@@ -1,0 +1,1842 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>웹스튜디오여행 - 작동형 여행예약 데모</title>
+  <style>
+    :root{
+      --blue:#2b6ef3;
+      --blue-dark:#0f56d9;
+      --sky:#f2f7ff;
+      --text:#24292f;
+      --sub:#6b7280;
+      --muted:#8b95a1;
+      --line:#e5e8ef;
+      --bg:#f7f8fb;
+      --paper:#fff;
+      --red:#ff3d55;
+      --green:#0aaa6e;
+      --orange:#ff8a00;
+      --yellow:#ffcc33;
+      --shadow:0 8px 26px rgba(15,23,42,.08);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      font-size:14px;
+    }
+    a{text-decoration:none;color:inherit}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .wrap{width:min(1160px,calc(100% - 32px));margin:0 auto}
+    .line-clamp-2{
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .hide{display:none!important}
+
+    .topbar{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      position:sticky;
+      top:0;
+      z-index:80;
+    }
+    .top-inner{
+      height:72px;
+      display:flex;
+      align-items:center;
+      gap:24px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      flex:none;
+      color:var(--blue);
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-1.2px;
+    }
+    .logo-icon{
+      width:34px;
+      height:34px;
+      border-radius:10px;
+      background:linear-gradient(135deg,#49a3ff,#1569f3);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      box-shadow:0 8px 18px rgba(43,110,243,.28);
+    }
+    .main-nav{
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:22px;
+      overflow:auto;
+      white-space:nowrap;
+      color:#495056;
+      font-weight:700;
+      scrollbar-width:none;
+    }
+    .main-nav::-webkit-scrollbar{display:none}
+    .main-nav a.active,.main-nav a:hover{color:var(--blue)}
+    .member{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex:none;
+      font-size:13px;
+      color:#495056;
+      font-weight:700;
+    }
+    .member .login{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:9px 12px;
+      color:var(--blue);
+      background:#fff;
+    }
+
+    .sub-nav{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .sub-inner{
+      height:48px;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      overflow:auto;
+      white-space:nowrap;
+      scrollbar-width:none;
+      color:#495056;
+      font-weight:700;
+    }
+    .sub-inner::-webkit-scrollbar{display:none}
+    .sub-inner a.active,.sub-inner a:hover{color:var(--blue)}
+
+    .home{display:block}
+    .detail{display:none}
+    body.detail-mode .home{display:none}
+    body.detail-mode .detail{display:block}
+
+    .search-section{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      padding:24px 0 22px;
+    }
+    .search-card{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 290px;
+      gap:18px;
+      align-items:stretch;
+    }
+    .search-left{
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      background:#fff;
+    }
+    .search-title{
+      margin:0 0 16px;
+      font-size:30px;
+      letter-spacing:-1.5px;
+      line-height:1.25;
+    }
+    .search-tabs{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      white-space:nowrap;
+      margin-bottom:14px;
+      scrollbar-width:none;
+    }
+    .search-tabs::-webkit-scrollbar{display:none}
+    .tab-btn{
+      border:0;
+      border-radius:999px;
+      background:#f3f5f8;
+      color:#495056;
+      padding:10px 14px;
+      font-weight:800;
+    }
+    .tab-btn.active{
+      background:#e8f1ff;
+      color:var(--blue);
+    }
+    .search-row{
+      display:grid;
+      grid-template-columns:1fr 160px 150px 100px;
+      gap:8px;
+    }
+    .search-row input,.search-row select{
+      height:50px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:0 14px;
+      outline:none;
+      background:#fff;
+    }
+    .search-row input:focus,.search-row select:focus{border-color:var(--blue)}
+    .search-row button{
+      border:0;
+      border-radius:14px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:900;
+    }
+    .promo{
+      border-radius:22px;
+      overflow:hidden;
+      min-height:210px;
+      position:relative;
+      color:#fff;
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      background-image:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.52)),url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=900&q=80');
+      background-size:cover;
+      background-position:center;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+    }
+    .promo b{
+      width:max-content;
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.25);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+    }
+    .promo h2{margin:0;font-size:24px;letter-spacing:-1px;line-height:1.25}
+    .promo p{margin:7px 0 0;color:rgba(255,255,255,.86)}
+
+    .quick-service{
+      display:grid;
+      grid-template-columns:repeat(8,1fr);
+      gap:12px;
+      padding:24px 0 2px;
+    }
+    .quick-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:15px 8px;
+      text-align:center;
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
+      transition:.16s;
+      font-weight:800;
+    }
+    .quick-item:hover{
+      transform:translateY(-2px);
+      border-color:#bcd5ff;
+    }
+    .quick-item img{
+      width:42px;height:42px;object-fit:cover;border-radius:14px;display:block;margin:0 auto 9px;
+    }
+
+    .section{
+      padding:30px 0 0;
+    }
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .section h2{
+      margin:0;
+      font-size:25px;
+      letter-spacing:-1.2px;
+    }
+    .section p{
+      margin:6px 0 0;
+      color:var(--sub);
+    }
+    .more-link{
+      color:var(--blue);
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .city-rank{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:330px 1fr;
+      min-height:560px;
+    }
+    .city-cover{
+      color:#fff;
+      background-size:cover;
+      background-position:center;
+      padding:24px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      isolation:isolate;
+    }
+    .city-cover:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.62));
+      z-index:-1;
+    }
+    .city-cover h3{
+      margin:0;
+      font-size:34px;
+      letter-spacing:-1.5px;
+    }
+    .city-cover span{
+      width:max-content;
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.28);
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .rank-content{
+      padding:18px;
+      min-width:0;
+    }
+    .rank-tabs{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      white-space:nowrap;
+      margin-bottom:12px;
+      scrollbar-width:none;
+    }
+    .rank-tabs::-webkit-scrollbar{display:none}
+    .rank-tabs button{
+      border:0;
+      border-radius:999px;
+      background:#f3f5f8;
+      padding:9px 13px;
+      font-weight:900;
+      color:#495056;
+    }
+    .rank-tabs button.active{background:#111827;color:#fff}
+    .rank-list{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px 12px;
+    }
+    .rank-row{
+      display:grid;
+      grid-template-columns:24px 72px minmax(0,1fr);
+      gap:10px;
+      align-items:center;
+      padding:8px;
+      border-radius:14px;
+      cursor:pointer;
+    }
+    .rank-row:hover{background:#f6f8fb}
+    .rank-no{
+      font-size:18px;
+      color:var(--blue);
+      font-weight:900;
+      text-align:center;
+    }
+    .rank-thumb{
+      height:58px;
+      border-radius:13px;
+      object-fit:cover;
+      width:72px;
+      background:#e5e7eb;
+    }
+    .rank-title{
+      font-weight:900;
+      line-height:1.35;
+      color:#24292f;
+    }
+    .rank-meta{
+      margin-top:4px;
+      color:var(--sub);
+      font-size:12px;
+    }
+    .rank-price{
+      margin-top:4px;
+      font-weight:900;
+      color:#111827;
+    }
+    .discount{color:var(--red);font-weight:900;margin-right:4px}
+
+    .theme-scroller{
+      display:grid;
+      grid-template-columns:repeat(8,1fr);
+      gap:12px;
+    }
+    .theme-card{
+      height:116px;
+      border-radius:18px;
+      overflow:hidden;
+      position:relative;
+      color:#fff;
+      padding:13px;
+      display:flex;
+      align-items:flex-end;
+      font-weight:900;
+      background-size:cover;
+      background-position:center;
+      box-shadow:0 8px 22px rgba(15,23,42,.08);
+    }
+    .theme-card:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.58));
+    }
+    .theme-card span{position:relative}
+
+    .filter-summary{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:13px 15px;
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
+      margin-bottom:14px;
+    }
+    .filter-summary b{color:var(--blue)}
+    .filter-summary button{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:900;
+      color:#495056;
+    }
+
+    .product-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+    .product-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 8px 22px rgba(15,23,42,.05);
+      cursor:pointer;
+      transition:.16s;
+    }
+    .product-card:hover{
+      transform:translateY(-3px);
+      box-shadow:var(--shadow);
+    }
+    .product-img{
+      height:170px;
+      background-size:cover;
+      background-position:center;
+      position:relative;
+    }
+    .product-img:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.1));
+    }
+    .product-badge{
+      position:absolute;
+      left:12px;
+      top:12px;
+      z-index:1;
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      border-radius:999px;
+      padding:5px 8px;
+      font-size:11px;
+      font-weight:900;
+      background:#eaf2ff;
+      color:var(--blue);
+    }
+    .badge.white{
+      background:rgba(255,255,255,.92);
+      color:#111827;
+    }
+    .badge.green{background:#e9fbf4;color:#047857}
+    .badge.orange{background:#fff3e6;color:#c45d00}
+    .product-body{
+      padding:14px;
+    }
+    .product-title{
+      min-height:44px;
+      line-height:1.45;
+      font-weight:900;
+    }
+    .product-info{
+      margin-top:8px;
+      color:var(--sub);
+      font-size:12px;
+    }
+    .product-price{
+      margin-top:10px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:14px;
+    }
+    .info-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:20px;
+      box-shadow:0 8px 22px rgba(15,23,42,.05);
+      cursor:pointer;
+    }
+    .info-card:hover{border-color:#bcd5ff}
+    .info-card b{font-size:18px}
+    .info-card p{line-height:1.6}
+
+    .footer{
+      margin-top:42px;
+      border-top:1px solid var(--line);
+      background:#fff;
+      padding:28px 0;
+      color:#848c98;
+      font-size:12px;
+      line-height:1.7;
+    }
+    .footer strong{color:#24292f;font-size:15px}
+
+    /* Detail */
+    .detail-header{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      padding:18px 0;
+    }
+    .back{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:9px 13px;
+      font-weight:900;
+      color:#495056;
+    }
+    .breadcrumb{
+      margin-top:14px;
+      color:var(--sub);
+      font-size:13px;
+    }
+    .detail-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 360px;
+      gap:28px;
+      padding:26px 0 44px;
+      align-items:start;
+    }
+    .photo-gallery{
+      display:grid;
+      grid-template-columns:1.35fr .65fr;
+      gap:8px;
+      height:414px;
+      margin-bottom:24px;
+    }
+    .gallery-main,.gallery-small{
+      background-size:cover;
+      background-position:center;
+      position:relative;
+      overflow:hidden;
+      cursor:pointer;
+    }
+    .gallery-main{
+      border-radius:24px 0 0 24px;
+    }
+    .gallery-side{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .gallery-small:nth-child(2){border-radius:0 24px 0 0}
+    .gallery-small:nth-child(4){border-radius:0 0 24px 0}
+    .gallery-main:after,.gallery-small:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.12));
+    }
+    .photo-count{
+      position:absolute;
+      right:14px;
+      bottom:14px;
+      z-index:1;
+      background:rgba(0,0,0,.65);
+      color:#fff;
+      border-radius:999px;
+      padding:8px 11px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .detail-title-box{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:22px;
+      margin-bottom:16px;
+    }
+    .detail-badges{
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .detail-title{
+      margin:0;
+      font-size:28px;
+      line-height:1.36;
+      letter-spacing:-1.2px;
+    }
+    .detail-meta{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:12px;
+      color:var(--sub);
+      font-size:13px;
+    }
+    .detail-price{
+      margin-top:16px;
+      font-size:24px;
+      font-weight:900;
+    }
+    .sticky-tabs{
+      position:sticky;
+      top:73px;
+      z-index:40;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:0 8px 18px rgba(15,23,42,.05);
+      display:flex;
+      gap:4px;
+      overflow:auto;
+      padding:6px;
+      margin-bottom:16px;
+      scrollbar-width:none;
+    }
+    .sticky-tabs::-webkit-scrollbar{display:none}
+    .sticky-tabs a{
+      padding:10px 13px;
+      border-radius:11px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .sticky-tabs a:hover{background:#f2f7ff;color:var(--blue)}
+    .detail-section{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:22px;
+      margin-bottom:16px;
+    }
+    .detail-section h2{
+      margin:0 0 14px;
+      font-size:21px;
+      letter-spacing:-.8px;
+    }
+    .detail-section p,.detail-section li{
+      line-height:1.78;
+      color:#3b4450;
+    }
+    .detail-section ul{margin:0;padding-left:20px}
+    .notice-box{
+      border:1px solid #d7e7ff;
+      background:#f5f9ff;
+      color:#1d4ed8;
+      border-radius:16px;
+      padding:15px;
+      margin:12px 0;
+      line-height:1.65;
+      font-weight:800;
+    }
+    .detail-table{
+      display:grid;
+      gap:8px;
+    }
+    .detail-row{
+      display:grid;
+      grid-template-columns:150px minmax(0,1fr);
+      gap:12px;
+      border:1px solid var(--line);
+      background:#fafbfc;
+      border-radius:14px;
+      padding:13px;
+      line-height:1.6;
+    }
+    .detail-row b{color:#111827}
+    .schedule-box{
+      display:grid;
+      gap:10px;
+    }
+    .schedule-item{
+      display:grid;
+      grid-template-columns:82px 1fr;
+      gap:12px;
+      padding:13px;
+      background:#fafbfc;
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+    .schedule-item b{color:var(--blue)}
+
+    .booking{
+      position:sticky;
+      top:94px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:0 18px 45px rgba(15,23,42,.13);
+      overflow:hidden;
+    }
+    .booking-head{
+      padding:18px;
+      border-bottom:1px solid var(--line);
+    }
+    .booking-price{
+      font-size:23px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    .booking-rating{
+      color:var(--sub);
+      font-size:13px;
+    }
+    .booking-body{padding:18px}
+    .field{margin-bottom:15px}
+    .field label{
+      display:block;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+    .field input{
+      width:100%;
+      height:48px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:0 13px;
+      outline:none;
+      background:#fff;
+    }
+    .field input:focus{border-color:var(--blue)}
+    .date-help{
+      font-size:12px;
+      color:var(--sub);
+      margin-top:7px;
+      line-height:1.45;
+    }
+    .option-area{
+      display:none;
+      border-top:1px solid var(--line);
+      padding-top:15px;
+      margin-top:2px;
+    }
+    .option-area.show{display:block}
+    .option-row{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      padding:13px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .option-row:last-child{border-bottom:0}
+    .opt-name{
+      font-weight:900;
+      line-height:1.45;
+    }
+    .opt-name small{
+      display:block;
+      color:var(--sub);
+      font-weight:500;
+      margin-top:4px;
+    }
+    .counter{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:none;
+    }
+    .counter button{
+      width:31px;height:31px;
+      border-radius:50%;
+      border:1px solid #cfd8e3;
+      background:#fff;
+      color:var(--blue);
+      font-size:18px;
+      font-weight:900;
+      display:grid;
+      place-items:center;
+    }
+    .counter button:disabled{
+      color:#c2c8d0;
+      background:#f3f4f6;
+      cursor:not-allowed;
+    }
+    .counter span{
+      width:24px;
+      text-align:center;
+      font-weight:900;
+    }
+    .total{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      border:1px solid var(--line);
+      background:#fafbfc;
+      border-radius:16px;
+      padding:14px;
+      margin-top:14px;
+    }
+    .total b{font-size:20px}
+    .actions{
+      display:grid;
+      gap:9px;
+      margin-top:14px;
+    }
+    .primary,.secondary{
+      height:50px;
+      border:0;
+      border-radius:14px;
+      font-weight:900;
+    }
+    .primary{
+      background:var(--blue);
+      color:#fff;
+    }
+    .primary:disabled{
+      background:#d1d5db;
+      color:#fff;
+      cursor:not-allowed;
+    }
+    .secondary{
+      background:#eef6ff;
+      color:var(--blue);
+    }
+    .checkout{
+      display:none;
+      margin-top:15px;
+      border:1px solid #bcd5ff;
+      background:#f6faff;
+      border-radius:18px;
+      padding:15px;
+    }
+    .checkout.show{display:block}
+    .checkout h3{
+      margin:0 0 11px;
+      color:#0f56d9;
+      font-size:18px;
+    }
+    .checkout-line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 0;
+      border-bottom:1px dashed #c8dcff;
+      line-height:1.45;
+    }
+    .checkout-line:last-child{border-bottom:0}
+    .pay-methods{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:12px;
+    }
+    .pay-methods button{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      min-height:40px;
+      font-weight:900;
+    }
+    .pay-methods button.active{
+      border-color:var(--blue);
+      color:var(--blue);
+      background:#eef6ff;
+    }
+    .buy{
+      margin-top:12px;
+      width:100%;
+      height:50px;
+      border:0;
+      border-radius:14px;
+      background:#111827;
+      color:#fff;
+      font-weight:900;
+    }
+    .booking-note{
+      margin-top:12px;
+      color:var(--sub);
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    .drawer{
+      position:fixed;
+      inset:0;
+      z-index:110;
+      display:none;
+      background:rgba(0,0,0,.45);
+      justify-content:flex-end;
+    }
+    .drawer.show{display:flex}
+    .drawer-panel{
+      width:min(420px,100%);
+      background:#fff;
+      height:100%;
+      padding:20px;
+      overflow:auto;
+      box-shadow:-20px 0 50px rgba(0,0,0,.22);
+    }
+    .drawer-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .drawer-head h2{margin:0}
+    .drawer-head button{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:50%;
+      width:34px;height:34px;
+      font-weight:900;
+      font-size:18px;
+    }
+
+    .photo-modal{
+      position:fixed;
+      inset:0;
+      z-index:120;
+      background:rgba(0,0,0,.82);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+    }
+    .photo-modal.show{display:flex}
+    .photo-view{
+      width:min(960px,100%);
+      background:#111827;
+      border-radius:22px;
+      overflow:hidden;
+    }
+    .photo-view img{
+      width:100%;
+      max-height:74vh;
+      object-fit:cover;
+      display:block;
+    }
+    .photo-controls{
+      padding:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .photo-controls button{
+      border:0;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:900;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:24px;
+      z-index:200;
+      transform:translateX(-50%) translateY(18px);
+      background:#111827;
+      color:#fff;
+      border-radius:999px;
+      padding:12px 16px;
+      box-shadow:0 12px 30px rgba(0,0,0,.25);
+      font-weight:900;
+      opacity:0;
+      transition:.2s;
+      pointer-events:none;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media(max-width:980px){
+      .top-inner{height:auto;min-height:64px;padding:12px 0;display:block}
+      .main-nav{margin:12px 0}
+      .member{justify-content:flex-start}
+      .search-card,.city-rank,.detail-layout{grid-template-columns:1fr}
+      .search-row{grid-template-columns:1fr 1fr}
+      .quick-service{grid-template-columns:repeat(4,1fr)}
+      .city-rank{min-height:auto}
+      .city-cover{min-height:280px}
+      .rank-list{grid-template-columns:1fr}
+      .theme-scroller{grid-template-columns:repeat(4,1fr)}
+      .product-grid{grid-template-columns:repeat(2,1fr)}
+      .info-grid{grid-template-columns:1fr}
+      .booking{position:relative;top:auto}
+      .photo-gallery{grid-template-columns:1fr;height:auto}
+      .gallery-main{height:320px;border-radius:22px}
+      .gallery-side{grid-template-columns:1fr 1fr}
+      .gallery-small{height:150px;border-radius:18px!important}
+    }
+    @media(max-width:640px){
+      .wrap{width:min(100% - 20px,1160px)}
+      .logo{font-size:19px}
+      .search-title{font-size:25px}
+      .search-row{grid-template-columns:1fr}
+      .quick-service{grid-template-columns:repeat(2,1fr)}
+      .theme-scroller{grid-template-columns:repeat(2,1fr)}
+      .product-grid{grid-template-columns:1fr}
+      .city-cover h3{font-size:29px}
+      .rank-row{grid-template-columns:24px 66px minmax(0,1fr)}
+      .rank-thumb{width:66px;height:52px}
+      .detail-title{font-size:23px}
+      .detail-row,.schedule-item{grid-template-columns:1fr}
+      .option-row{grid-template-columns:1fr}
+      .counter{justify-content:flex-end}
+      .filter-summary{display:block}
+      .filter-summary button{margin-top:8px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap top-inner">
+      <a class="logo" href="#" onclick="showHome();return false;">
+        <span class="logo-icon">W</span>
+        <span>웹스튜디오여행</span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="#" class="active" data-filter="sale">할인</a>
+        <a href="#" data-filter="flight">항공</a>
+        <a href="#" data-filter="hotel-domestic">국내 숙소</a>
+        <a href="#" data-filter="hotel">해외 숙소</a>
+        <a href="#" data-filter="insurance">해외여행보험</a>
+        <a href="#" data-filter="package">패키지</a>
+        <a href="#" data-filter="minbak">한인민박</a>
+        <a href="#" data-filter="tour">투어·티켓</a>
+        <a href="#" data-filter="rent">글로벌렌터카</a>
+        <a href="#" data-filter="all">더보기</a>
+      </nav>
+      <div class="member">
+        <a href="#" onclick="openPartner();return false;">파트너 로그인</a>
+        <a class="login" href="#" onclick="openLogin();return false;">로그인 및 회원가입</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sub-nav home">
+    <div class="wrap sub-inner" id="subNav">
+      <a class="active" href="#" data-filter="all">홈</a>
+      <a href="#" data-filter="wellness">뷰티·웰니스</a>
+      <a href="#" data-filter="package">패키지초특가</a>
+      <a href="#" data-filter="japan">일본 특가</a>
+      <a href="#" data-filter="barcelona">유럽 투어</a>
+      <a href="#" data-filter="ticket">입장권</a>
+      <a href="#" data-filter="pass">교통패스</a>
+      <a href="#" data-filter="instant">즉시확정</a>
+    </div>
+  </nav>
+
+  <div class="home">
+    <section class="search-section">
+      <div class="wrap search-card">
+        <div class="search-left">
+          <h1 class="search-title">어디로 떠나세요?</h1>
+          <div class="search-tabs" id="searchTabs">
+            <button class="tab-btn active" data-filter="all">전체</button>
+            <button class="tab-btn" data-filter="flight">항공</button>
+            <button class="tab-btn" data-filter="hotel">숙소</button>
+            <button class="tab-btn" data-filter="tour">투어·티켓</button>
+            <button class="tab-btn" data-filter="package">패키지</button>
+            <button class="tab-btn" data-filter="rent">렌터카</button>
+          </div>
+          <form class="search-row" id="searchForm">
+            <input id="searchKeyword" placeholder="여행지나 상품명을 검색하세요">
+            <select id="searchCity">
+              <option value="">전체 지역</option>
+              <option>후쿠오카</option>
+              <option>바르셀로나</option>
+              <option>오사카</option>
+              <option>도쿄</option>
+              <option>서울</option>
+              <option>부산</option>
+            </select>
+            <select id="searchDate">
+              <option value="">여행일 선택</option>
+              <option>이번 주말</option>
+              <option>다음 주</option>
+              <option>다음 달</option>
+            </select>
+            <button>검색</button>
+          </form>
+        </div>
+        <div class="promo" onclick="showDetail('huis')">
+          <b>기간 한정 특가</b>
+          <div>
+            <h2>하우스텐보스<br>애프터3 패스포트</h2>
+            <p>오후 3시 이후 입장권 · 즉시 확정 · 모바일 바우처</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap quick-service">
+        <a class="quick-item" href="#" data-filter="flight"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=120&q=80" alt="">항공</a>
+        <a class="quick-item" href="#" data-filter="hotel"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=120&q=80" alt="">숙소</a>
+        <a class="quick-item" href="#" data-filter="tour"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=120&q=80" alt="">투어·티켓</a>
+        <a class="quick-item" href="#" data-filter="package"><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=120&q=80" alt="">패키지</a>
+        <a class="quick-item" href="#" data-filter="minbak"><img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=120&q=80" alt="">한인민박</a>
+        <a class="quick-item" href="#" data-filter="rent"><img src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=120&q=80" alt="">렌터카</a>
+        <a class="quick-item" href="#" data-filter="insurance"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=120&q=80" alt="">보험</a>
+        <a class="quick-item" href="#" data-filter="sale"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=120&q=80" alt="">할인</a>
+      </div>
+    </section>
+
+    <main class="wrap">
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>바르셀로나</h2>
+            <p>투어・티켓, 숙소, 패키지, 한인민박 인기 상품</p>
+          </div>
+          <a class="more-link" href="#" onclick="applyFilter('barcelona','바르셀로나 전체상품');return false;">바르셀로나 전체보기</a>
+        </div>
+        <div class="city-rank">
+          <div class="city-cover" style="background-image:url('https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=900&q=80')">
+            <span>여행자 인기 도시</span>
+            <h3>바르셀로나</h3>
+          </div>
+          <div class="rank-content">
+            <div class="rank-tabs" id="barcelonaTabs">
+              <button class="active" data-city="barcelona" data-cat="tour">투어・티켓</button>
+              <button data-city="barcelona" data-cat="hotel">숙소</button>
+              <button data-city="barcelona" data-cat="package">패키지</button>
+              <button data-city="barcelona" data-cat="minbak">한인민박</button>
+            </div>
+            <div class="rank-list" id="barcelonaList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>후쿠오카</h2>
+            <p>입장권, 교통패스, 근교 투어 인기 상품</p>
+          </div>
+          <a class="more-link" href="#" onclick="applyFilter('fukuoka','후쿠오카 전체상품');return false;">후쿠오카 전체보기</a>
+        </div>
+        <div class="city-rank">
+          <div class="city-cover" style="background-image:url('https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?auto=format&fit=crop&w=900&q=80')">
+            <span>일본 여행 특가</span>
+            <h3>후쿠오카</h3>
+          </div>
+          <div class="rank-content">
+            <div class="rank-tabs" id="fukuokaTabs">
+              <button class="active" data-city="fukuoka" data-cat="tour">투어・티켓</button>
+              <button data-city="fukuoka" data-cat="ticket">입장권</button>
+              <button data-city="fukuoka" data-cat="pass">교통패스</button>
+              <button data-city="fukuoka" data-cat="bus">버스투어</button>
+            </div>
+            <div class="rank-list" id="fukuokaList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>테마별 추천</h2>
+            <p>슈퍼찬스, 가우디 투어, 티켓・입장권, 미식투어</p>
+          </div>
+          <a class="more-link" href="#" onclick="applyFilter('all','전체 테마상품');return false;">더보기</a>
+        </div>
+        <div class="theme-scroller" id="themeCards"></div>
+      </section>
+
+      <section class="section" id="productsSection">
+        <div class="section-head">
+          <div>
+            <h2 id="productSectionTitle">지금 많이 보는 상품</h2>
+            <p id="productSectionDesc">모든 상품은 클릭하면 각각의 상세페이지로 이동합니다.</p>
+          </div>
+          <a class="more-link" href="#" onclick="resetProducts();return false;">전체보기</a>
+        </div>
+        <div class="filter-summary" id="filterSummary">
+          <span>현재 <b id="filterName">전체 상품</b>을 보고 있습니다. 결과 <b id="filterCount">0</b>개</span>
+          <button onclick="resetProducts()">필터 초기화</button>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="info-grid">
+          <div class="info-card" onclick="openLogin()">
+            <b>마이페이지 예약관리</b>
+            <p>바우처, 예약상태, 결제내역을 확인하는 로그인 패널이 열립니다.</p>
+          </div>
+          <div class="info-card" onclick="toast('고객지원실 페이지 데모입니다')">
+            <b>고객지원실 운영안내</b>
+            <p>채팅상담, 유선상담, 예약 문의, 취소/환불 정책을 안내합니다.</p>
+          </div>
+          <div class="info-card" onclick="openPartner()">
+            <b>파트너센터</b>
+            <p>상품 등록, 예약 관리, 정산 관리용 파트너 로그인 패널이 열립니다.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <strong>웹스튜디오여행</strong><br>
+        이 페이지는 여행 예약 사이트 데모입니다. 실제 운영 시에는 결제 PG, 재고/가격 API, 바우처 발송, 취소/환불, 회원 DB 연동이 필요합니다.
+      </div>
+    </footer>
+  </div>
+
+  <div class="detail">
+    <section class="detail-header">
+      <div class="wrap">
+        <button class="back" onclick="showHome()">← 홈으로 돌아가기</button>
+        <div class="breadcrumb" id="breadcrumb">홈 &gt; 상품상세</div>
+      </div>
+    </section>
+
+    <main class="wrap detail-layout">
+      <div>
+        <div class="photo-gallery">
+          <div class="gallery-main" id="galleryMain" onclick="openPhoto(0)">
+            <span class="photo-count" id="photoCount">사진 전체보기 1 / 5</span>
+          </div>
+          <div class="gallery-side" id="gallerySide"></div>
+        </div>
+
+        <section class="detail-title-box">
+          <div class="detail-badges" id="detailBadges"></div>
+          <h1 class="detail-title" id="detailTitle"></h1>
+          <div class="detail-meta" id="detailMeta"></div>
+          <div class="detail-price" id="detailPrice"></div>
+        </section>
+
+        <nav class="sticky-tabs">
+          <a href="#summary">상품소개</a>
+          <a href="#point">핵심포인트</a>
+          <a href="#schedule">이용방법</a>
+          <a href="#include">포함/불포함</a>
+          <a href="#notice">필수확인</a>
+          <a href="#refund">취소/환불</a>
+        </nav>
+
+        <section class="detail-section" id="summary">
+          <h2>상품소개</h2>
+          <div class="notice-box" id="detailNotice"></div>
+          <p id="detailIntro"></p>
+          <ul id="detailIntroList"></ul>
+        </section>
+
+        <section class="detail-section" id="point">
+          <h2>핵심포인트</h2>
+          <div class="detail-table" id="pointTable"></div>
+        </section>
+
+        <section class="detail-section" id="schedule">
+          <h2>이용방법</h2>
+          <div class="schedule-box">
+            <div class="schedule-item"><b>STEP 1</b><span>예약창에서 이용 날짜를 선택합니다.</span></div>
+            <div class="schedule-item"><b>STEP 2</b><span>상품 옵션과 인원 수량을 선택합니다.</span></div>
+            <div class="schedule-item"><b>STEP 3</b><span>금액조회하기 버튼을 눌러 결제 예정금액을 확인합니다.</span></div>
+            <div class="schedule-item"><b>STEP 4</b><span>구매하기 버튼을 눌러 결제 단계로 이동합니다.</span></div>
+          </div>
+        </section>
+
+        <section class="detail-section" id="include">
+          <h2>포함 / 불포함</h2>
+          <div class="detail-table" id="includeTable"></div>
+        </section>
+
+        <section class="detail-section" id="notice">
+          <h2>필수확인사항</h2>
+          <ul id="noticeList"></ul>
+        </section>
+
+        <section class="detail-section" id="refund">
+          <h2>취소 / 환불</h2>
+          <p>이 영역은 데모용 정책입니다. 실제 운영에서는 이용일, 현지 시간, 바우처 발권 여부, 공급사 취소 수수료 정책에 따라 자동 계산되도록 서버 연동이 필요합니다.</p>
+        </section>
+      </div>
+
+      <aside class="booking">
+        <div class="booking-head">
+          <div class="booking-price" id="bookingPrice"></div>
+          <div class="booking-rating" id="bookingRating"></div>
+        </div>
+        <div class="booking-body">
+          <div class="field">
+            <label>날짜 선택</label>
+            <input type="date" id="useDate">
+            <div class="date-help">날짜를 선택하면 옵션 선택 영역이 표시됩니다.</div>
+          </div>
+
+          <div class="option-area" id="optionArea">
+            <div class="field">
+              <label>옵션 선택</label>
+              <div id="optionRows"></div>
+            </div>
+            <div class="total">
+              <span>예상 결제금액</span>
+              <b id="totalPrice">0원</b>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="lookupBtn" disabled onclick="lookupPrice()">금액조회하기</button>
+            <button class="secondary" onclick="addWishlist()">위시리스트 담기</button>
+          </div>
+          <div class="booking-note">날짜 + 1개 이상 선택 시 금액조회가 활성화됩니다. 금액조회 후 구매하기 화면이 열립니다.</div>
+
+          <div class="checkout" id="checkout">
+            <h3>구매하기</h3>
+            <div id="checkoutSummary"></div>
+            <div class="pay-methods" id="payMethods">
+              <button class="active" onclick="selectPay(this)">카드결제</button>
+              <button onclick="selectPay(this)">간편결제</button>
+              <button onclick="selectPay(this)">무통장</button>
+              <button onclick="selectPay(this)">포인트</button>
+            </div>
+            <button class="buy" onclick="finishBuy()">구매하기</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="drawer" id="loginDrawer">
+    <div class="drawer-panel">
+      <div class="drawer-head">
+        <h2 id="drawerTitle">로그인 및 회원가입</h2>
+        <button onclick="closeLogin()">×</button>
+      </div>
+      <div class="field"><label>이메일</label><input placeholder="email@example.com"></div>
+      <div class="field"><label>비밀번호</label><input type="password" placeholder="비밀번호"></div>
+      <div class="actions">
+        <button class="primary" onclick="toast('로그인 데모입니다');closeLogin()">로그인</button>
+        <button class="secondary" onclick="toast('회원가입 데모입니다')">회원가입</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="photo-modal" id="photoModal">
+    <div class="photo-view">
+      <img id="photoModalImg" src="" alt="">
+      <div class="photo-controls">
+        <button onclick="prevPhoto()">이전</button>
+        <button onclick="closePhoto()">닫기</button>
+        <button onclick="nextPhoto()">다음</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const IMG = {
+      huis1:"https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
+      huis2:"https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?auto=format&fit=crop&w=900&q=80",
+      huis3:"https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=900&q=80",
+      huis4:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80",
+      huis5:"https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=900&q=80",
+      barca1:"https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80",
+      barca2:"https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=600&q=80",
+      barca3:"https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?auto=format&fit=crop&w=600&q=80",
+      barca4:"https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?auto=format&fit=crop&w=600&q=80",
+      fukuoka1:"https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?auto=format&fit=crop&w=600&q=80",
+      fukuoka2:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80",
+      fukuoka3:"https://images.unsplash.com/photo-1505069446780-4ef442b5207f?auto=format&fit=crop&w=600&q=80",
+      fukuoka4:"https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80",
+      hotel:"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
+      hotel2:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=600&q=80",
+      flight:"https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80",
+      beach:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80",
+      food:"https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=600&q=80",
+      car:"https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=600&q=80",
+      seoul:"https://images.unsplash.com/photo-1538485399081-7c8ed7fca3a7?auto=format&fit=crop&w=600&q=80",
+      spa:"https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80"
+    };
+
+    const products = [
+      {id:"huis", city:"후쿠오카", country:"일본", cat:"ticket", tags:["japan","instant","sale","ticket","tour"], title:"[기간 한정 할인] 하우스텐보스 애프터3 입장권 패스포트", price:47600, displayPrice:"47,600원", discount:"20%", rating:"4.7", reviews:"62", img:IMG.huis1, photos:[IMG.huis1,IMG.huis2,IMG.huis3,IMG.huis4,IMG.huis5], notice:"이용 당일 오후 3시 이후부터 이용 가능한 애프터3 패스포트입니다.", intro:"네덜란드풍 거리와 운하, 계절별 일루미네이션, 어트랙션을 오후 시간대부터 즐길 수 있는 테마파크 입장권 데모 상품입니다.", detailType:"huis"},
+      {id:"gaudi1", city:"바르셀로나", country:"스페인", cat:"tour", tags:["barcelona","tour","instant","sale"], title:"바르셀로나 가우디 명소 3곳 가이드 투어", price:65550, displayPrice:"65,550원", discount:"5%", rating:"4.9", reviews:"1,284", img:IMG.barca1, photos:[IMG.barca1,IMG.barca2,IMG.barca3,IMG.barca4,IMG.food], notice:"바르셀로나 대표 가우디 명소를 전문 가이드와 함께 둘러보는 투어입니다.", intro:"사그라다 파밀리아, 구엘공원, 까사 바뜨요 등 바르셀로나 핵심 명소를 효율적으로 둘러보는 가이드 투어 데모입니다."},
+      {id:"gaudi2", city:"바르셀로나", country:"스페인", cat:"tour", tags:["barcelona","tour","instant"], title:"[전일/반일] 가우디투어 : 바뜨요·까사밀라·구엘 모두 입장", price:50350, displayPrice:"50,350원", discount:"5%", rating:"4.8", reviews:"924", img:IMG.barca2, photos:[IMG.barca2,IMG.barca1,IMG.barca3,IMG.barca4,IMG.food], notice:"전일 또는 반일 일정으로 선택 가능한 가우디 집중 투어입니다.", intro:"가우디 건축물을 중심으로 내부 입장과 외부 설명을 함께 구성한 투어 상품 데모입니다."},
+      {id:"f1", city:"바르셀로나", country:"스페인", cat:"package", tags:["barcelona","package","sale"], title:"[공식판매] F1 바르셀로나 카탈루냐 그랑프리 패키지", price:217927, displayPrice:"217,927원", discount:"3%", rating:"4.7", reviews:"46", img:IMG.barca3, photos:[IMG.barca3,IMG.barca1,IMG.barca2,IMG.flight,IMG.hotel], notice:"경기 관람권과 여행 구성을 묶은 패키지형 데모 상품입니다.", intro:"바르셀로나 카탈루냐 서킷 일정에 맞춰 티켓과 이동, 숙박 옵션을 구성하는 패키지 상품 데모입니다."},
+      {id:"paella", city:"바르셀로나", country:"스페인", cat:"tour", tags:["barcelona","tour"], title:"바르셀로나 빠에야 클래스 + 보케리아 미식 투어", price:89000, displayPrice:"89,000원", discount:"", rating:"4.9", reviews:"381", img:IMG.food, photos:[IMG.food,IMG.barca4,IMG.barca1,IMG.barca2,IMG.beach], notice:"현지 시장 투어와 쿠킹 클래스를 함께 체험하는 미식 투어입니다.", intro:"보케리아 시장을 둘러보고 현지식 빠에야를 만들어보는 소규모 미식 체험 상품 데모입니다."},
+      {id:"marine", city:"후쿠오카", country:"일본", cat:"ticket", tags:["fukuoka","japan","ticket","instant"], title:"후쿠오카 마린월드 우미노나카미치 수족관 입장권", price:22800, displayPrice:"22,800원", discount:"2%", rating:"4.9", reviews:"376", img:IMG.fukuoka2, photos:[IMG.fukuoka2,IMG.fukuoka1,IMG.beach,IMG.huis2,IMG.huis3], notice:"후쿠오카 인기 수족관 입장권을 모바일 바우처로 이용하는 상품입니다.", intro:"가족 여행, 커플 여행에 적합한 후쿠오카 대표 수족관 입장권 데모입니다."},
+      {id:"green", city:"후쿠오카", country:"일본", cat:"pass", tags:["fukuoka","japan","pass","instant"], title:"후쿠오카 시내 1일 자유승차권 그린패스", price:4940, displayPrice:"4,940원", discount:"5%", rating:"4.8", reviews:"684", img:IMG.fukuoka3, photos:[IMG.fukuoka3,IMG.fukuoka1,IMG.flight,IMG.fukuoka4,IMG.huis2], notice:"후쿠오카 시내 이동을 편하게 할 수 있는 교통패스 상품입니다.", intro:"후쿠오카 시내 관광지를 효율적으로 이동할 수 있는 1일 교통패스 데모입니다."},
+      {id:"itoshima", city:"후쿠오카", country:"일본", cat:"bus", tags:["fukuoka","japan","bus","tour","sale"], title:"[최저가보장제] 후쿠오카 이토시마 반나절 버스투어", price:29003, displayPrice:"29,003원", discount:"3%", rating:"4.9", reviews:"190", img:IMG.fukuoka4, photos:[IMG.fukuoka4,IMG.beach,IMG.fukuoka1,IMG.huis2,IMG.food], notice:"이토시마 핵심 포인트를 반나절 동안 둘러보는 버스투어입니다.", intro:"후쿠오카 근교 이토시마의 바다, 카페, 포토스팟을 효율적으로 둘러보는 버스투어 데모입니다."},
+      {id:"yufuin", city:"후쿠오카", country:"일본", cat:"bus", tags:["fukuoka","japan","bus","tour"], title:"[유후인 가장먼저도착] 후쿠오카 유후인 일일 버스 투어", price:48403, displayPrice:"48,403원", discount:"3%", rating:"4.9", reviews:"172", img:IMG.beach, photos:[IMG.beach,IMG.fukuoka4,IMG.spa,IMG.fukuoka1,IMG.huis2], notice:"유후인 주요 관광지를 하루 일정으로 둘러보는 버스투어입니다.", intro:"후쿠오카 출발 유후인 당일치기 여행을 위한 일일 버스투어 상품 데모입니다."},
+      {id:"hotel1", city:"바르셀로나", country:"스페인", cat:"hotel", tags:["barcelona","hotel","sale"], title:"바르셀로나 중심가 4성급 호텔 특가", price:128000, displayPrice:"128,000원", discount:"12%", rating:"4.6", reviews:"217", img:IMG.hotel, photos:[IMG.hotel,IMG.hotel2,IMG.barca1,IMG.barca4,IMG.food], notice:"바르셀로나 중심가 접근성이 좋은 4성급 호텔 숙박권입니다.", intro:"시내 주요 관광지와 지하철 접근성이 좋은 호텔 객실 예약 데모 상품입니다."},
+      {id:"flight1", city:"도쿄", country:"일본", cat:"flight", tags:["flight","japan","sale"], title:"인천-도쿄 왕복 항공권 특가", price:199000, displayPrice:"199,000원", discount:"", rating:"4.5", reviews:"88", img:IMG.flight, photos:[IMG.flight,IMG.huis3,IMG.huis4,IMG.hotel,IMG.fukuoka1], notice:"왕복 항공권 검색 및 결제 흐름을 보여주는 항공권 데모입니다.", intro:"출발일과 탑승 인원을 선택해 항공권 금액을 조회하는 데모 상품입니다."},
+      {id:"osaka", city:"오사카", country:"일본", cat:"ticket", tags:["japan","ticket","instant"], title:"오사카 유니버셜 테마파크 입장권", price:82000, displayPrice:"82,000원", discount:"4%", rating:"4.8", reviews:"2,142", img:IMG.huis5, photos:[IMG.huis5,IMG.huis4,IMG.huis3,IMG.huis2,IMG.flight], notice:"오사카 인기 테마파크 입장권 데모 상품입니다.", intro:"선택한 날짜에 이용 가능한 테마파크 입장권을 예약하는 데모 상품입니다."},
+      {id:"rent1", city:"후쿠오카", country:"일본", cat:"rent", tags:["rent","fukuoka","japan"], title:"후쿠오카 공항 수령 렌터카 24시간", price:69000, displayPrice:"69,000원", discount:"", rating:"4.6", reviews:"132", img:IMG.car, photos:[IMG.car,IMG.fukuoka1,IMG.fukuoka3,IMG.beach,IMG.hotel], notice:"공항에서 차량을 수령하고 반납하는 렌터카 상품입니다.", intro:"후쿠오카 공항 수령 기준으로 차량 옵션과 이용일을 선택하는 렌터카 데모 상품입니다."},
+      {id:"insurance1", city:"전세계", country:"여행보험", cat:"insurance", tags:["insurance","instant"], title:"해외여행보험 기본 플랜", price:9800, displayPrice:"9,800원", discount:"", rating:"4.7", reviews:"441", img:IMG.flight, photos:[IMG.flight,IMG.beach,IMG.hotel,IMG.seoul,IMG.huis2], notice:"여행 기간과 인원에 따라 가입금액을 조회하는 보험 데모 상품입니다.", intro:"해외여행 중 발생할 수 있는 사고, 질병, 휴대품 손해 등을 보장하는 여행보험 데모입니다."},
+      {id:"wellness1", city:"서울", country:"한국", cat:"wellness", tags:["wellness","hotel-domestic","instant"], title:"서울 프리미엄 스파&웰니스 이용권", price:55000, displayPrice:"55,000원", discount:"10%", rating:"4.8", reviews:"205", img:IMG.spa, photos:[IMG.spa,IMG.hotel,IMG.seoul,IMG.food,IMG.beach], notice:"도심 속 스파와 웰니스 시설을 이용하는 티켓 상품입니다.", intro:"마사지, 사우나, 휴식 공간을 포함한 웰니스 이용권 데모 상품입니다."},
+      {id:"busanHotel", city:"부산", country:"한국", cat:"hotel-domestic", tags:["hotel-domestic","hotel","sale"], title:"부산 해운대 오션뷰 호텔 특가", price:118000, displayPrice:"118,000원", discount:"15%", rating:"4.7", reviews:"319", img:IMG.beach, photos:[IMG.beach,IMG.hotel2,IMG.hotel,IMG.food,IMG.seoul], notice:"국내 숙소 예약 흐름을 보여주는 호텔 특가 상품입니다.", intro:"부산 해운대 인근 오션뷰 호텔 객실을 선택하고 금액을 조회하는 국내 숙소 데모입니다."},
+      {id:"minbak1", city:"바르셀로나", country:"스페인", cat:"minbak", tags:["barcelona","minbak"], title:"바르셀로나 한인민박 중심가점", price:55000, displayPrice:"55,000원", discount:"", rating:"4.7", reviews:"151", img:IMG.hotel2, photos:[IMG.hotel2,IMG.hotel,IMG.barca1,IMG.barca4,IMG.food], notice:"바르셀로나 중심가 한인민박 숙박 상품입니다.", intro:"조식, 공용공간, 여행정보 안내를 포함한 한인민박 예약 데모입니다."}
+    ];
+
+    const rankData = {
+      barcelona:{
+        tour:["gaudi1","gaudi2","f1","paella","hotel1","minbak1"],
+        hotel:["hotel1","minbak1","busanHotel","gaudi1"],
+        package:["f1","gaudi1","gaudi2","paella"],
+        minbak:["minbak1","hotel1","paella","gaudi1"]
+      },
+      fukuoka:{
+        tour:["huis","marine","green","itoshima","yufuin","rent1"],
+        ticket:["huis","marine","osaka","wellness1"],
+        pass:["green","flight1","rent1","insurance1"],
+        bus:["itoshima","yufuin","rent1","green"]
+      }
+    };
+
+    const themeCards = [
+      ["슈퍼찬스", "sale", IMG.huis1],
+      ["가우디 투어", "barcelona", IMG.barca2],
+      ["숙소 메가딜", "hotel", IMG.hotel],
+      ["고딕·야경 투어", "tour", IMG.barca4],
+      ["일본 특가", "japan", IMG.fukuoka1],
+      ["티켓・입장권", "ticket", IMG.huis5],
+      ["렌터카", "rent", IMG.car],
+      ["웰니스", "wellness", IMG.spa]
+    ];
+
+    let currentProduct = products[0];
+    let currentOptions = [];
+    let currentPhotos = currentProduct.photos;
+    let currentPhoto = 0;
+    let currentFilterLabel = "전체 상품";
+
+    function getProduct(id){
+      return products.find(p=>p.id===id) || products[0];
+    }
+
+    function formatWon(n){
+      return n.toLocaleString("ko-KR") + "원";
+    }
+
+    function categoryName(cat){
+      return {
+        tour:"투어",ticket:"입장권",pass:"교통패스",bus:"버스투어",hotel:"숙소",
+        package:"패키지",flight:"항공",minbak:"한인민박",rent:"렌터카",
+        insurance:"여행보험",wellness:"웰니스", "hotel-domestic":"국내 숙소"
+      }[cat] || cat;
+    }
+
+    function filterProductList(filter){
+      if(!filter || filter === "all") return products.slice();
+      if(filter === "sale") return products.filter(p=>p.discount);
+      if(filter === "instant") return products.filter(p=>p.tags.includes("instant"));
+      if(filter === "japan") return products.filter(p=>p.tags.includes("japan"));
+      if(filter === "barcelona") return products.filter(p=>p.tags.includes("barcelona"));
+      return products.filter(p=>p.cat === filter || p.tags.includes(filter));
+    }
+
+    function applyFilter(filter,label){
+      const list = filterProductList(filter);
+      currentFilterLabel = label || labelFromFilter(filter);
+      renderProducts(list);
+      document.getElementById("productSectionTitle").textContent = currentFilterLabel;
+      document.getElementById("productSectionDesc").textContent = "클릭하면 해당 상품의 상세페이지와 예약 옵션을 확인할 수 있습니다.";
+      document.getElementById("filterName").textContent = currentFilterLabel;
+      document.getElementById("filterCount").textContent = list.length;
+      document.getElementById("productsSection").scrollIntoView({behavior:"smooth",block:"start"});
+      setActiveLinks(filter);
+      toast(currentFilterLabel + "을 표시합니다");
+    }
+
+    function labelFromFilter(filter){
+      return {
+        all:"전체 상품", sale:"할인 상품", flight:"항공권", hotel:"해외 숙소", "hotel-domestic":"국내 숙소",
+        insurance:"해외여행보험", package:"패키지", minbak:"한인민박", tour:"투어·티켓",
+        rent:"글로벌렌터카", wellness:"뷰티·웰니스", japan:"일본 특가", barcelona:"유럽 투어",
+        ticket:"입장권", pass:"교통패스", instant:"즉시확정 상품", bus:"버스투어"
+      }[filter] || "상품 목록";
+    }
+
+    function setActiveLinks(filter){
+      document.querySelectorAll("#mainNav a,#subNav a,#searchTabs button").forEach(el=>{
+        el.classList.toggle("active", el.dataset.filter === filter);
+      });
+      if(filter === "all"){
+        document.querySelector('#subNav a[data-filter="all"]')?.classList.add("active");
+        document.querySelector('#searchTabs button[data-filter="all"]')?.classList.add("active");
+      }
+    }
+
+    function resetProducts(){
+      renderProducts(products);
+      currentFilterLabel = "전체 상품";
+      document.getElementById("productSectionTitle").textContent = "지금 많이 보는 상품";
+      document.getElementById("productSectionDesc").textContent = "모든 상품은 클릭하면 각각의 상세페이지로 이동합니다.";
+      document.getElementById("filterName").textContent = "전체 상품";
+      document.getElementById("filterCount").textContent = products.length;
+      setActiveLinks("all");
+      toast("전체 상품을 표시합니다");
+    }
+
+    function renderRank(city,cat,target){
+      const ids = rankData[city][cat] || [];
+      document.getElementById(target).innerHTML = ids.map((id,idx)=>{
+        const p = getProduct(id);
+        return `
+          <article class="rank-row" onclick="showDetail('${p.id}')">
+            <div class="rank-no">${idx+1}</div>
+            <img class="rank-thumb" src="${p.img}" alt="">
+            <div>
+              <div class="rank-title line-clamp-2">${escapeHtml(p.title)}</div>
+              <div class="rank-meta">⭐ ${p.rating} (${p.reviews}) · ${escapeHtml(p.city)}</div>
+              <div class="rank-price">${p.discount ? `<span class="discount">${p.discount}</span>` : ""}${p.displayPrice}</div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function bindRankTabs(id,target){
+      document.querySelectorAll(`#${id} button`).forEach(btn=>{
+        btn.addEventListener("click",()=>{
+          document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("active"));
+          btn.classList.add("active");
+          renderRank(btn.dataset.city, btn.dataset.cat, target);
+        });
+      });
+    }
+
+    function renderThemeCards(){
+      document.getElementById("themeCards").innerHTML = themeCards.map(([name,filter,img])=>`
+        <a class="theme-card" href="#" onclick="applyFilter('${filter}','${escapeJs(name)}');return false;" style="background-image:url('${img}')"><span>${escapeHtml(name)}</span></a>
+      `).join("");
+    }
+
+    function renderProducts(list=products){
+      document.getElementById("productGrid").innerHTML = list.map(p=>`
+        <article class="product-card" onclick="showDetail('${p.id}')">
+          <div class="product-img" style="background-image:url('${p.img}')">
+            <div class="product-badge">
+              <span class="badge white">즉시확정</span>
+              <span class="badge white">${escapeHtml(p.city)}</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-title line-clamp-2">${escapeHtml(p.title)}</div>
+            <div class="product-info">⭐ <b>${p.rating}</b> (${p.reviews}) · ${categoryName(p.cat)}</div>
+            <div class="product-price">${p.discount ? `<span class="discount">${p.discount}</span>` : ""}${p.displayPrice}</div>
+          </div>
+        </article>
+      `).join("") || `<div class="filter-summary" style="grid-column:1/-1"><span>검색 결과가 없습니다.</span><button onclick="resetProducts()">전체보기</button></div>`;
+      document.getElementById("filterCount").textContent = list.length;
+    }
+
+    function bindMenus(){
+      document.querySelectorAll("#mainNav a,#subNav a,#searchTabs button,.quick-item").forEach(el=>{
+        el.addEventListener("click",e=>{
+          e.preventDefault();
+          const filter = el.dataset.filter || "all";
+          applyFilter(filter, el.textContent.trim());
+        });
+      });
+
+      document.getElementById("searchForm").addEventListener("submit",e=>{
+        e.preventDefault();
+        const kw = document.getElementById("searchKeyword").value.trim().toLowerCase();
+        const city = document.getElementById("searchCity").value;
+        const filtered = products.filter(p=>{
+          const matchKw = !kw || `${p.title} ${p.city} ${p.country} ${categoryName(p.cat)}`.toLowerCase().includes(kw);
+          const matchCity = !city || p.city === city;
+          return matchKw && matchCity;
+        });
+        renderProducts(filtered);
+        document.getElementById("productSectionTitle").textContent = "검색 결과";
+        document.getElementById("productSectionDesc").textContent = "검색 조건에 맞는 상품입니다. 모든 상품은 상세페이지로 이동합니다.";
+        document.getElementById("filterName").textContent = kw || city || "검색 결과";
+        document.getElementById("filterCount").textContent = filtered.length;
+        document.getElementById("productsSection").scrollIntoView({behavior:"smooth",block:"start"});
+        toast(filtered.length ? `${filtered.length}개 상품을 찾았습니다` : "검색 결과가 없습니다");
+      });
+    }
+
+    function buildOptions(product){
+      if(product.detailType === "huis"){
+        return [
+          {name:"AFTER3(패스포트) 성인만18세이상", price:47600, count:0},
+          {name:"AFTER3(패스포트) 청소년만12-17세", price:39000, count:0},
+          {name:"AFTER3(패스포트) 아동만7-11세", price:32000, count:0},
+          {name:"AFTER3(패스포트) 유아만4-6세", price:24000, count:0},
+          {name:"AFTER3(패스포트) 시니어만65세이상", price:41000, count:0}
+        ];
+      }
+      if(product.cat === "hotel" || product.cat === "hotel-domestic" || product.cat === "minbak"){
+        return [
+          {name:"스탠다드 객실 1박", price:product.price, count:0},
+          {name:"디럭스 객실 1박", price:Math.round(product.price*1.35), count:0},
+          {name:"조식 추가 1인", price:18000, count:0}
+        ];
+      }
+      if(product.cat === "flight"){
+        return [
+          {name:"왕복 항공권 성인 1인", price:product.price, count:0},
+          {name:"왕복 항공권 청소년 1인", price:Math.round(product.price*.9), count:0},
+          {name:"왕복 항공권 아동 1인", price:Math.round(product.price*.75), count:0}
+        ];
+      }
+      if(product.cat === "rent"){
+        return [
+          {name:"소형 차량 24시간", price:product.price, count:0},
+          {name:"중형 차량 24시간", price:Math.round(product.price*1.25), count:0},
+          {name:"보험 패키지 추가", price:15000, count:0}
+        ];
+      }
+      if(product.cat === "insurance"){
+        return [
+          {name:"기본 플랜 성인 1인", price:product.price, count:0},
+          {name:"표준 플랜 성인 1인", price:Math.round(product.price*1.6), count:0},
+          {name:"프리미엄 플랜 성인 1인", price:Math.round(product.price*2.3), count:0}
+        ];
+      }
+      return [
+        {name:`${categoryName(product.cat)} 성인 1인`, price:product.price, count:0},
+        {name:`${categoryName(product.cat)} 청소년 1인`, price:Math.round(product.price*.82), count:0},
+        {name:`${categoryName(product.cat)} 아동 1인`, price:Math.round(product.price*.65), count:0}
+      ];
+    }
+
+    function showDetail(id){
+      currentProduct = getProduct(id);
+      currentPhotos = currentProduct.photos || [currentProduct.img, IMG.huis2, IMG.huis3, IMG.hotel, IMG.beach];
+      currentOptions = buildOptions(currentProduct);
+      currentPhoto = 0;
+
+      document.body.classList.add("detail-mode");
+      window.scrollTo({top:0,behavior:"smooth"});
+
+      renderDetail();
+      renderOptions();
+      document.getElementById("useDate").value = "";
+      document.getElementById("optionArea").classList.remove("show");
+      document.getElementById("checkout").classList.remove("show");
+      updateBooking();
+    }
+
+    function renderDetail(){
+      document.getElementById("breadcrumb").textContent = `홈 > ${currentProduct.country} > ${currentProduct.city} > ${categoryName(currentProduct.cat)} > ${currentProduct.title}`;
+      document.getElementById("galleryMain").style.backgroundImage = `url('${currentPhotos[0]}')`;
+      document.getElementById("photoCount").textContent = `사진 전체보기 1 / ${currentPhotos.length}`;
+      document.getElementById("gallerySide").innerHTML = currentPhotos.slice(1,5).map((img,i)=>`
+        <div class="gallery-small" onclick="openPhoto(${i+1})" style="background-image:url('${img}')"></div>
+      `).join("");
+
+      document.getElementById("detailBadges").innerHTML = `
+        <span class="badge green">즉시확정</span>
+        <span class="badge">모바일 바우처</span>
+        <span class="badge orange">${currentProduct.discount ? "할인중" : "인기상품"}</span>
+        <span class="badge">${categoryName(currentProduct.cat)}</span>
+      `;
+      document.getElementById("detailTitle").textContent = currentProduct.title;
+      document.getElementById("detailMeta").innerHTML = `
+        <span>⭐ ${currentProduct.rating} 후기 ${currentProduct.reviews}개</span>
+        <span>${escapeHtml(currentProduct.city)} · ${categoryName(currentProduct.cat)}</span>
+        <span>예약 가능</span>
+        <span>데모 상품</span>
+      `;
+      document.getElementById("detailPrice").innerHTML = `${currentProduct.discount ? `<span class="discount">${currentProduct.discount}</span>` : ""}${currentProduct.displayPrice}부터`;
+      document.getElementById("bookingPrice").innerHTML = `${currentProduct.discount ? `<span class="discount">${currentProduct.discount}</span>` : ""}${currentProduct.displayPrice}부터`;
+      document.getElementById("bookingRating").innerHTML = `⭐ <b>${currentProduct.rating}</b> 후기 ${currentProduct.reviews}개 · 즉시확정`;
+
+      document.getElementById("detailNotice").textContent = currentProduct.notice || "날짜와 옵션을 선택해 금액을 조회할 수 있는 데모 상품입니다.";
+      document.getElementById("detailIntro").textContent = currentProduct.intro || "여행 상품 상세페이지와 예약 흐름을 확인할 수 있는 데모 상품입니다.";
+      document.getElementById("detailIntroList").innerHTML = `
+        <li>상품 사진, 후기, 가격, 예약 옵션을 확인할 수 있습니다.</li>
+        <li>날짜 선택 후 옵션 수량을 선택하면 금액조회가 활성화됩니다.</li>
+        <li>금액조회 후 구매하기 영역에서 결제수단 선택까지 가능합니다.</li>
+      `;
+
+      document.getElementById("pointTable").innerHTML = `
+        <div class="detail-row"><b>상품 형태</b><span>${categoryName(currentProduct.cat)}</span></div>
+        <div class="detail-row"><b>지역</b><span>${currentProduct.country} · ${currentProduct.city}</span></div>
+        <div class="detail-row"><b>확정 방식</b><span>날짜 및 옵션 선택 후 금액조회 → 구매하기 진행</span></div>
+        <div class="detail-row"><b>바우처</b><span>구매 후 모바일 바우처 발급 영역으로 연결되는 구조</span></div>
+      `;
+      document.getElementById("includeTable").innerHTML = `
+        <div class="detail-row"><b>포함사항</b><span>선택한 날짜와 옵션에 해당하는 ${categoryName(currentProduct.cat)} 상품</span></div>
+        <div class="detail-row"><b>불포함사항</b><span>개인 경비, 현장 추가 비용, 별도 옵션</span></div>
+        <div class="detail-row"><b>준비물</b><span>모바일 바우처, 신분증, 예약자 정보</span></div>
+      `;
+      document.getElementById("noticeList").innerHTML = `
+        <li>선택한 날짜와 옵션은 구매 전 반드시 다시 확인해야 합니다.</li>
+        <li>실제 운영 시에는 재고, 현지 운영시간, 취소수수료가 API로 연동되어야 합니다.</li>
+        <li>이 페이지는 프론트 데모이므로 실제 결제와 바우처 발송은 처리되지 않습니다.</li>
+      `;
+    }
+
+    function showHome(){
+      document.body.classList.remove("detail-mode");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function renderOptions(){
+      document.getElementById("optionRows").innerHTML = currentOptions.map((o,i)=>`
+        <div class="option-row">
+          <div class="opt-name">
+            ${escapeHtml(o.name)}<span id="inlineCount${i}">${o.count}</span>
+            <small>${formatWon(o.price)} / 1개</small>
+          </div>
+          <div class="counter">
+            <button onclick="changeCount(${i},-1)" id="minus${i}" ${o.count===0 ? "disabled" : ""}>−</button>
+            <span id="count${i}">${o.count}</span>
+            <button onclick="changeCount(${i},1)">+</button>
+          </div>
+        </div>
+      `).join("");
+      updateBooking();
+    }
+
+    function changeCount(i,delta){
+      currentOptions[i].count = Math.max(0, currentOptions[i].count + delta);
+      document.getElementById("count"+i).textContent = currentOptions[i].count;
+      document.getElementById("inlineCount"+i).textContent = currentOptions[i].count;
+      document.getElementById("minus"+i).disabled = currentOptions[i].count === 0;
+      document.getElementById("checkout").classList.remove("show");
+      updateBooking();
+    }
+
+    function updateBooking(){
+      const date = document.getElementById("useDate").value;
+      const qty = currentOptions.reduce((s,o)=>s+o.count,0);
+      const total = currentOptions.reduce((s,o)=>s+o.count*o.price,0);
+      document.getElementById("totalPrice").textContent = formatWon(total);
+      document.getElementById("lookupBtn").disabled = !(date && qty>0);
+    }
+
+    document.getElementById("useDate").addEventListener("change",()=>{
+      document.getElementById("optionArea").classList.toggle("show", !!document.getElementById("useDate").value);
+      document.getElementById("checkout").classList.remove("show");
+      updateBooking();
+    });
+
+    function lookupPrice(){
+      const date = document.getElementById("useDate").value;
+      const selected = currentOptions.filter(o=>o.count>0);
+      const total = selected.reduce((s,o)=>s+o.count*o.price,0);
+      document.getElementById("checkoutSummary").innerHTML = `
+        <div class="checkout-line"><span>상품명</span><b>${escapeHtml(currentProduct.title)}</b></div>
+        <div class="checkout-line"><span>이용일</span><b>${date}</b></div>
+        ${selected.map(o=>`<div class="checkout-line"><span>${escapeHtml(o.name)} × ${o.count}</span><b>${formatWon(o.price*o.count)}</b></div>`).join("")}
+        <div class="checkout-line"><span>총 결제금액</span><b>${formatWon(total)}</b></div>
+      `;
+      document.getElementById("checkout").classList.add("show");
+      document.getElementById("checkout").scrollIntoView({behavior:"smooth",block:"center"});
+      toast("금액조회가 완료되었습니다");
+    }
+
+    function selectPay(btn){
+      document.querySelectorAll("#payMethods button").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      toast(btn.textContent + " 선택");
+    }
+
+    function finishBuy(){
+      toast("구매하기 데모 완료: 실제 결제는 PG 연동이 필요합니다");
+    }
+
+    function addWishlist(){
+      toast("위시리스트에 담았습니다");
+    }
+
+    function openLogin(){
+      document.getElementById("drawerTitle").textContent = "로그인 및 회원가입";
+      document.getElementById("loginDrawer").classList.add("show");
+    }
+    function openPartner(){
+      document.getElementById("drawerTitle").textContent = "파트너 로그인";
+      document.getElementById("loginDrawer").classList.add("show");
+    }
+    function closeLogin(){document.getElementById("loginDrawer").classList.remove("show")}
+
+    function openPhoto(i){
+      currentPhoto = i;
+      document.getElementById("photoModalImg").src = currentPhotos[currentPhoto];
+      document.getElementById("photoModal").classList.add("show");
+    }
+    function closePhoto(){document.getElementById("photoModal").classList.remove("show")}
+    function nextPhoto(){
+      currentPhoto = (currentPhoto + 1) % currentPhotos.length;
+      document.getElementById("photoModalImg").src = currentPhotos[currentPhoto];
+    }
+    function prevPhoto(){
+      currentPhoto = (currentPhoto - 1 + currentPhotos.length) % currentPhotos.length;
+      document.getElementById("photoModalImg").src = currentPhotos[currentPhoto];
+    }
+
+    function toast(msg){
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(window.__toast);
+      window.__toast = setTimeout(()=>el.classList.remove("show"),1800);
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "").replace(/[&<>"']/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[s]));
+    }
+    function escapeJs(str){
+      return String(str ?? "").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+    }
+
+    renderRank("barcelona","tour","barcelonaList");
+    renderRank("fukuoka","tour","fukuokaList");
+    bindRankTabs("barcelonaTabs","barcelonaList");
+    bindRankTabs("fukuokaTabs","fukuokaList");
+    renderThemeCards();
+    renderProducts(products);
+    bindMenus();
+    resetProducts();
+  </script>
+</body>
+</html>

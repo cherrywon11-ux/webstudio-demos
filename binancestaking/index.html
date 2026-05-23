@@ -1,0 +1,1492 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>웹스튜디오스테이킹 - 수익 데모</title>
+  <style>
+    :root{
+      --bg:#0b0e11;
+      --bg2:#181a20;
+      --card:#1e2329;
+      --card2:#2b3139;
+      --line:#30363f;
+      --text:#eaecef;
+      --muted:#848e9c;
+      --yellow:#f0b90b;
+      --yellow2:#f8d33a;
+      --green:#0ecb81;
+      --red:#f6465d;
+      --blue:#2b70ff;
+      --white:#fff;
+      --shadow:0 18px 46px rgba(0,0,0,.28);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      font-size:14px;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .wrap{width:min(1240px,calc(100% - 28px));margin:0 auto}
+    .muted{color:var(--muted)}
+    .up{color:var(--green)}
+    .down{color:var(--red)}
+    .yellow{color:var(--yellow)}
+    .hide{display:none!important}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:#0b0e11;
+      border-bottom:1px solid #202630;
+    }
+    .top-inner{
+      height:64px;
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:none;
+      font-size:21px;
+      font-weight:900;
+      color:var(--yellow);
+      letter-spacing:-.8px;
+    }
+    .brand-mark{
+      width:34px;height:34px;
+      border-radius:9px;
+      background:linear-gradient(135deg,#f0b90b,#ffe16b);
+      color:#111;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      box-shadow:0 10px 28px rgba(240,185,11,.24);
+    }
+    .main-nav{
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      overflow:auto;
+      white-space:nowrap;
+      scrollbar-width:none;
+      color:#c7ccd3;
+      font-weight:800;
+    }
+    .main-nav::-webkit-scrollbar{display:none}
+    .main-nav a:hover,.main-nav a.active{color:var(--yellow)}
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex:none;
+    }
+    .wallet-pill{
+      border:1px solid var(--line);
+      background:#151a21;
+      border-radius:999px;
+      padding:9px 12px;
+      font-weight:900;
+      color:#dbe0e7;
+    }
+    .btn{
+      border:0;
+      border-radius:10px;
+      min-height:38px;
+      padding:0 13px;
+      font-weight:900;
+      background:var(--yellow);
+      color:#111;
+    }
+    .btn.dark{
+      background:#2b3139;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+    .btn.green{background:var(--green);color:#031a11}
+    .btn.red{background:var(--red);color:#fff}
+    .btn:disabled{
+      background:#3c424d;
+      color:#7e8794;
+      cursor:not-allowed;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:230px minmax(0,1fr);
+      gap:18px;
+      padding:18px 0 40px;
+    }
+    .side{
+      position:sticky;
+      top:82px;
+      align-self:start;
+      background:#11161d;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .side-title{
+      padding:16px;
+      border-bottom:1px solid var(--line);
+      font-weight:900;
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .side-list{
+      list-style:none;
+      padding:8px;
+      margin:0;
+      display:grid;
+      gap:4px;
+    }
+    .side-list button{
+      width:100%;
+      border:0;
+      background:transparent;
+      color:#c8ced8;
+      text-align:left;
+      border-radius:12px;
+      padding:11px 12px;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .side-list button:hover,.side-list button.active{
+      background:#252b34;
+      color:var(--yellow);
+    }
+    .side-list small{
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .page{display:none}
+    .page.active{display:block}
+    .hero{
+      border:1px solid var(--line);
+      background:
+        radial-gradient(circle at 78% 18%,rgba(240,185,11,.25),transparent 28%),
+        radial-gradient(circle at 18% 78%,rgba(43,112,255,.18),transparent 28%),
+        linear-gradient(135deg,#181a20,#0f1319);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      min-height:210px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 340px;
+      gap:20px;
+      align-items:center;
+      overflow:hidden;
+    }
+    .hero h1{
+      margin:0;
+      font-size:38px;
+      letter-spacing:-1.8px;
+      line-height:1.15;
+    }
+    .hero p{
+      margin:12px 0 0;
+      max-width:680px;
+      color:#b5bdc9;
+      line-height:1.65;
+      font-size:15px;
+    }
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:20px;
+    }
+    .hero-stat{
+      background:#11161d;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+    }
+    .hero-stat .row{
+      display:flex;
+      justify-content:space-between;
+      padding:9px 0;
+      border-bottom:1px solid #252b34;
+      color:#cbd1da;
+    }
+    .hero-stat .row:last-child{border-bottom:0}
+    .hero-stat b{color:#fff}
+
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+    .grid.cols-4{grid-template-columns:repeat(4,1fr)}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    .section{
+      margin-top:18px;
+    }
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      margin:0 0 12px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size:22px;
+      letter-spacing:-.8px;
+    }
+    .section-head p{margin:5px 0 0;color:var(--muted)}
+    .card{
+      background:#11161d;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 26px rgba(0,0,0,.18);
+    }
+    .product-card{
+      background:#11161d;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      min-height:160px;
+      cursor:pointer;
+      transition:.16s;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .product-card:hover{
+      transform:translateY(-2px);
+      border-color:#5c6572;
+      background:#151a21;
+    }
+    .product-icon{
+      width:40px;height:40px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#252b34;
+      color:var(--yellow);
+      font-weight:900;
+      margin-bottom:12px;
+    }
+    .product-card h3{
+      margin:0;
+      font-size:18px;
+    }
+    .product-card p{
+      color:var(--muted);
+      line-height:1.5;
+      margin:7px 0 0;
+      min-height:42px;
+    }
+    .product-card .apr{
+      margin-top:13px;
+      font-size:20px;
+      font-weight:900;
+      color:var(--green);
+    }
+    .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+    .tag{
+      border-radius:999px;
+      background:#252b34;
+      color:#c8ced8;
+      padding:5px 8px;
+      font-size:11px;
+      font-weight:800;
+    }
+    .tag.yellow{background:rgba(240,185,11,.14);color:var(--yellow)}
+    .tag.green{background:rgba(14,203,129,.12);color:var(--green)}
+    .tag.red{background:rgba(246,70,93,.12);color:var(--red)}
+
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px;
+      background:#11161d;
+      border:1px solid var(--line);
+      border-radius:16px;
+      margin-bottom:12px;
+    }
+    .toolbar-left,.toolbar-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .chip{
+      border:1px solid var(--line);
+      background:#181e26;
+      color:#dbe0e7;
+      border-radius:999px;
+      padding:8px 11px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .chip.active{
+      background:var(--yellow);
+      color:#111;
+      border-color:var(--yellow);
+    }
+    .field,.select{
+      height:38px;
+      border:1px solid var(--line);
+      background:#0f1319;
+      color:#fff;
+      border-radius:10px;
+      padding:0 11px;
+      outline:none;
+    }
+    .field:focus,.select:focus{border-color:var(--yellow)}
+
+    .table-wrap{
+      background:#11161d;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 10px 26px rgba(0,0,0,.16);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      table-layout:auto;
+    }
+    th{
+      text-align:left;
+      color:var(--muted);
+      background:#151a21;
+      border-bottom:1px solid var(--line);
+      padding:13px 14px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    td{
+      padding:14px;
+      border-bottom:1px solid #202630;
+      vertical-align:middle;
+      color:#dbe0e7;
+    }
+    tr:last-child td{border-bottom:0}
+    tr:hover td{background:#141a22}
+    .coin{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .coin-logo{
+      width:30px;height:30px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#252b34;
+      color:var(--yellow);
+      font-size:12px;
+      font-weight:900;
+      flex:none;
+    }
+    .coin small{display:block;color:var(--muted);font-weight:600;margin-top:2px}
+    .action-group{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+
+    .calculator{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      align-items:end;
+    }
+    .calc-result{
+      background:#0f1319;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+    }
+    .calc-result span{color:var(--muted);font-size:12px}
+    .calc-result b{display:block;margin-top:6px;font-size:20px;color:var(--green)}
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+    .form-row label{
+      display:block;
+      color:#c8ced8;
+      font-weight:900;
+      margin-bottom:7px;
+    }
+    .form-row input,.form-row select{
+      width:100%;
+      height:44px;
+      border:1px solid var(--line);
+      background:#0f1319;
+      color:#fff;
+      border-radius:12px;
+      padding:0 12px;
+      outline:none;
+    }
+    .form-row input:focus,.form-row select:focus{border-color:var(--yellow)}
+    .summary-box{
+      background:#0f1319;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      display:grid;
+      gap:9px;
+    }
+    .summary-line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:#cbd1da;
+    }
+    .summary-line b{color:#fff}
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.62);
+    }
+    .modal.show{display:flex}
+    .modal-card{
+      width:min(560px,100%);
+      background:#181a20;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 30px 90px rgba(0,0,0,.45);
+      overflow:hidden;
+    }
+    .modal-head{
+      padding:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      border-bottom:1px solid var(--line);
+    }
+    .modal-head h2{margin:0;font-size:20px}
+    .close{
+      width:34px;height:34px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:#11161d;
+      color:#fff;
+      font-weight:900;
+      font-size:18px;
+    }
+    .modal-body{padding:18px}
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:24px;
+      z-index:200;
+      transform:translateX(-50%) translateY(18px);
+      background:#252b34;
+      color:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:12px 16px;
+      box-shadow:0 12px 30px rgba(0,0,0,.35);
+      font-weight:900;
+      opacity:0;
+      transition:.2s;
+      pointer-events:none;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:1080px){
+      .layout{grid-template-columns:1fr}
+      .side{position:relative;top:auto}
+      .side-list{grid-template-columns:repeat(3,1fr)}
+      .hero{grid-template-columns:1fr}
+      .grid.cols-4{grid-template-columns:repeat(2,1fr)}
+      .grid.cols-3{grid-template-columns:repeat(2,1fr)}
+      .calculator{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:720px){
+      .wrap{width:min(100% - 20px,1240px)}
+      .top-inner{height:auto;display:block;padding:12px 0}
+      .main-nav{margin:12px 0}
+      .top-actions{justify-content:space-between}
+      .side-list{grid-template-columns:1fr}
+      .hero h1{font-size:29px}
+      .grid.cols-4,.grid.cols-3,.grid.cols-2,.form-grid,.calculator{grid-template-columns:1fr}
+      th:nth-child(4),td:nth-child(4),th:nth-child(5),td:nth-child(5){display:none}
+      .action-group{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap top-inner">
+      <a class="brand" href="#" onclick="goPage('earn');return false;">
+        <span class="brand-mark">웹</span>
+        <span>웹스튜디오스테이킹</span>
+      </a>
+      <nav class="main-nav" id="topNav">
+        <a href="#" data-page="earn" class="active">수익</a>
+        <a href="#" data-page="simple">간편 예치</a>
+        <a href="#" data-page="usd">달러 수익</a>
+        <a href="#" data-page="eth">ETH 스테이킹</a>
+        <a href="#" data-page="sol">SOL 스테이킹</a>
+        <a href="#" data-page="advanced">고급 수익</a>
+        <a href="#" data-page="dual">듀얼 투자</a>
+        <a href="#" data-page="loan">대출</a>
+      </nav>
+      <div class="top-actions">
+        <button class="btn dark" onclick="open지갑()">지갑</button>
+        <span class="wallet-pill">총액: <b id="totalUsd">$0.00</b></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <aside class="side">
+      <div class="side-title">수익 메뉴 <small class="muted">데모</small></div>
+      <ul class="side-list" id="sideList">
+        <li><button data-page="earn" class="active">🏠 수익 홈 <small>300+</small></button></li>
+        <li><button data-page="simple">💰 간편 예치 <small>유동형</small></button></li>
+        <li><button data-page="usd">💵 달러 수익 허브 <small>스테이블</small></button></li>
+        <li><button data-page="eth">◆ Ethereum 스테이킹 <small>WBETH</small></button></li>
+        <li><button data-page="sol">◎ Solana 스테이킹 <small>BNSOL</small></button></li>
+        <li><button data-page="advanced">⚡ 고급 수익 <small>위험</small></button></li>
+        <li><button data-page="dual">🎯 듀얼 투자 <small>매수/매도</small></button></li>
+        <li><button data-page="arbitrage">⇄ 스마트 차익거래 <small>펀딩</small></button></li>
+        <li><button data-page="onchain">⛓ 온체인 수익 <small>탈중앙 금융</small></button></li>
+        <li><button data-page="discount">🏷 할인 매수 <small>목표가</small></button></li>
+        <li><button data-page="loan">🏦 코인 대출 <small>대출하기</small></button></li>
+        <li><button data-page="portfolio">📊 수익 지갑 <small id="positionCount">0</small></button></li>
+      </ul>
+    </aside>
+
+    <section>
+      <div class="page active" id="page-earn">
+        <section class="hero">
+          <div>
+            <h1>스마트 수익 관리는 여기서 시작됩니다</h1>
+            <p>코인을 예치하고 연 이율, 기간, 상품 유형을 선택해 보상을 계산하는 스테이킹 수익 데모입니다. 실제 자산을 다루지 않는 프론트 시뮬레이션이며, 메뉴와 구독/상환/계산 기능이 모두 작동합니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="goPage('simple')">수익 시작하기</button>
+              <button class="btn dark" onclick="goPage('portfolio')">포트폴리오 보기</button>
+              <button class="btn dark" onclick="resetDemo()">데모 초기화</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>지원 자산</span><b>300개 이상 데모</b></div>
+            <div class="row"><span>총 예치 잔고</span><b id="heroEarn">$0.00</b></div>
+            <div class="row"><span>예상 일일 보상</span><b id="hero일일">$0.00</b></div>
+            <div class="row"><span>데모 지갑</span><b id="hero지갑">$0.00</b></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <h2>인기 상품</h2>
+              <p>거래소 수익상품 구조처럼 간편 예치, 스테이킹, 고급 수익, 대출을 카드로 배치했습니다.</p>
+            </div>
+          </div>
+          <div class="grid cols-4">
+            <article class="product-card" onclick="goPage('simple')">
+              <div><div class="product-icon">간편</div><h3>간편 예치</h3><p>유동형/고정형 상품, 실시간 연 이율, 자동 구독 시뮬레이션</p></div>
+              <div class="apr">최대 12.5%</div>
+            </article>
+            <article class="product-card" onclick="goPage('eth')">
+              <div><div class="product-icon">ETH</div><h3>ETH 스테이킹</h3><p>ETH를 스테이킹하고 WBETH 잔고를 받는 구조</p></div>
+              <div class="apr">연 2.95%</div>
+            </article>
+            <article class="product-card" onclick="goPage('dual')">
+              <div><div class="product-icon">듀얼</div><h3>듀얼 투자</h3><p>저가 매수 / 고가 매도, 목표가와 정산일 선택</p></div>
+              <div class="apr">높은 연 수익률</div>
+            </article>
+            <article class="product-card" onclick="goPage('loan')">
+              <div><div class="product-icon">대출</div><h3>코인 대출</h3><p>담보와 대출자산을 선택해 담보비율과 이자를 계산</p></div>
+              <div class="apr">대출하기</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <h2>코인 수익 계산하기</h2>
+              <p>코인, 금액, 연 이율, 기간을 입력하면 예상 보상을 계산합니다.</p>
+            </div>
+          </div>
+          <div class="card calculator">
+            <div class="form-row"><label>자산</label><select id="calc자산"></select></div>
+            <div class="form-row"><label>금액</label><input id="calc금액" type="number" value="1000"></div>
+            <div class="form-row"><label>연 이율 %</label><input id="calcApr" type="number" value="8.5" step="0.1"></div>
+            <div class="form-row"><label>기간</label><select id="calc일수"><option value="7">7일</option><option value="30" selected>30일</option><option value="90">90일</option><option value="120">120일</option></select></div>
+            <button class="btn" onclick="calculateEarn()">계산하기</button>
+            <div class="calc-result"><span>예상 보상</span><b id="calcReward">0.0000</b></div>
+            <div class="calc-result"><span>예상 가치</span><b id="calc가치">$0.00</b></div>
+            <div class="calc-result"><span>계산식</span><b style="font-size:13px">금액 × 연 이율 × 일수 / 365</b></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <h2>코인 상품</h2>
+              <p>검색/정렬/구독이 작동하는 수익 상품 리스트입니다.</p>
+            </div>
+          </div>
+          <div id="earnTable"></div>
+        </section>
+      </div>
+
+      <div class="page" id="page-simple">
+        <section class="hero">
+          <div>
+            <h1>간편 예치</h1>
+            <p>유동형 상품과 고정형 상품을 선택해 예치합니다. 유동형은 즉시 상환, 고정형은 기간을 선택해 더 높은 연 이율을 받는 구조입니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="setSimpleType('유동형')">유동형 상품</button>
+              <button class="btn dark" onclick="setSimpleType('고정형')">고정형 상품</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>상품 유형</span><b id="simpleTypeLabel">유동형</b></div>
+            <div class="row"><span>실시간 연 이율</span><b>매분 반영</b></div>
+            <div class="row"><span>고정형 보상</span><b>일별 지급</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <button class="chip active" onclick="setSimpleType('유동형')" id="chipFlex">유동형</button>
+              <button class="chip" onclick="setSimpleType('고정형')" id="chipLock">고정형</button>
+              <input class="field" id="simpleSearch" placeholder="Search coin" oninput="renderSimpleTable()">
+            </div>
+            <div class="toolbar-right">
+              <select class="select" id="simpleSort" onchange="renderSimpleTable()">
+                <option value="apr">연 이율 높은순</option>
+                <option value="asset">자산 가나다순</option>
+                <option value="balance">잔고</option>
+              </select>
+            </div>
+          </div>
+          <div id="simpleTable"></div>
+        </section>
+      </div>
+
+      <div class="page" id="page-usd">
+        <section class="hero">
+          <div>
+            <h1>달러 수익 허브</h1>
+            <p>USDT, USDC, FDUSD 같은 스테이블 자산의 수익 상품을 비교하고 구독합니다. 유동성/고정기간/보상 계산이 작동합니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="subscribe자산('USDT','달러 수익 유동형',5.2,0)">USDT 유동형</button>
+              <button class="btn dark" onclick="subscribe자산('USDC','달러 수익 고정형 30D',7.1,30)">USDC 30일</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>스테이블 상품</span><b>USDT / USDC / FDUSD</b></div>
+            <div class="row"><span>유동성</span><b>유동형 + 고정형</b></div>
+            <div class="row"><span>비교</span><b>연 이율 / 기간</b></div>
+          </div>
+        </section>
+        <section class="section"><div id="usdTable"></div></section>
+      </div>
+
+      <div class="page" id="page-eth">
+        <section class="hero">
+          <div>
+            <h1>Ethereum 스테이킹</h1>
+            <p>ETH를 스테이킹하면 데모상 WBETH로 표시됩니다. 스테이킹/상환/예상 보상 계산이 작동합니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="quick스테이킹('ETH')">ETH 스테이킹하기</button>
+              <button class="btn dark" onclick="goPage('portfolio')">WBETH 보기</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>스테이킹 자산</span><b>ETH</b></div>
+            <div class="row"><span>수령 자산</span><b>WBETH</b></div>
+            <div class="row"><span>예상 연 이율</span><b class="up">2.95%</b></div>
+            <div class="row"><span>보유 ETH 잔고</span><b id="ethBal">0</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-2">
+            <div class="card">
+              <h2 style="margin-top:0">ETH 스테이킹하기</h2>
+              <div class="form-grid">
+                <div class="form-row"><label>ETH 수량</label><input id="eth금액" type="number" value="0.5" step="0.01" oninput="previewEth()"></div>
+                <div class="form-row"><label>수령 자산</label><input id="ethReceive" readonly></div>
+              </div>
+              <div class="summary-box" style="margin-top:12px">
+                <div class="summary-line"><span>비율</span><b>1 ETH ≈ 1 WBETH</b></div>
+                <div class="summary-line"><span>연 이율</span><b class="up">2.95%</b></div>
+                <div class="summary-line"><span>일일 예상</span><b id="eth일일">0 ETH</b></div>
+              </div>
+              <button class="btn" style="margin-top:12px" onclick="stakeSpecial('ETH')">스테이킹 확정</button>
+            </div>
+            <div class="card">
+              <h2 style="margin-top:0">자주 묻는 질문</h2>
+              <p class="muted">데모에서는 ETH를 차감하고 WBETH 포지션을 추가합니다. 상환은 수익 지갑에서 처리됩니다.</p>
+              <div class="tag-row"><span class="tag green">온체인 보상</span><span class="tag yellow">WBETH</span><span class="tag">일일 누적</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-sol">
+        <section class="hero">
+          <div>
+            <h1>Solana 스테이킹</h1>
+            <p>SOL을 스테이킹하고 데모상 BNSOL 포지션을 받습니다. 수량 입력, 예상 보상, 포트폴리오 반영이 작동합니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="quick스테이킹('SOL')">SOL 스테이킹하기</button>
+              <button class="btn dark" onclick="goPage('portfolio')">BNSOL 보기</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>스테이킹 자산</span><b>SOL</b></div>
+            <div class="row"><span>수령 자산</span><b>BNSOL</b></div>
+            <div class="row"><span>예상 연 이율</span><b class="up">7.20%</b></div>
+            <div class="row"><span>보유 SOL 잔고</span><b id="solBal">0</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-2">
+            <div class="card">
+              <h2 style="margin-top:0">SOL 스테이킹하기</h2>
+              <div class="form-grid">
+                <div class="form-row"><label>SOL 수량</label><input id="sol금액" type="number" value="10" step="0.1" oninput="previewSol()"></div>
+                <div class="form-row"><label>수령 자산</label><input id="solReceive" readonly></div>
+              </div>
+              <div class="summary-box" style="margin-top:12px">
+                <div class="summary-line"><span>비율</span><b>1 SOL ≈ 1 BNSOL</b></div>
+                <div class="summary-line"><span>연 이율</span><b class="up">7.20%</b></div>
+                <div class="summary-line"><span>일일 예상</span><b id="sol일일">0 SOL</b></div>
+              </div>
+              <button class="btn" style="margin-top:12px" onclick="stakeSpecial('SOL')">스테이킹 확정</button>
+            </div>
+            <div class="card">
+              <h2 style="margin-top:0">스테이킹 안내</h2>
+              <p class="muted">SOL 스테이킹도 실제 네트워크가 아니라 잔고/포지션을 시뮬레이션합니다.</p>
+              <div class="tag-row"><span class="tag green">BNSOL</span><span class="tag yellow">스테이킹</span><span class="tag">상환 데모</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-advanced">
+        <section class="hero">
+          <div>
+            <h1>고급 수익</h1>
+            <p>높은 보상을 노리는 구조화 상품을 모은 페이지입니다. 듀얼 투자, 스마트 차익거래, 온체인 수익, 할인 매수가 각각 작동합니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="goPage('dual')">듀얼 투자</button>
+              <button class="btn dark" onclick="goPage('arbitrage')">스마트 차익거래</button>
+              <button class="btn dark" onclick="goPage('onchain')">온체인 수익</button>
+              <button class="btn dark" onclick="goPage('discount')">할인 매수</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>위험도</span><b class="down">높음</b></div>
+            <div class="row"><span>상품</span><b>4개 데모</b></div>
+            <div class="row"><span>계산기</span><b>포함</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-4">
+            <article class="product-card" onclick="goPage('dual')"><div><div class="product-icon">듀얼</div><h3>듀얼 투자</h3><p>저가 매수 / 고가 매도, 목표가와 정산일 기준 보상 계산</p></div><div class="apr">연 수익률 35~180%</div></article>
+            <article class="product-card" onclick="goPage('arbitrage')"><div><div class="product-icon">차익</div><h3>스마트 차익거래</h3><p>현물/선물 조합, 펀딩 수수료 수익 시뮬레이션</p></div><div class="apr">펀딩</div></article>
+            <article class="product-card" onclick="goPage('onchain')"><div><div class="product-icon">온체인</div><h3>온체인 수익</h3><p>프로토콜 참여형 수익 상품 데모</p></div><div class="apr">최대 18%</div></article>
+            <article class="product-card" onclick="goPage('discount')"><div><div class="product-icon">할인</div><h3>할인 매수</h3><p>목표 가격 도달 시 할인 매수, 미체결 시 보상</p></div><div class="apr">할인</div></article>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-dual">
+        <section class="hero">
+          <div>
+            <h1>듀얼 투자</h1>
+            <p>자산, 방향, 목표가, 정산일, 금액을 선택해 보상을 계산하고 포지션을 생성합니다.</p>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>방향</span><b>저가 매수 / 고가 매도</b></div>
+            <div class="row"><span>보상 계산식</span><b>금액 × 연 수익률 × 일수 / 365</b></div>
+            <div class="row"><span>위험</span><b class="down">원금 보장 아님</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-2">
+            <div class="card">
+              <h2 style="margin-top:0">듀얼 투자 구독</h2>
+              <div class="form-grid">
+                <div class="form-row"><label>거래쌍</label><select id="dualPair" onchange="previewDual()"><option>BTC/USDT</option><option>ETH/USDT</option><option>SOL/USDT</option></select></div>
+                <div class="form-row"><label>방향</label><select id="dualDir" onchange="previewDual()"><option>저가 매수</option><option>고가 매도</option></select></div>
+                <div class="form-row"><label>목표 가격</label><input id="dualTarget" type="number" value="98000" oninput="previewDual()"></div>
+                <div class="form-row"><label>정산일</label><select id="dual일수" onchange="previewDual()"><option value="3">&lt; 3일</option><option value="7">&lt; 7일</option><option value="30" selected>7 - 30일</option><option value="60">30 - 60일</option></select></div>
+                <div class="form-row"><label>연 수익률 %</label><input id="dualApy" type="number" value="85.3" oninput="previewDual()"></div>
+                <div class="form-row"><label>USDT 금액</label><input id="dual금액" type="number" value="1000" oninput="previewDual()"></div>
+              </div>
+              <button class="btn" style="margin-top:12px" onclick="subscribeDual()">구독하기</button>
+            </div>
+            <div class="card">
+              <h2 style="margin-top:0">미리보기</h2>
+              <div class="summary-box" id="dualPreview"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-arbitrage">
+        <section class="hero">
+          <div>
+            <h1>스마트 차익거래</h1>
+            <p>현물과 선물을 반대 포지션으로 구성해 펀딩 수수료를 받는 전략을 데모로 시작/상환합니다.</p>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>포트폴리오</span><b id="arbPortfolio">$0</b></div>
+            <div class="row"><span>다음 예상 연 이율</span><b class="up" id="arbAprView">12.8%</b></div>
+            <div class="row"><span>펀딩 수수료</span><b>시뮬레이션</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-2">
+            <div class="card">
+              <h2 style="margin-top:0">전략 시작</h2>
+              <div class="form-grid">
+                <div class="form-row"><label>종목</label><select id="arbSymbol" onchange="previewArb()"><option>BTCUSDT</option><option>ETHUSDT</option><option>SOLUSDT</option></select></div>
+                <div class="form-row"><label>명목 금액 USDT</label><input id="arb금액" type="number" value="1000" oninput="previewArb()"></div>
+                <div class="form-row"><label>다음 펀딩 비율 %</label><input id="arbFunding" type="number" value="0.012" step="0.001" oninput="previewArb()"></div>
+                <div class="form-row"><label>기간 일수</label><input id="arb일수" type="number" value="7" oninput="previewArb()"></div>
+              </div>
+              <button class="btn" style="margin-top:12px" onclick="startArb()">차익거래 시작</button>
+            </div>
+            <div class="card">
+              <h2 style="margin-top:0">펀딩 미리보기</h2>
+              <div class="summary-box" id="arbPreview"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-onchain">
+        <section class="hero">
+          <div>
+            <h1>온체인 수익</h1>
+            <p>복잡한 온체인 작업 없이 프로토콜 수익 상품에 참여하는 흐름을 데모로 구성했습니다.</p>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>프로토콜</span><b>6개 데모</b></div>
+            <div class="row"><span>보상</span><b>연 이율 + 포인트</b></div>
+            <div class="row"><span>위험</span><b class="down">프로토콜 위험</b></div>
+          </div>
+        </section>
+        <section class="section"><div id="onchainTable"></div></section>
+      </div>
+
+      <div class="page" id="page-discount">
+        <section class="hero">
+          <div>
+            <h1>할인 매수</h1>
+            <p>목표 가격에 도달하면 할인 매수, 도달하지 않으면 보상을 받는 구조화 상품 데모입니다.</p>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>할인가 매수</span><b>목표 가격</b></div>
+            <div class="row"><span>미체결 시</span><b>보상 수령</b></div>
+            <div class="row"><span>거래 수수료 없음</span><b>데모</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-2">
+            <div class="card">
+              <h2 style="margin-top:0">할인 매수 계산기</h2>
+              <div class="form-grid">
+                <div class="form-row"><label>자산</label><select id="disc자산" onchange="preview할인()"><option>BTC</option><option>ETH</option><option>SOL</option></select></div>
+                <div class="form-row"><label>현재 가격</label><input id="discCurrent" type="number" value="104000" oninput="preview할인()"></div>
+                <div class="form-row"><label>목표 가격</label><input id="discTarget" type="number" value="98000" oninput="preview할인()"></div>
+                <div class="form-row"><label>USDT 금액</label><input id="disc금액" type="number" value="1000" oninput="preview할인()"></div>
+                <div class="form-row"><label>연 수익률 %</label><input id="discApy" type="number" value="38" oninput="preview할인()"></div>
+                <div class="form-row"><label>일수</label><input id="disc일수" type="number" value="7" oninput="preview할인()"></div>
+              </div>
+              <button class="btn" style="margin-top:12px" onclick="subscribe할인()">할인 매수 구독</button>
+            </div>
+            <div class="card">
+              <h2 style="margin-top:0">미리보기</h2>
+              <div class="summary-box" id="discPreview"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-loan">
+        <section class="hero">
+          <div>
+            <h1>코인 대출</h1>
+            <p>담보 코인을 넣고 USDT 등 자산을 빌리는 대출 데모입니다. 담보비율, 이자, 상환액 계산이 작동합니다.</p>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>대출 가능 자산</span><b>USDT / BTC / ETH</b></div>
+            <div class="row"><span>담보</span><b>BTC / ETH / BNB / SOL</b></div>
+            <div class="row"><span>담보비율 경고</span><b class="down">포함</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="grid cols-2">
+            <div class="card">
+              <h2 style="margin-top:0">대출하기</h2>
+              <div class="form-grid">
+                <div class="form-row"><label>대출 자산</label><select id="loan대출" onchange="preview대출()"><option>USDT</option><option>BTC</option><option>ETH</option></select></div>
+                <div class="form-row"><label>대출 금액</label><input id="loan금액" type="number" value="1000" oninput="preview대출()"></div>
+                <div class="form-row"><label>담보 자산</label><select id="loanColl" onchange="preview대출()"><option>BTC</option><option>ETH</option><option>BNB</option><option>SOL</option></select></div>
+                <div class="form-row"><label>담보 수량</label><input id="loanColl금액" type="number" value="0.03" oninput="preview대출()"></div>
+                <div class="form-row"><label>대출 기간</label><select id="loan일수" onchange="preview대출()"><option value="7">7일</option><option value="30" selected>30일</option><option value="90">90일</option></select></div>
+                <div class="form-row"><label>시간당 이율 %</label><input id="loanRate" type="number" value="0.0012" step="0.0001" oninput="preview대출()"></div>
+              </div>
+              <button class="btn" style="margin-top:12px" onclick="create대출()">지금 대출하기</button>
+            </div>
+            <div class="card">
+              <h2 style="margin-top:0">대출 미리보기</h2>
+              <div class="summary-box" id="loanPreview"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="page" id="page-portfolio">
+        <section class="hero">
+          <div>
+            <h1>수익 지갑</h1>
+            <p>구독한 상품, 예상 보상, 지갑 잔고, 대출 포지션을 한곳에서 확인하고 상환/상환처리를 합니다.</p>
+            <div class="hero-actions">
+              <button class="btn" onclick="accrue보상()">1일 보상 시뮬레이션</button>
+              <button class="btn dark" onclick="open지갑()">현물 지갑</button>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="row"><span>예치 잔고</span><b id="portEarn">$0</b></div>
+            <div class="row"><span>누적 보상</span><b id="port보상">$0</b></div>
+            <div class="row"><span>활성 포지션</span><b id="portCount">0</b></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="section-head"><div><h2>내 포지션</h2><p>상환 버튼을 누르면 원금+누적 보상이 현물 지갑으로 돌아옵니다.</p></div></div>
+          <div id="portfolioTable"></div>
+        </section>
+        <section class="section">
+          <div class="section-head"><div><h2>거래 내역</h2><p>구독, 상환, 대출 실행 기록입니다.</p></div></div>
+          <div id="historyTable"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="subModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="subTitle">구독하기</h2>
+        <button class="close" onclick="closeModal('subModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-row"><label>자산</label><input id="sub자산" readonly></div>
+          <div class="form-row"><label>상품</label><input id="sub상품" readonly></div>
+          <div class="form-row"><label>연 이율 %</label><input id="subApr" readonly></div>
+          <div class="form-row"><label>기간</label><input id="sub기간" readonly></div>
+          <div class="form-row" style="grid-column:1/-1"><label>금액</label><input id="sub금액" type="number" value="1" oninput="previewSub()"></div>
+        </div>
+        <div class="summary-box" style="margin-top:12px" id="subPreview"></div>
+        <div class="modal-actions">
+          <button class="btn dark" onclick="closeModal('subModal')">취소</button>
+          <button class="btn" onclick="confirm구독()">확정</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="walletModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>현물 지갑</h2>
+        <button class="close" onclick="closeModal('walletModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="walletList"></div>
+        <div class="modal-actions">
+          <button class="btn dark" onclick="faucet()">데모 잔고 추가 +</button>
+          <button class="btn" onclick="closeModal('walletModal')">완료</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const prices = {BTC:104000, ETH:3600, BNB:690, SOL:172, USDT:1, USDC:1, FDUSD:1, WBETH:3610, BNSOL:173, XRP:2.2, DOGE:.18, ADA:.65, AVAX:42};
+    const coinNames = {BTC:"Bitcoin",ETH:"Ethereum",BNB:"BNB",SOL:"Solana",USDT:"Tether",USDC:"USD Coin",FDUSD:"First Digital USD",WBETH:"Wrapped Beacon ETH",BNSOL:"Binance Staked SOL",XRP:"XRP",DOGE:"Dogecoin",ADA:"Cardano",AVAX:"Avalanche"};
+
+    const earn상품s = [
+      {asset:"USDT", name:"USDT 유동형", type:"유동형", apr:5.20, duration:0, min:1, tag:"실시간 연 이율"},
+      {asset:"USDC", name:"USDC 유동형", type:"유동형", apr:5.45, duration:0, min:1, tag:"스테이블"},
+      {asset:"FDUSD", name:"FDUSD 고정형", type:"고정형", apr:8.10, duration:30, min:1, tag:"달러 수익"},
+      {asset:"BTC", name:"BTC 유동형", type:"유동형", apr:1.20, duration:0, min:.0001, tag:"유동형"},
+      {asset:"BTC", name:"BTC 고정형", type:"고정형", apr:3.85, duration:90, min:.0001, tag:"고정형"},
+      {asset:"ETH", name:"ETH 간편 예치", type:"유동형", apr:2.10, duration:0, min:.001, tag:"유동형"},
+      {asset:"ETH", name:"ETH 고정형", type:"고정형", apr:4.00, duration:120, min:.001, tag:"고정형"},
+      {asset:"BNB", name:"BNB 고정형", type:"고정형", apr:5.30, duration:60, min:.01, tag:"런치풀"},
+      {asset:"SOL", name:"SOL 유동형", type:"유동형", apr:3.90, duration:0, min:.01, tag:"유동형"},
+      {asset:"SOL", name:"SOL 고정형", type:"고정형", apr:8.40, duration:90, min:.01, tag:"고정형"},
+      {asset:"XRP", name:"XRP 고정형", type:"고정형", apr:6.50, duration:60, min:1, tag:"고정형"},
+      {asset:"DOGE", name:"DOGE 유동형", type:"유동형", apr:2.30, duration:0, min:10, tag:"유동형"},
+      {asset:"ADA", name:"ADA 고정형", type:"고정형", apr:4.75, duration:90, min:10, tag:"고정형"},
+      {asset:"AVAX", name:"AVAX 고정형", type:"고정형", apr:7.20, duration:120, min:.1, tag:"고정형"}
+    ];
+
+    const onchain상품s = [
+      {asset:"USDC", name:"USDC 온체인 대출", type:"온체인", apr:9.2, duration:0, min:10, tag:"대출형"},
+      {asset:"ETH", name:"ETH 리스테이킹 포인트", type:"온체인", apr:4.8, duration:30, min:.01, tag:"포인트"},
+      {asset:"SOL", name:"SOL 디파이 볼트", type:"온체인", apr:10.4, duration:14, min:.1, tag:"볼트"},
+      {asset:"USDT", name:"USDT 유동성 풀", type:"온체인", apr:12.2, duration:7, min:10, tag:"유동성 풀"},
+      {asset:"BNB", name:"BNB 체인 수익", type:"온체인", apr:6.6, duration:30, min:.1, tag:"체인"},
+      {asset:"BTC", name:"BTC 씨디파이 수익", type:"온체인", apr:3.4, duration:30, min:.001, tag:"씨디파이"}
+    ];
+
+    let state = loadState();
+    let currentPage = "earn";
+    let simpleType = "유동형";
+    let subDraft = null;
+
+    function initialState(){
+      return {
+        wallet:{USDT:10000,USDC:3000,FDUSD:1000,BTC:.25,ETH:3,BNB:8,SOL:80,XRP:500,DOGE:4000,ADA:2000,AVAX:30,WBETH:0,BNSOL:0},
+        positions:[],
+        history:[]
+      };
+    }
+    function loadState(){
+      const saved = localStorage.getItem("webstudioStakingStateV1");
+      if(saved){try{return JSON.parse(saved)}catch(e){}}
+      return initialState();
+    }
+    function save(){localStorage.setItem("webstudioStakingStateV1", JSON.stringify(state));}
+
+    function fmt(n, d=4){
+      if(!isFinite(n)) return "0";
+      return Number(n).toLocaleString("en-US",{maximumFractionDigits:d});
+    }
+    function usd(n){return "$" + Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+    function assetUsd(asset, amount){return (prices[asset]||1) * Number(amount||0);}
+    function walletUsd(){return Object.entries(state.wallet).reduce((s,[a,v])=>s+assetUsd(a,v),0);}
+    function positionsUsd(){return state.positions.reduce((s,p)=>s+p.usd가치,0);}
+    function rewardsUsd(){return state.positions.reduce((s,p)=>s+(p.rewardsUsd||0),0);}
+    function dailyUsd(){return state.positions.reduce((s,p)=>s+p.usd가치*(p.apr/100)/365,0);}
+    function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+
+    function init(){
+      document.querySelectorAll("[data-page]").forEach(el=>{
+        el.addEventListener("click",e=>{
+          e.preventDefault();
+          goPage(el.dataset.page);
+        });
+      });
+      document.getElementById("calc자산").innerHTML = Object.keys(prices).filter(a=>!["WBETH","BNSOL"].includes(a)).map(a=>`<option>${a}</option>`).join("");
+      renderAll();
+      previewDual(); previewArb(); preview할인(); preview대출(); previewEth(); previewSol(); calculateEarn();
+    }
+
+    function renderAll(){
+      renderGlobalStats();
+      renderEarnTable();
+      renderSimpleTable();
+      renderUsdTable();
+      renderOnchainTable();
+      renderPortfolio();
+      render지갑List();
+    }
+
+    function renderGlobalStats(){
+      const total = walletUsd()+positionsUsd()+rewardsUsd();
+      document.getElementById("totalUsd").textContent = usd(total);
+      document.getElementById("heroEarn").textContent = usd(positionsUsd());
+      document.getElementById("hero일일").textContent = usd(dailyUsd());
+      document.getElementById("hero지갑").textContent = usd(walletUsd());
+      document.getElementById("portEarn").textContent = usd(positionsUsd());
+      document.getElementById("port보상").textContent = usd(rewardsUsd());
+      document.getElementById("portCount").textContent = state.positions.length;
+      document.getElementById("positionCount").textContent = state.positions.length;
+      document.getElementById("ethBal").textContent = fmt(state.wallet.ETH||0, 6) + " ETH";
+      document.getElementById("solBal").textContent = fmt(state.wallet.SOL||0, 4) + " SOL";
+      const arb = state.positions.filter(p=>p.type==="스마트 차익거래").reduce((s,p)=>s+p.usd가치,0);
+      document.getElementById("arbPortfolio").textContent = usd(arb);
+    }
+
+    function goPage(page){
+      currentPage = page;
+      document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+      document.getElementById("page-"+page)?.classList.add("active");
+      document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active", el.dataset.page===page));
+      window.scrollTo({top:0,behavior:"smooth"});
+      renderAll();
+    }
+
+    function table(products, targetId){
+      const html = `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>코인</th><th>상품</th><th>예상 연 이율</th><th>기간</th><th>지갑</th><th style="text-align:right">작업</th></tr></thead>
+            <tbody>
+            ${products.map(p=>`
+              <tr>
+                <td><div class="coin"><span class="coin-logo">${p.asset.slice(0,2)}</span><div>${p.asset}<small>${coinNames[p.asset]||p.asset}</small></div></div></td>
+                <td><b>${p.name}</b><div class="tag-row"><span class="tag ${p.type==='유동형'?'green':'yellow'}">${p.type}</span><span class="tag">${p.tag||""}</span></div></td>
+                <td class="up"><b>${p.apr.to고정(2)}%</b></td>
+                <td>${p.duration ? p.duration+" 일수" : "유동형"}</td>
+                <td>${fmt(state.wallet[p.asset]||0, 6)} ${p.asset}</td>
+                <td><div class="action-group"><button class="btn" onclick="open구독('${p.asset}','${escapeJs(p.name)}',${p.apr},${p.duration},'${p.type}')">구독하기</button><button class="btn dark" onclick="quickCalc('${p.asset}',${p.apr},${p.duration||30})">Calc</button></div></td>
+              </tr>
+            `).join("")}
+            </tbody>
+          </table>
+        </div>`;
+      document.getElementById(targetId).innerHTML = html;
+    }
+
+    function renderEarnTable(){
+      table(earn상품s.slice(0,8), "earnTable");
+    }
+
+    function setSimpleType(type){
+      simpleType = type;
+      document.getElementById("simpleTypeLabel").textContent = type;
+      document.getElementById("chipFlex").classList.toggle("active", type==="유동형");
+      document.getElementById("chipLock").classList.toggle("active", type==="고정형");
+      renderSimpleTable();
+    }
+
+    function renderSimpleTable(){
+      const q = (document.getElementById("simpleSearch")?.value||"").toLowerCase();
+      const sort = document.getElementById("simpleSort")?.value || "apr";
+      let list = earn상품s.filter(p=>p.type===simpleType && (`${p.asset} ${p.name}`.toLowerCase().includes(q)));
+      if(sort==="apr") list.sort((a,b)=>b.apr-a.apr);
+      if(sort==="asset") list.sort((a,b)=>a.asset.locale비교(b.asset));
+      if(sort==="balance") list.sort((a,b)=>(state.wallet[b.asset]||0)-(state.wallet[a.asset]||0));
+      table(list, "simpleTable");
+    }
+
+    function renderUsdTable(){
+      table(earn상품s.filter(p=>["USDT","USDC","FDUSD"].includes(p.asset)), "usdTable");
+    }
+
+    function renderOnchainTable(){
+      table(onchain상품s, "onchainTable");
+    }
+
+    function open구독(asset, name, apr, duration, type="Earn"){
+      subDraft = {asset,name,apr,duration,type};
+      document.getElementById("subTitle").textContent = "구독 " + name;
+      document.getElementById("sub자산").value = asset;
+      document.getElementById("sub상품").value = name;
+      document.getElementById("subApr").value = apr.to고정(2) + "%";
+      document.getElementById("sub기간").value = duration ? duration + " 일수" : "유동형";
+      document.getElementById("sub금액").value = Math.max(Number(subDraft.asset==="BTC"?.001:subDraft.asset==="ETH"?.01:1), 1);
+      if(["BTC","ETH","BNB","SOL"].includes(asset)) document.getElementById("sub금액").value = asset==="BTC"?.01:asset==="ETH"?.1:1;
+      previewSub();
+      openModal("subModal");
+    }
+
+    function subscribe자산(asset,name,apr,duration){open구독(asset,name,apr,duration,duration?"고정형":"유동형");}
+
+    function previewSub(){
+      if(!subDraft) return;
+      const amount = Number(document.getElementById("sub금액").value||0);
+      const asset = subDraft.asset;
+      const value = assetUsd(asset, amount);
+      const days = subDraft.duration || 30;
+      const reward자산 = amount * (subDraft.apr/100) * days / 365;
+      const reward가치 = assetUsd(asset,reward자산);
+      const bal = state.wallet[asset]||0;
+      document.getElementById("subPreview").innerHTML = `
+        <div class="summary-line"><span>사용 가능</span><b>${fmt(bal,6)} ${asset}</b></div>
+        <div class="summary-line"><span>구독 가치</span><b>${usd(value)}</b></div>
+        <div class="summary-line"><span>예상 보상 (${days}D)</span><b class="up">${fmt(reward자산,8)} ${asset} / ${usd(reward가치)}</b></div>
+        <div class="summary-line"><span>상태</span><b class="${amount<=bal?'up':'down'}">${amount<=bal?'사용 가능':'잔고 부족'}</b></div>
+      `;
+    }
+
+    function confirm구독(){
+      const amount = Number(document.getElementById("sub금액").value||0);
+      if(!subDraft || amount<=0) return toast("수량을 입력하세요");
+      const asset = subDraft.asset;
+      if((state.wallet[asset]||0) < amount) return toast("잔고가 부족합니다");
+      state.wallet[asset] -= amount;
+      const usd가치 = assetUsd(asset,amount);
+      state.positions.unshift({
+        id:uid(), type:subDraft.type, product:subDraft.name, asset, amount, apr:subDraft.apr,
+        duration:subDraft.duration, usd가치, rewardsUsd:0, created:new Date().toLocaleString()
+      });
+      addHistory("구독", `${subDraft.name} ${fmt(amount,6)} ${asset}`, usd가치);
+      save(); closeModal("subModal"); renderAll(); toast("구독이 완료되었습니다");
+    }
+
+    function renderPortfolio(){
+      const rows = state.positions.map(p=>`
+        <tr>
+          <td><div class="coin"><span class="coin-logo">${p.asset.slice(0,2)}</span><div>${p.asset}<small>${p.product}</small></div></div></td>
+          <td>${p.type}<div class="tag-row"><span class="tag">${p.duration?p.duration+"D":"유동형"}</span><span class="tag green">${p.apr.to고정(2)}%</span></div></td>
+          <td>${fmt(p.amount,8)} ${p.asset}<br><span class="muted">${usd(p.usd가치)}</span></td>
+          <td class="up">${usd(p.rewardsUsd||0)}</td>
+          <td>${p.created}</td>
+          <td><div class="action-group"><button class="btn dark" onclick="accrueOne('${p.id}')">+1D</button><button class="btn" onclick="redeemPosition('${p.id}')">상환</button></div></td>
+        </tr>
+      `).join("") || `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">기록이 없습니다</td></tr>`;
+
+      document.getElementById("portfolioTable").innerHTML = `
+        <div class="table-wrap"><table><thead><tr><th>자산</th><th>상품</th><th>원금</th><th>보상</th><th>구독 시간</th><th>작업</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+
+      const hist = state.history.map(h=>`<tr><td>${h.time}</td><td>${h.action}</td><td>${h.detail}</td><td>${usd(h.value)}</td></tr>`).join("") || `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px">내역이 없습니다</td></tr>`;
+      document.getElementById("historyTable").innerHTML = `
+        <div class="table-wrap"><table><thead><tr><th>시간</th><th>작업</th><th>상세</th><th>가치</th></tr></thead><tbody>${hist}</tbody></table></div>`;
+    }
+
+    function redeemPosition(id){
+      const idx = state.positions.findIndex(p=>p.id===id);
+      if(idx<0) return;
+      const p = state.positions[idx];
+      const reward자산 = (p.rewardsUsd||0)/(prices[p.asset]||1);
+      state.wallet[p.asset] = (state.wallet[p.asset]||0) + p.amount + reward자산;
+      addHistory("상환", `${p.product} ${fmt(p.amount+reward자산,8)} ${p.asset}`, p.usd가치+(p.rewardsUsd||0));
+      state.positions.splice(idx,1);
+      save(); renderAll(); toast("상환 완료: 원금+보상이 현물 지갑으로 이동했습니다");
+    }
+
+    function accrueOne(id){
+      const p = state.positions.find(x=>x.id===id);
+      if(!p) return;
+      p.rewardsUsd = (p.rewardsUsd||0) + p.usd가치*(p.apr/100)/365;
+      addHistory("1일 보상", p.product, p.usd가치*(p.apr/100)/365);
+      save(); renderAll(); toast("1일 보상을 누적했습니다");
+    }
+
+    function accrue보상(){
+      state.positions.forEach(p=>p.rewardsUsd=(p.rewardsUsd||0)+p.usd가치*(p.apr/100)/365);
+      addHistory("1일 보상", "전체 활성 포지션", dailyUsd());
+      save(); renderAll(); toast("전체 포지션에 1일 보상을 누적했습니다");
+    }
+
+    function addHistory(action, detail, value){
+      state.history.unshift({time:new Date().toLocaleString(), action, detail, value});
+      state.history = state.history.slice(0,50);
+    }
+
+    function quickCalc(asset, apr, days){
+      goPage("earn");
+      document.getElementById("calc자산").value = asset;
+      document.getElementById("calcApr").value = apr;
+      document.getElementById("calc일수").value = days;
+      calculateEarn();
+      toast("계산기에 반영했습니다");
+    }
+
+    function calculateEarn(){
+      const asset = document.getElementById("calc자산").value || "USDT";
+      const amount = Number(document.getElementById("calc금액").value||0);
+      const apr = Number(document.getElementById("calcApr").value||0);
+      const days = Number(document.getElementById("calc일수").value||30);
+      const reward = amount*(apr/100)*days/365;
+      document.getElementById("calcReward").textContent = fmt(reward,8)+" "+asset;
+      document.getElementById("calc가치").textContent = usd(assetUsd(asset,reward));
+    }
+    ["calc금액","calcApr","calc일수","calc자산"].forEach(id=>document.addEventListener("input",e=>{if(e.target.id===id) calculateEarn()}));
+
+    function previewEth(){
+      const amt = Number(document.getElementById("eth금액")?.value||0);
+      document.getElementById("ethReceive").value = fmt(amt,6)+" WBETH";
+      document.getElementById("eth일일").textContent = fmt(amt*.0295/365,8)+" ETH";
+    }
+    function previewSol(){
+      const amt = Number(document.getElementById("sol금액")?.value||0);
+      document.getElementById("solReceive").value = fmt(amt,6)+" BNSOL";
+      document.getElementById("sol일일").textContent = fmt(amt*.072/365,8)+" SOL";
+    }
+    function quick스테이킹(asset){ goPage(asset==="ETH"?"eth":"sol"); }
+    function stakeSpecial(asset){
+      const amount = Number(document.getElementById(asset==="ETH"?"eth금액":"sol금액").value||0);
+      const receive자산 = asset==="ETH"?"WBETH":"BNSOL";
+      const apr = asset==="ETH"?2.95:7.20;
+      if(amount<=0) return toast("수량을 입력하세요");
+      if((state.wallet[asset]||0)<amount) return toast("잔고가 부족합니다");
+      state.wallet[asset]-=amount;
+      state.wallet[receive자산]=(state.wallet[receive자산]||0)+amount;
+      const p = {id:uid(),type:asset+" 스테이킹",product:asset+" 스테이킹",asset:receive자산,amount,apr,duration:0,usd가치:assetUsd(asset,amount),rewardsUsd:0,created:new Date().toLocaleString()};
+      state.positions.unshift(p);
+      addHistory("스테이킹", `${fmt(amount,6)} ${asset} -> ${receive자산}`, p.usd가치);
+      save(); renderAll(); toast(asset+" 스테이킹 완료");
+    }
+
+    function previewDual(){
+      const pair=document.getElementById("dualPair").value;
+      const dir=document.getElementById("dualDir").value;
+      const target=Number(document.getElementById("dualTarget").value||0);
+      const days=Number(document.getElementById("dual일수").value||0);
+      const apy=Number(document.getElementById("dualApy").value||0);
+      const amount=Number(document.getElementById("dual금액").value||0);
+      const reward=amount*(apy/100)*days/365;
+      document.getElementById("dualPreview").innerHTML=`
+        <div class="summary-line"><span>거래쌍</span><b>${pair}</b></div>
+        <div class="summary-line"><span>방향</span><b>${dir}</b></div>
+        <div class="summary-line"><span>목표 가격</span><b>${usd(target)}</b></div>
+        <div class="summary-line"><span>정산일</span><b>${days} 일수</b></div>
+        <div class="summary-line"><span>예상 보상</span><b class="up">${usd(reward)}</b></div>
+        <div class="summary-line"><span>시나리오</span><b>${dir==="저가 매수"?"도달 시 코인 수령":"도달 시 코인 매도"}</b></div>`;
+    }
+    function subscribeDual(){
+      const amount=Number(document.getElementById("dual금액").value||0);
+      if((state.wallet.USDT||0)<amount) return toast("USDT 잔고가 부족합니다");
+      state.wallet.USDT-=amount;
+      const apy=Number(document.getElementById("dualApy").value||0), days=Number(document.getElementById("dual일수").value||0);
+      const p={id:uid(),type:"듀얼 투자",product:document.getElementById("dualPair").value+" "+document.getElementById("dualDir").value,asset:"USDT",amount,apr:apy,duration:days,usd가치:amount,rewardsUsd:0,created:new Date().toLocaleString()};
+      state.positions.unshift(p); addHistory("듀얼 구독",p.product,amount); save(); renderAll(); previewDual(); toast("듀얼 투자 구독 완료");
+    }
+
+    function previewArb(){
+      const amount=Number(document.getElementById("arb금액").value||0);
+      const funding=Number(document.getElementById("arbFunding").value||0);
+      const days=Number(document.getElementById("arb일수").value||0);
+      const fee=amount*(funding/100)*3*days;
+      const apr=(funding/100)*3*365*100;
+      document.getElementById("arbAprView").textContent=apr.to고정(2)+"%";
+      document.getElementById("arbPreview").innerHTML=`
+        <div class="summary-line"><span>종목</span><b>${document.getElementById("arbSymbol").value}</b></div>
+        <div class="summary-line"><span>명목 금액</span><b>${usd(amount)}</b></div>
+        <div class="summary-line"><span>일일 펀딩 횟수</span><b>3</b></div>
+        <div class="summary-line"><span>예상 펀딩</span><b class="up">${usd(fee)}</b></div>
+        <div class="summary-line"><span>연 환산</span><b class="up">${apr.to고정(2)}%</b></div>`;
+    }
+    function startArb(){
+      const amount=Number(document.getElementById("arb금액").value||0);
+      if((state.wallet.USDT||0)<amount) return toast("USDT 잔고가 부족합니다");
+      const apr=Number(document.getElementById("arbPreview").textContent.match(/연 환산.*?(\d+\.?\d*)%/)?.[1]||12.8);
+      state.wallet.USDT-=amount;
+      const p={id:uid(),type:"스마트 차익거래",product:document.getElementById("arbSymbol").value+" 펀딩 전략",asset:"USDT",amount,apr,duration:Number(document.getElementById("arb일수").value||7),usd가치:amount,rewardsUsd:0,created:new Date().toLocaleString()};
+      state.positions.unshift(p); addHistory("차익거래 시작",p.product,amount); save(); renderAll(); toast("스마트 차익거래 전략 시작");
+    }
+
+    function preview할인(){
+      const asset=document.getElementById("disc자산").value;
+      const current=Number(document.getElementById("discCurrent").value||0);
+      const target=Number(document.getElementById("discTarget").value||0);
+      const amount=Number(document.getElementById("disc금액").value||0);
+      const apy=Number(document.getElementById("discApy").value||0);
+      const days=Number(document.getElementById("disc일수").value||0);
+      const reward=amount*(apy/100)*days/365;
+      const discount=((current-target)/current*100);
+      document.getElementById("discPreview").innerHTML=`
+        <div class="summary-line"><span>자산</span><b>${asset}</b></div>
+        <div class="summary-line"><span>할인</span><b class="up">${discount.to고정(2)}%</b></div>
+        <div class="summary-line"><span>체결 시</span><b>${fmt((amount+reward)/target,8)} ${asset}</b></div>
+        <div class="summary-line"><span>미체결 시</span><b>${usd(amount+reward)}</b></div>
+        <div class="summary-line"><span>예상 보상</span><b class="up">${usd(reward)}</b></div>`;
+    }
+    function subscribe할인(){
+      const amount=Number(document.getElementById("disc금액").value||0);
+      if((state.wallet.USDT||0)<amount) return toast("USDT 잔고가 부족합니다");
+      state.wallet.USDT-=amount;
+      const apy=Number(document.getElementById("discApy").value||0), days=Number(document.getElementById("disc일수").value||0);
+      const p={id:uid(),type:"할인 매수",product:document.getElementById("disc자산").value+" 할인 매수",asset:"USDT",amount,apr:apy,duration:days,usd가치:amount,rewardsUsd:0,created:new Date().toLocaleString()};
+      state.positions.unshift(p); addHistory("할인 매수",p.product,amount); save(); renderAll(); toast("할인 매수 구독 완료");
+    }
+
+    function preview대출(){
+      const borrow=document.getElementById("loan대출").value;
+      const amount=Number(document.getElementById("loan금액").value||0);
+      const coll=document.getElementById("loanColl").value;
+      const collAmt=Number(document.getElementById("loanColl금액").value||0);
+      const days=Number(document.getElementById("loan일수").value||0);
+      const rate=Number(document.getElementById("loanRate").value||0);
+      const borrowUsd=assetUsd(borrow,amount);
+      const collUsd=assetUsd(coll,collAmt);
+      const ltv=collUsd?borrowUsd/collUsd*100:0;
+      const interest=borrowUsd*(rate/100)*24*days;
+      document.getElementById("loanPreview").innerHTML=`
+        <div class="summary-line"><span>대출하기</span><b>${fmt(amount,6)} ${borrow} / ${usd(borrowUsd)}</b></div>
+        <div class="summary-line"><span>담보</span><b>${fmt(collAmt,6)} ${coll} / ${usd(collUsd)}</b></div>
+        <div class="summary-line"><span>LTV</span><b class="${ltv>70?'down':ltv>55?'yellow':'up'}">${ltv.to고정(2)}%</b></div>
+        <div class="summary-line"><span>이자</span><b>${usd(interest)}</b></div>
+        <div class="summary-line"><span>총 상환액</span><b>${usd(borrowUsd+interest)}</b></div>`;
+    }
+    function create대출(){
+      const borrow=document.getElementById("loan대출").value;
+      const amount=Number(document.getElementById("loan금액").value||0);
+      const coll=document.getElementById("loanColl").value;
+      const collAmt=Number(document.getElementById("loanColl금액").value||0);
+      const borrowUsd=assetUsd(borrow,amount), collUsd=assetUsd(coll,collAmt);
+      if((state.wallet[coll]||0)<collAmt) return toast("담보 잔고가 부족합니다");
+      if(collUsd<=0 || borrowUsd/collUsd>0.75) return toast("LTV가 너무 높습니다. 담보를 늘리세요");
+      state.wallet[coll]-=collAmt;
+      state.wallet[borrow]=(state.wallet[borrow]||0)+amount;
+      const p={id:uid(),type:"대출",product:`대출 ${borrow} / 담보 ${coll}`,asset:coll,amount:collAmt,apr:Number(document.getElementById("loanRate").value||0)*24*365,duration:Number(document.getElementById("loan일수").value||30),usd가치:collUsd,rewardsUsd:0,created:new Date().toLocaleString()};
+      state.positions.unshift(p); addHistory("대출 실행",p.product,borrowUsd); save(); renderAll(); toast("대출 실행 완료");
+    }
+
+    function render지갑List(){
+      const rows = Object.entries(state.wallet).map(([a,v])=>`
+        <tr><td><div class="coin"><span class="coin-logo">${a.slice(0,2)}</span><div>${a}<small>${coinNames[a]||a}</small></div></div></td><td>${fmt(v,8)} ${a}</td><td>${usd(assetUsd(a,v))}</td></tr>
+      `).join("");
+      document.getElementById("walletList").innerHTML = `<div class="table-wrap"><table><thead><tr><th>자산</th><th>잔고</th><th>가치</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    }
+    function open지갑(){render지갑List();openModal("walletModal")}
+    function faucet(){
+      state.wallet.USDT+=5000; state.wallet.BTC+=.05; state.wallet.ETH+=1; state.wallet.SOL+=20;
+      addHistory("데모 잔고 추가","USDT/BTC/ETH/SOL 추가",5000+assetUsd("BTC",.05)+assetUsd("ETH",1)+assetUsd("SOL",20));
+      save(); renderAll(); toast("데모 잔고가 추가되었습니다");
+    }
+
+    function resetDemo(){
+      if(!confirm("데모 데이터를 초기화할까요?")) return;
+      state=initialState(); save(); renderAll(); toast("초기화 완료");
+    }
+
+    function openModal(id){document.getElementById(id).classList.add("show")}
+    function closeModal(id){document.getElementById(id).classList.remove("show")}
+    function toast(msg){
+      const el=document.getElementById("toast");
+      el.textContent=msg; el.classList.add("show");
+      clear시간out(window.__toast); window.__toast=set시간out(()=>el.classList.remove("show"),1900);
+    }
+    function escapeJs(str){return String(str??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+
+    init();
+  </script>
+</body>
+</html>

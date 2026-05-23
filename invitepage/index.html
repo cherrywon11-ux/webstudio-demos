@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웹스튜디오 | Company Introduction</title>
+  <meta name="description" content="웹스튜디오 회사소개" />
+  <style>
+    :root {
+      --bg: #06130d;
+      --bg2: #0b1e14;
+      --card: rgba(255,255,255,0.075);
+      --card2: rgba(255,255,255,0.115);
+      --line: rgba(255,255,255,0.12);
+      --text: #f4fff8;
+      --muted: #b8cfc0;
+      --green: #40f58a;
+      --green2: #10b981;
+      --lime: #b7ff63;
+      --cyan: #72ffe1;
+      --dark: #031009;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+      --radius: 28px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(64,245,138,.18), transparent 30%),
+        radial-gradient(circle at 85% 8%, rgba(114,255,225,.13), transparent 32%),
+        linear-gradient(180deg, #06130d 0%, #07170f 42%, #04100a 100%);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font-family: inherit; }
+
+    .page-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        linear-gradient(120deg, rgba(64,245,138,.08), transparent 38%),
+        radial-gradient(circle at 20% 70%, rgba(183,255,99,.07), transparent 24%),
+        radial-gradient(circle at 90% 65%, rgba(16,185,129,.10), transparent 28%);
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .top-banner {
+      background: linear-gradient(90deg, rgba(64,245,138,.18), rgba(114,255,225,.08), rgba(183,255,99,.12));
+      border-bottom: 1px solid var(--line);
+      color: #dffff0;
+      font-size: 14px;
+      letter-spacing: -.2px;
+    }
+
+    .top-banner .container {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(64,245,138,.9);
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(6,19,13,.76);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .nav {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -.5px;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 72% 24%, #fff 0 5%, transparent 6%),
+        linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 14px 32px rgba(64,245,138,.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark:before,
+    .brand-mark:after {
+      content: "";
+      position: absolute;
+      border: 2px solid rgba(3,16,9,.75);
+      border-radius: 999px;
+      width: 23px;
+      height: 23px;
+      transform: rotate(-30deg);
+    }
+
+    .brand-mark:before { left: 6px; top: 12px; }
+    .brand-mark:after { right: 6px; bottom: 8px; }
+
+    .brand span {
+      display: block;
+      line-height: 1.05;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-top: 3px;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #d9eee0;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .menu a {
+      opacity: .86;
+      transition: .25s;
+    }
+
+    .menu a:hover {
+      opacity: 1;
+      color: var(--green);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      padding: 13px 18px;
+      color: var(--text);
+      font-weight: 800;
+      background: rgba(255,255,255,.06);
+      cursor: pointer;
+      transition: .25s;
+      box-shadow: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(64,245,138,.45);
+      background: rgba(255,255,255,.1);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--green), #16d884);
+      color: #04110a;
+      border: 0;
+      box-shadow: 0 18px 44px rgba(64,245,138,.22);
+    }
+
+    .btn.primary:hover {
+      box-shadow: 0 22px 54px rgba(64,245,138,.28);
+    }
+
+    .hamburger {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 19px;
+      height: 2px;
+      background: #fff;
+      display: block;
+      margin: 5px auto;
+      border-radius: 2px;
+    }
+
+    .mobile-menu { display: none; }
+
+    .hero {
+      position: relative;
+      padding: 92px 0 56px;
+      min-height: 680px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 46px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border: 1px solid rgba(64,245,138,.24);
+      border-radius: 999px;
+      color: #dffff0;
+      background: rgba(64,245,138,.08);
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(46px, 6vw, 82px);
+      line-height: .98;
+      letter-spacing: -4px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(95deg, #fff 12%, var(--green) 50%, var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.78;
+      margin: 24px 0 0;
+      max-width: 640px;
+      letter-spacing: -.35px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .hero-note {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      color: #cde7d5;
+      font-size: 14px;
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 2px solid var(--bg);
+      margin-left: -8px;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+    }
+
+    .avatar:first-child { margin-left: 0; }
+    .avatar:nth-child(2) { background: linear-gradient(135deg, #f9ff8d, #40f58a); }
+    .avatar:nth-child(3) { background: linear-gradient(135deg, #72ffe1, #8ef7b3); }
+
+    .hero-card {
+      position: relative;
+      min-height: 500px;
+    }
+
+    .orb {
+      position: absolute;
+      inset: auto;
+      border-radius: 999px;
+      filter: blur(4px);
+      opacity: .95;
+    }
+
+    .orb.one {
+      width: 360px;
+      height: 360px;
+      right: 44px;
+      top: 8px;
+      background:
+        radial-gradient(circle at 38% 28%, rgba(255,255,255,.9), transparent 6%),
+        radial-gradient(circle at 50% 55%, rgba(64,245,138,.45), rgba(16,185,129,.2) 42%, transparent 68%);
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .orb.two {
+      width: 190px;
+      height: 190px;
+      left: 18px;
+      bottom: 34px;
+      background: radial-gradient(circle, rgba(114,255,225,.35), transparent 70%);
+      animation: float 8s ease-in-out infinite reverse;
+    }
+
+    .dashboard {
+      position: absolute;
+      right: 0;
+      top: 80px;
+      width: min(460px, 100%);
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 34px;
+      background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.055));
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .dashboard:before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at 70% 0%, rgba(64,245,138,.18), transparent 42%);
+      pointer-events: none;
+    }
+
+    .dash-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .dash-title {
+      font-size: 15px;
+      color: #dffceb;
+      font-weight: 900;
+    }
+
+    .status {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      color: #abffc9;
+      background: rgba(64,245,138,.1);
+      border: 1px solid rgba(64,245,138,.2);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .metric-main {
+      position: relative;
+      padding: 22px;
+      border-radius: 25px;
+      background: rgba(3,16,9,.5);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .metric-main strong {
+      display: block;
+      font-size: 46px;
+      letter-spacing: -2px;
+      margin-top: 6px;
+    }
+
+    .metric-main span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .chart {
+      height: 120px;
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .bar {
+      flex: 1;
+      border-radius: 12px 12px 4px 4px;
+      background: linear-gradient(180deg, rgba(64,245,138,.95), rgba(16,185,129,.35));
+      min-height: 28px;
+      animation: grow 1.3s ease forwards;
+      transform-origin: bottom;
+    }
+
+    .bar:nth-child(1) { height: 36%; }
+    .bar:nth-child(2) { height: 58%; }
+    .bar:nth-child(3) { height: 46%; }
+    .bar:nth-child(4) { height: 76%; }
+    .bar:nth-child(5) { height: 62%; }
+    .bar:nth-child(6) { height: 88%; }
+    .bar:nth-child(7) { height: 70%; }
+
+    .mini-cards {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .mini-card {
+      border-radius: 22px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 16px;
+    }
+
+    .mini-card b {
+      display: block;
+      font-size: 22px;
+      letter-spacing: -.8px;
+    }
+
+    .mini-card small {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .floating-badge {
+      position: absolute;
+      left: -18px;
+      top: 54px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      font-weight: 900;
+      animation: float 5.8s ease-in-out infinite;
+    }
+
+    .floating-badge.bottom {
+      left: auto;
+      top: auto;
+      right: -12px;
+      bottom: 28px;
+      color: #dffff0;
+    }
+
+    section {
+      padding: 88px 0;
+      position: relative;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      color: var(--green);
+      font-weight: 950;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1.08;
+      letter-spacing: -2.2px;
+    }
+
+    .section-head p {
+      max-width: 480px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,.095), rgba(255,255,255,.045));
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 54px rgba(0,0,0,.17);
+    }
+
+    .stat-card b {
+      display: block;
+      font-size: 42px;
+      letter-spacing: -2px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-weight: 750;
+      line-height: 1.5;
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .about-visual {
+      min-height: 470px;
+      border-radius: 36px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(64,245,138,.18), rgba(255,255,255,.045)),
+        radial-gradient(circle at 24% 20%, rgba(183,255,99,.25), transparent 28%);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .about-visual:before {
+      content: "";
+      position: absolute;
+      width: 330px;
+      height: 330px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow:
+        0 0 0 48px rgba(255,255,255,.035),
+        0 0 0 98px rgba(255,255,255,.022);
+    }
+
+    .leaf-chip {
+      position: absolute;
+      left: 34px;
+      bottom: 34px;
+      right: 34px;
+      padding: 22px;
+      border-radius: 28px;
+      background: rgba(4,16,10,.62);
+      border: 1px solid rgba(255,255,255,.13);
+      backdrop-filter: blur(16px);
+    }
+
+    .leaf-chip strong {
+      display: block;
+      font-size: 23px;
+      letter-spacing: -.8px;
+    }
+
+    .leaf-chip p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 10px 0 0;
+    }
+
+    .leaf {
+      width: 145px;
+      height: 92px;
+      border-radius: 100px 0 100px 0;
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%) rotate(-18deg);
+      box-shadow: 0 30px 80px rgba(64,245,138,.26);
+    }
+
+    .leaf:after {
+      content: "";
+      width: 110px;
+      height: 2px;
+      background: rgba(4,16,10,.55);
+      position: absolute;
+      left: 20px;
+      top: 46px;
+      transform: rotate(-28deg);
+      border-radius: 10px;
+    }
+
+    .about-content {
+      display: grid;
+      gap: 16px;
+    }
+
+    .info-card {
+      padding: 26px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+    }
+
+    .info-card h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      letter-spacing: -.8px;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.76;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .service-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+      min-height: 246px;
+      transition: .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:before {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 999px;
+      right: -54px;
+      top: -54px;
+      background: rgba(64,245,138,.1);
+      transition: .25s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(64,245,138,.3);
+      background: linear-gradient(145deg, rgba(64,245,138,.13), rgba(255,255,255,.05));
+    }
+
+    .service-card:hover:before {
+      transform: scale(1.3);
+    }
+
+    .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: rgba(64,245,138,.12);
+      border: 1px solid rgba(64,245,138,.18);
+      font-size: 25px;
+      margin-bottom: 22px;
+    }
+
+    .service-card h3 {
+      font-size: 23px;
+      margin: 0 0 12px;
+      letter-spacing: -.8px;
+      position: relative;
+    }
+
+    .service-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+      position: relative;
+    }
+
+    .process-wrap {
+      border: 1px solid var(--line);
+      border-radius: 36px;
+      padding: 18px;
+      background: rgba(255,255,255,.045);
+      box-shadow: 0 22px 70px rgba(0,0,0,.17);
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .step {
+      padding: 26px;
+      border-radius: 26px;
+      background: rgba(3,16,9,.45);
+      border: 1px solid rgba(255,255,255,.09);
+      position: relative;
+    }
+
+    .step-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      color: #031009;
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+      margin-bottom: 48px;
+    }
+
+    .step h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: -.7px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .feature-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .feature-card {
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+      padding: 34px;
+      min-height: 360px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 14px;
+      font-size: 29px;
+      letter-spacing: -1.2px;
+    }
+
+    .feature-card p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .check-list {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .check-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #dffceb;
+      line-height: 1.5;
+      font-weight: 750;
+    }
+
+    .check-list li:before {
+      content: "✓";
+      width: 23px;
+      height: 23px;
+      border-radius: 999px;
+      background: rgba(64,245,138,.14);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      font-size: 13px;
+      font-weight: 950;
+      margin-top: 1px;
+    }
+
+    .partners {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .partner {
+      min-height: 84px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.74);
+      font-weight: 900;
+      letter-spacing: -.3px;
+    }
+
+    .contact-box {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+      padding: 18px;
+      border-radius: 40px;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(64,245,138,.12), rgba(255,255,255,.045));
+      box-shadow: var(--shadow);
+    }
+
+    .contact-info {
+      padding: 36px;
+      border-radius: 30px;
+      background: rgba(3,16,9,.45);
+    }
+
+    .contact-info h2 {
+      margin-bottom: 16px;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      line-height: 1.72;
+      margin: 0 0 28px;
+    }
+
+    .contact-lines {
+      display: grid;
+      gap: 13px;
+    }
+
+    .contact-line {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: #e9fff1;
+      font-weight: 800;
+    }
+
+    form {
+      padding: 26px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.09);
+      display: grid;
+      gap: 14px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 18px;
+      background: rgba(2,10,6,.48);
+      color: #fff;
+      outline: none;
+      padding: 16px 17px;
+      font-size: 15px;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(216,238,224,.55);
+    }
+
+    select {
+      color: rgba(255,255,255,.82);
+    }
+
+    textarea {
+      min-height: 134px;
+      resize: vertical;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      overflow: hidden;
+    }
+
+    .faq-q {
+      width: 100%;
+      padding: 22px 24px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      text-align: left;
+      font-size: 17px;
+      font-weight: 900;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: .28s ease;
+    }
+
+    .faq-a p {
+      margin: 0;
+      padding: 0 24px 22px;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .faq-item.active .faq-a {
+      max-height: 220px;
+    }
+
+    footer {
+      padding: 48px 0 34px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr .8fr .8fr;
+      gap: 24px;
+    }
+
+    .footer-grid p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 16px 0 0;
+      max-width: 360px;
+    }
+
+    .footer-col h4 {
+      margin: 0 0 15px;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .footer-col a {
+      display: block;
+      color: var(--muted);
+      margin: 10px 0;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--green);
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,.08);
+      margin-top: 34px;
+      padding-top: 22px;
+      color: rgba(216,238,224,.65);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 14px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: .75s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+
+    @keyframes grow {
+      from { transform: scaleY(.1); opacity: .3; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
+
+    @media (max-width: 1020px) {
+      .hero-grid,
+      .about,
+      .feature-area,
+      .contact-box {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 64px;
+      }
+
+      .hero-card {
+        min-height: 520px;
+      }
+
+      .dashboard {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+      }
+
+      .stats,
+      .process {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .service-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .partners {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .container {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .nav {
+        height: 68px;
+      }
+
+      .menu,
+      .nav-actions {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .mobile-menu.open {
+        display: grid;
+        gap: 9px;
+        padding: 12px 0 18px;
+      }
+
+      .mobile-menu a {
+        padding: 13px 15px;
+        border-radius: 14px;
+        background: rgba(255,255,255,.055);
+        color: #dffceb;
+        font-weight: 800;
+      }
+
+      h1 {
+        letter-spacing: -2.6px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 52px 0 36px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .hero-card {
+        min-height: 430px;
+      }
+
+      .dashboard {
+        width: 100%;
+        top: 34px;
+      }
+
+      .floating-badge {
+        left: 8px;
+        top: 14px;
+        font-size: 13px;
+      }
+
+      .floating-badge.bottom {
+        right: 8px;
+        bottom: 8px;
+        font-size: 13px;
+      }
+
+      section {
+        padding: 62px 0;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 16px;
+      }
+
+      .stats,
+      .service-grid,
+      .process,
+      .partners,
+      .field-row,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        padding: 24px;
+      }
+
+      .about-visual {
+        min-height: 430px;
+      }
+
+      .service-card {
+        min-height: auto;
+      }
+
+      .contact-info,
+      form {
+        padding: 22px;
+      }
+
+      .copyright {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-glow"></div>
+
+  <div class="top-banner">
+    <div class="container">
+      <span class="dot"></span>
+      웹스튜디오 · Sustainable Finance · Digital Exchange · ESG Infrastructure
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#home" class="brand" aria-label="웹스튜디오 Home">
+          <span class="brand-mark"></span>
+          <span>
+            웹스튜디오
+            <small>GREEN DIGITAL VALUE</small>
+          </span>
+        </a>
+
+        <div class="menu">
+          <a href="#about">회사소개</a>
+          <a href="#revenue">수익구조</a>
+          <a href="#process">프로세스</a>
+          <a href="#partners">파트너 및 수익인증</a>
+          <a href="#contact">문의하기</a>
+        </div>
+
+        <div class="nav-actions">
+          <a class="btn" href="#faq">FAQ</a>
+          <a class="btn primary" href="#contact">상담 요청</a>
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#about">회사소개</a>
+        <a href="#revenue">수익구조</a>
+        <a href="#process">프로세스</a>
+        <a href="#partners">파트너 및 수익인증</a>
+        <a href="#contact">문의하기</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><span class="dot"></span> Green Finance & Digital Swap Company</div>
+          <h1>
+            지속가능한 가치를<br />
+            <span class="gradient-text">디지털로 연결하는</span><br />
+            그린 스왑 플랫폼
+          </h1>
+          <p>
+            웹스튜디오는 친환경 프로젝트, 디지털 자산, 기업 파트너십을 하나의 네트워크로 연결합니다.
+            신뢰감 있는 기업 이미지, 고급스러운 그린 톤, 명확한 구조를 중심으로 브랜드 가치를 전달합니다.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#about" class="btn primary">회사 알아보기</a>
+            <a href="#revenue" class="btn">수익구조 보기</a>
+          </div>
+
+          <div class="hero-note">
+            <div class="avatar-stack">
+              <span class="avatar"></span>
+              <span class="avatar"></span>
+              <span class="avatar"></span>
+            </div>
+            <span>기업 소개 · 파트너 모집 · 투자 제안 · 비즈니스 문의</span>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="orb one"></div>
+          <div class="orb two"></div>
+
+          <div class="floating-badge">Carbon Saving +42%</div>
+          <div class="floating-badge bottom">ESG Network Ready</div>
+
+          <div class="dashboard">
+            <div class="dash-top">
+              <div class="dash-title">Green Impact Dashboard</div>
+              <div class="status"><span class="dot"></span> ACTIVE</div>
+            </div>
+
+            <div class="metric-main">
+              <span>Total Green Value Connected</span>
+              <strong>$18.7M</strong>
+              <div class="chart" aria-label="growth chart">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+              </div>
+            </div>
+
+            <div class="mini-cards">
+              <div class="mini-card">
+                <b>128+</b>
+                <small>Verified Partners</small>
+              </div>
+              <div class="mini-card">
+                <b>24/7</b>
+                <small>Global Operations</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="container">
+        <div class="stats">
+          <div class="stat-card">
+            <b data-count="128">0</b>
+            <span>등록 파트너 및 협력 네트워크</span>
+          </div>
+          <div class="stat-card">
+            <b data-count="36">0</b>
+            <span>연결 가능한 글로벌 프로젝트</span>
+          </div>
+          <div class="stat-card">
+            <b data-count="92">0</b>
+            <span>거래·검증 프로세스 자동화율</span>
+          </div>
+          <div class="stat-card">
+            <b data-count="15">0</b>
+            <span>ESG·핀테크 운영 경험 지표</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="section-kicker">About Company</div>
+            <h2>투명한 디지털 교환과<br />친환경 가치를 연결합니다.</h2>
+          </div>
+          <p>
+            웹스튜디오는 기업의 방향, 제공 가치, 파트너십 가능성을 빠르게 전달하는 구조로 브랜드 신뢰를 만듭니다.
+          </p>
+        </div>
+
+        <div class="about">
+          <div class="about-visual reveal">
+            <div class="leaf"></div>
+            <div class="leaf-chip">
+              <strong>Green + Digital + Trust</strong>
+              <p>친환경 프로젝트와 디지털 금융 네트워크를 하나의 브랜드 메시지로 정리합니다.</p>
+            </div>
+          </div>
+
+          <div class="about-content reveal">
+            <div class="info-card">
+              <h3>미션</h3>
+              <p>
+                복잡한 디지털 자산 교환과 친환경 프로젝트 참여 과정을 더 쉽고 안전하게 연결하여
+                기업과 개인이 지속가능한 가치 창출에 참여할 수 있도록 돕습니다.
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>비전</h3>
+              <p>
+                글로벌 파트너, 기술 인프라, 데이터 기반 운영 체계를 통해 ESG 중심의 새로운 디지털 비즈니스 생태계를 만듭니다.
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>핵심 가치</h3>
+              <p>
+                투명성, 보안성, 확장성, 사용 편의성을 중심으로 신뢰할 수 있는 기업 이미지를 구축합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="revenue">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="section-kicker">Revenue Structure</div>
+            <h2>웹스튜디오의<br />수익구조</h2>
+          </div>
+          <p>
+            프로젝트 연결, 플랫폼 운영, 검증 시스템, 파트너십 확장을 통해 지속 가능한 수익 모델을 만듭니다.
+          </p>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card reveal">
+            <div class="icon">♻️</div>
+            <h3>Project Matching</h3>
+            <p>친환경 프로젝트, 탄소 절감 캠페인, ESG 파트너십을 연결해 수익 기회를 만듭니다.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="icon">⇄</div>
+            <h3>Swap Commission</h3>
+            <p>디지털 가치 교환, 결제 연결, 글로벌 파트너 매칭 과정에서 운영 수수료를 확보합니다.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="icon">🛡️</div>
+            <h3>Verification Fee</h3>
+            <p>파트너 검증, 거래 흐름 관리, 데이터 보안 정책을 기반으로 검증 수익을 만듭니다.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="icon">📊</div>
+            <h3>Impact Analytics</h3>
+            <p>프로젝트 성과, 참여 지표, ESG 리포팅 데이터를 분석 서비스로 확장합니다.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="icon">🌍</div>
+            <h3>Global Partnership</h3>
+            <p>국내외 기업, 재단, 투자자, 기술 파트너와의 협업을 통해 수익 채널을 넓힙니다.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="icon">⚡</div>
+            <h3>Fast Deployment</h3>
+            <p>빠른 도입과 운영 구조를 통해 초기 파트너 유입과 반복 운영 수익을 만듭니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="section-kicker">How It Works</div>
+            <h2>간단하고 명확한<br />운영 프로세스</h2>
+          </div>
+          <p>
+            파트너 등록부터 가치 매칭, 운영 관리, 성과 리포트까지 단계별로 진행합니다.
+          </p>
+        </div>
+
+        <div class="process-wrap reveal">
+          <div class="process">
+            <div class="step">
+              <div class="step-num">1</div>
+              <h3>Partner Onboarding</h3>
+              <p>기업·프로젝트 정보를 등록하고 기본 검토를 진행합니다.</p>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <h3>Value Matching</h3>
+              <p>목적에 맞는 프로젝트, 파트너, 디지털 교환 구조를 매칭합니다.</p>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <h3>Secure Operation</h3>
+              <p>정해진 기준에 따라 운영 상태와 진행 데이터를 관리합니다.</p>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <h3>Impact Report</h3>
+              <p>성과 지표를 시각화하고 다음 협업 전략으로 연결합니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="partners">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="section-kicker">Partner & Proof</div>
+            <h2>파트너 및<br />수익인증</h2>
+          </div>
+          <p>
+            파트너 네트워크, 프로젝트 성과, 운영 수익을 한눈에 확인할 수 있도록 구성합니다.
+          </p>
+        </div>
+
+        <div class="feature-area">
+          <div class="feature-card reveal">
+            <div class="section-kicker">Security & Trust</div>
+            <h3>신뢰 중심의 기업 이미지</h3>
+            <p>
+              금융·디지털·ESG 관련 사이트는 화려함보다 신뢰감이 중요합니다.
+              어두운 배경, 그린 포인트, 정돈된 카드 UI로 안정적인 느낌을 전달합니다.
+            </p>
+            <ul class="check-list">
+              <li>반응형 모바일 최적화 구조</li>
+              <li>투명한 운영 흐름과 검증 프로세스</li>
+              <li>회사소개, 수익구조, 파트너 모집에 적합</li>
+              <li>운영 데이터와 수익 인증 확장 가능</li>
+            </ul>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="section-kicker">Partner Network</div>
+            <h3>파트너 로고 영역</h3>
+            <p>
+              제휴사, 거래처, 인증기관, 기술 파트너 로고가 들어갈 수 있는 영역입니다.
+            </p>
+
+            <div class="partners">
+              <div class="partner">ECO LAB</div>
+              <div class="partner">CHAIN X</div>
+              <div class="partner">GREEN DAO</div>
+              <div class="partner">FIN TECH</div>
+              <div class="partner">CARBON+</div>
+              <div class="partner">PAY NODE</div>
+              <div class="partner">KYC HUB</div>
+              <div class="partner">ESG DATA</div>
+              <div class="partner">GLOBAL</div>
+              <div class="partner">TRUST</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head reveal" style="justify-content:center;text-align:center;display:block;">
+          <div class="section-kicker">FAQ</div>
+          <h2>자주 묻는 질문</h2>
+          <p style="margin:16px auto 0;">
+            파트너 등록, 수익 구조, 운영 방식에 대한 주요 질문을 정리했습니다.
+          </p>
+        </div>
+
+        <div class="faq reveal">
+          <div class="faq-item active">
+            <button class="faq-q">웹스튜디오는 어떤 기업인가요? <span>+</span></button>
+            <div class="faq-a">
+              <p>웹스튜디오는 친환경 프로젝트와 디지털 가치 교환을 연결하는 기업입니다.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">수익구조는 어떻게 구성되나요? <span>+</span></button>
+            <div class="faq-a">
+              <p>프로젝트 매칭, 교환 수수료, 검증 수익, 파트너십 운영 수익으로 구성됩니다.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">파트너 등록이 가능한가요? <span>+</span></button>
+            <div class="faq-a">
+              <p>기업, 재단, 기술사, 투자 파트너 등 다양한 형태의 파트너 등록이 가능합니다.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">성과와 수익인증은 어떻게 확인하나요? <span>+</span></button>
+            <div class="faq-a">
+              <p>프로젝트별 운영 성과와 수익 데이터를 파트너 및 수익인증 영역에서 확인할 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box reveal">
+          <div class="contact-info">
+            <div class="section-kicker">Contact</div>
+            <h2>파트너십과 비즈니스 문의를 남겨주세요.</h2>
+            <p>
+              프로젝트 제휴, 수익 모델, 파트너 등록, 투자 제안에 대한 문의를 남겨주세요.
+            </p>
+
+            <div class="contact-lines">
+              <div class="contact-line"><span class="icon" style="width:42px;height:42px;margin:0;font-size:18px;">✉</span> contact@webstudio.co.kr</div>
+              <div class="contact-line"><span class="icon" style="width:42px;height:42px;margin:0;font-size:18px;">⌖</span> Seoul · Singapore · Global</div>
+              <div class="contact-line"><span class="icon" style="width:42px;height:42px;margin:0;font-size:18px;">◷</span> Mon - Fri · 09:00 - 18:00</div>
+            </div>
+          </div>
+
+          <form id="contactForm">
+            <div class="field-row">
+              <input type="text" name="name" placeholder="이름 / 회사명" required />
+              <input type="email" name="email" placeholder="이메일" required />
+            </div>
+
+            <div class="field-row">
+              <input type="text" name="phone" placeholder="연락처" />
+              <select name="type">
+                <option>문의 유형 선택</option>
+                <option>회사소개 요청</option>
+                <option>파트너십 문의</option>
+                <option>투자 / 제휴 문의</option>
+                <option>수익구조 문의</option>
+              </select>
+            </div>
+
+            <textarea name="message" placeholder="문의 내용을 입력해주세요."></textarea>
+            <button class="btn primary" type="submit">문의 보내기</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#home" class="brand">
+            <span class="brand-mark"></span>
+            <span>
+              웹스튜디오
+              <small>GREEN DIGITAL VALUE</small>
+            </span>
+          </a>
+          <p>
+            지속가능한 가치와 디지털 교환 생태계를 연결하는 기업입니다.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#about">회사소개</a>
+          <a href="#revenue">수익구조</a>
+          <a href="#process">운영 프로세스</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Business</h4>
+          <a href="#partners">파트너 및 수익인증</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">문의하기</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policy</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <span>© 2026 웹스튜디오. All rights reserved.</span>
+        <span>Green Digital Value Company</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    const statEls = document.querySelectorAll('[data-count]');
+    let counted = false;
+
+    function animateCounters() {
+      if (counted) return;
+      const statsSection = document.querySelector('.stats');
+      const rect = statsSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 80) {
+        counted = true;
+        statEls.forEach(el => {
+          const target = Number(el.dataset.count);
+          let current = 0;
+          const step = Math.max(1, Math.ceil(target / 42));
+          const suffix = target === 92 ? '%' : '+';
+
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            el.textContent = current + suffix;
+          }, 24);
+        });
+      }
+    }
+
+    window.addEventListener('scroll', animateCounters);
+    window.addEventListener('load', animateCounters);
+
+    document.querySelectorAll('.faq-q').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.faq-item');
+        document.querySelectorAll('.faq-item').forEach(other => {
+          if (other !== item) other.classList.remove('active');
+        });
+        item.classList.toggle('active');
+      });
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('문의가 접수되었습니다.');
+    });
+  </script>
+</body>
+</html>

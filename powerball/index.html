@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>웹스튜디오 파워볼 데모</title>
+<style>
+:root{
+  --sky1:#0d83d9;
+  --sky2:#7ad7ff;
+  --brown:#6b3f25;
+  --brown2:#3d2417;
+  --brown3:#8b5630;
+  --gold:#ffd35a;
+  --gold2:#b9781e;
+  --gold3:#fff1a2;
+  --cream:#fff5ca;
+  --blue:#1268d9;
+  --red:#e32637;
+  --green:#22b579;
+  --yellow:#ffbd25;
+  --orange:#ff8425;
+  --gray:#79828c;
+  --dark:#26140d;
+  --panel:#7b4829;
+  --shadow:0 14px 30px rgba(55,28,8,.35);
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+  background:#0f7fd5;
+  color:#fff;
+  overflow-x:hidden;
+}
+button,input{font-family:inherit}
+button{cursor:pointer}
+.stage{
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,#0b8fe8 0%,#28b7f7 42%,#a6ecff 76%,#69cf63 76%,#31974a 100%);
+}
+.stage:before{
+  content:"";
+  position:absolute;
+  left:-3%;
+  right:-3%;
+  bottom:0;
+  height:150px;
+  background:
+    radial-gradient(ellipse at 7% 100%,#10652d 0 90px,transparent 92px),
+    radial-gradient(ellipse at 18% 100%,#1a8d3c 0 130px,transparent 132px),
+    radial-gradient(ellipse at 78% 100%,#157636 0 120px,transparent 122px),
+    radial-gradient(ellipse at 92% 100%,#0e5d2b 0 100px,transparent 102px);
+  opacity:.95;
+}
+.sky-clouds{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+.sky-cloud{
+  position:absolute;
+  display:block;
+  opacity:.96;
+  filter:drop-shadow(0 9px 10px rgba(19,91,142,.16));
+}
+.sky-cloud path.main{fill:#fff}
+.sky-cloud path.shade{fill:rgba(169,219,242,.32)}
+.sky-cloud.c1{width:310px;left:4%;top:86px}
+.sky-cloud.c2{width:350px;right:3%;top:86px}
+.sky-cloud.c3{width:220px;left:24%;top:34px;opacity:.82}
+.sky-cloud.c4{width:230px;right:23%;top:40px;opacity:.82}
+.sky-cloud.c5{width:230px;left:-72px;top:198px;opacity:.72}
+.sky-cloud.c6{width:245px;right:-84px;top:202px;opacity:.72}
+.game-wrap{
+  position:relative;
+  z-index:3;
+  width:min(1420px,100%);
+  margin:0 auto;
+  padding:20px 24px 24px;
+}
+.title-area{
+  text-align:center;
+  height:150px;
+  position:relative;
+  z-index:4;
+}
+.game-title{
+  display:inline-block;
+  margin-top:8px;
+  position:relative;
+  padding:0 38px;
+  font-size:56px;
+  line-height:1;
+  letter-spacing:-4px;
+  color:#fff;
+  text-shadow:
+    0 4px 0 #5c2c0b,
+    0 7px 0 #2a1205,
+    0 0 1px #000;
+  font-weight:1000;
+}
+.game-title .gold{
+  color:#ffd852;
+  text-shadow:
+    0 4px 0 #8e4a0b,
+    0 7px 0 #3b1804,
+    0 0 1px #000;
+}
+.game-title:before,.game-title:after{
+  content:"";
+  position:absolute;
+  top:6px;
+  width:88px;
+  height:60px;
+  background:
+    radial-gradient(ellipse at 74% 20%,#fff 0 18px,transparent 19px),
+    linear-gradient(145deg,#fff,#e7edf2);
+  filter:drop-shadow(0 4px 1px #5a2c0c);
+  clip-path:polygon(0 45%,25% 0,60% 30%,100% 12%,75% 55%,100% 86%,54% 78%,20% 100%);
+}
+.game-title:before{right:100%;transform:scaleX(-1)}
+.game-title:after{left:100%}
+.sub-banner{
+  display:inline-block;
+  min-width:560px;
+  margin-top:10px;
+  padding:12px 28px;
+  color:#ffeeb4;
+  font-weight:950;
+  font-size:18px;
+  background:linear-gradient(#6f421f,#3d2110);
+  border:4px solid var(--gold);
+  border-radius:0 0 18px 18px;
+  box-shadow:0 4px 0 #5f300b, inset 0 2px 8px rgba(255,255,255,.18);
+  clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);
+}
+.main-grid{
+  display:grid;
+  grid-template-columns:360px 1fr 360px;
+  gap:18px;
+  align-items:start;
+}
+.side-panel,.center-shell{
+  border:5px solid #f7cf57;
+  border-radius:22px;
+  background:linear-gradient(180deg,#8a512d,#5b341f 18%,#4b2a18);
+  box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.18);
+  overflow:hidden;
+}
+.side-title{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  color:#fff2c5;
+  font-size:25px;
+  font-weight:1000;
+  text-shadow:0 3px 0 #3a1807;
+  background:linear-gradient(180deg,#995f34,#6b3b20);
+  border-bottom:4px solid #351a0c;
+}
+.side-title:before,.side-title:after{content:"⌁";color:#ffe090;font-size:25px}
+.chat-body{padding:14px}
+.live-chat-list{
+  min-height:410px;
+  max-height:410px;
+  overflow-y:auto;
+  border-radius:12px;
+  background:rgba(37,18,8,.58);
+  padding:13px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.18);
+}
+.live-chat-list::-webkit-scrollbar,
+.history-body::-webkit-scrollbar,
+.chat-popup-list::-webkit-scrollbar{width:10px}
+.live-chat-list::-webkit-scrollbar-track,
+.history-body::-webkit-scrollbar-track,
+.chat-popup-list::-webkit-scrollbar-track{background:rgba(35,16,7,.45);border-radius:99px}
+.live-chat-list::-webkit-scrollbar-thumb,
+.history-body::-webkit-scrollbar-thumb,
+.chat-popup-list::-webkit-scrollbar-thumb{background:linear-gradient(#ffe380,#d08a16);border-radius:99px}
+.chat-msg{
+  margin-bottom:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(72,36,16,.72);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.chat-msg .name{color:#ffe28a;font-weight:1000;font-size:14px;margin-bottom:4px}
+.chat-msg .text{color:#fff;font-weight:800;font-size:14px;line-height:1.45}
+.chat-msg.me{background:rgba(27,91,156,.62)}
+.chat-msg.me .name{color:#9ee9ff}
+.side-buttons{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+.gold-btn{
+  min-height:52px;
+  border:0;
+  border-radius:10px;
+  color:#4b2508;
+  font-size:18px;
+  font-weight:1000;
+  background:linear-gradient(180deg,#fff09f,#ffbd2e 60%,#de8412);
+  box-shadow:0 5px 0 #7a3a09, inset 0 2px 0 rgba(255,255,255,.7);
+}
+.gold-btn.active{
+  color:#fff;
+  background:linear-gradient(180deg,#4aa7ff,#0753ba);
+  box-shadow:0 5px 0 #062b64, inset 0 2px 0 rgba(255,255,255,.45);
+}
+.center-shell{
+  border-radius:36px;
+  background:linear-gradient(180deg,#ffda62,#f5bc27 56%,#e49a1a);
+  padding:12px 24px 22px;
+  position:relative;
+  min-height:760px;
+}
+.board{
+  border:5px solid #f9dc77;
+  border-radius:34px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#8b5232,#663a24);
+  box-shadow:inset 0 0 0 3px rgba(75,32,11,.28),0 8px 18px rgba(0,0,0,.24);
+  min-height:560px;
+  position:relative;
+}
+.timebar{
+  width:330px;
+  height:50px;
+  border-radius:0 0 28px 28px;
+  background:linear-gradient(#57301b,#412211);
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#e9ae6a;
+  font-size:20px;
+  font-weight:900;
+}
+.machine-area{
+  position:relative;
+  width:92%;
+  height:430px;
+  margin:6px auto 0;
+  display:grid;
+  place-items:center;
+}
+.lotto-machine{
+  width:410px;
+  height:410px;
+  position:relative;
+}
+.globe{
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:330px;
+  height:330px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 28% 20%,rgba(255,255,255,.95) 0 16%,rgba(255,255,255,.32) 17% 28%,transparent 29%),
+    radial-gradient(circle at 50% 58%,rgba(255,255,255,.12),rgba(255,255,255,.03) 55%,rgba(0,0,0,.18) 100%);
+  border:8px solid rgba(255,255,255,.58);
+  box-shadow:
+    inset -20px -28px 44px rgba(0,0,0,.22),
+    inset 10px 10px 24px rgba(255,255,255,.42),
+    0 14px 26px rgba(42,19,5,.35);
+  overflow:hidden;
+}
+.globe:before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.35);
+  pointer-events:none;
+}
+.globe:after{
+  content:"";
+  position:absolute;
+  left:18%;
+  top:18%;
+  width:120px;
+  height:46px;
+  border-radius:50%;
+  background:rgba(255,255,255,.55);
+  transform:rotate(-28deg);
+  filter:blur(.3px);
+}
+.machine-top{
+  position:absolute;
+  left:50%;
+  top:10px;
+  width:116px;
+  height:52px;
+  transform:translateX(-50%);
+  border-radius:18px 18px 10px 10px;
+  background:linear-gradient(180deg,#ff3b32,#a40b0b);
+  border:6px solid #f7c74f;
+  box-shadow:0 6px 0 #6f340b,inset 0 5px 10px rgba(255,255,255,.35);
+  z-index:6;
+}
+.machine-side{
+  position:absolute;
+  top:49%;
+  width:52px;
+  height:88px;
+  transform:translateY(-50%);
+  border-radius:24px;
+  background:linear-gradient(90deg,#e99b24,#ffdb75,#9e550d);
+  box-shadow:0 5px 0 #6c3008,inset 0 3px 10px rgba(255,255,255,.38);
+  z-index:5;
+}
+.machine-side.left{left:14px}
+.machine-side.right{right:14px}
+.machine-base{
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  width:260px;
+  height:70px;
+  transform:translateX(-50%);
+  border-radius:30px 30px 16px 16px;
+  background:linear-gradient(180deg,#e63b28,#8e0e0a);
+  border:6px solid #f5c64b;
+  box-shadow:0 7px 0 #67300b;
+}
+.machine-hole{
+  position:absolute;
+  left:50%;
+  bottom:38px;
+  width:72px;
+  height:72px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,#3a2115 0 40%,#fff8cc 41% 50%,#b86c16 51% 100%);
+  border:5px solid #ffdf79;
+  z-index:7;
+}
+
+.ball-field{
+  position:absolute;
+  inset:38px;
+  border-radius:50%;
+  overflow:hidden;
+  z-index:3;
+  clip-path:circle(50% at 50% 50%);
+  contain:paint;
+}
+.orbit-particle{
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  transform-origin:50% 50%;
+  pointer-events:none;
+  will-change:transform;
+}
+.orbit-particle.cw{
+  animation-name:orbitCW;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+.orbit-particle.ccw{
+  animation-name:orbitCCW;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+.orbit-particle.swing{
+  animation-timing-function:cubic-bezier(.45,.05,.55,.95);
+  animation-direction:alternate;
+}
+.mix-ball{
+  position:absolute;
+  left:100%;
+  top:50%;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:12px;
+  font-weight:1000;
+  border:2px solid rgba(255,255,255,.55);
+  box-shadow:
+    inset -7px -9px 12px rgba(0,0,0,.24),
+    inset 4px 4px 8px rgba(255,255,255,.42),
+    0 2px 4px rgba(0,0,0,.16);
+  transform:translate(-50%,-50%);
+  will-change:transform;
+}
+.mix-ball:after{
+  content:"";
+  position:absolute;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  left:7px;
+  top:6px;
+  background:rgba(255,255,255,.76);
+  filter:blur(.2px);
+}
+.mix-ball.spinA{
+  animation:ballSelfSpin .75s linear infinite;
+}
+.mix-ball.spinB{
+  animation:ballSelfSpin .95s linear infinite reverse;
+}
+.mix-ball.spinC{
+  animation:ballPulse 1.15s ease-in-out infinite;
+}
+@keyframes orbitCW{
+  from{transform:translate(-50%,-50%) rotate(0deg)}
+  to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+@keyframes orbitCCW{
+  from{transform:translate(-50%,-50%) rotate(360deg)}
+  to{transform:translate(-50%,-50%) rotate(0deg)}
+}
+@keyframes ballSelfSpin{
+  from{rotate:0deg}
+  to{rotate:360deg}
+}
+@keyframes ballPulse{
+  0%,100%{scale:1}
+  50%{scale:.92}
+}
+.globe.mixing{
+  animation:machineShake .24s linear infinite alternate;
+}
+@keyframes machineShake{
+  from{transform:translate(-50%,-50%) rotate(-.06deg)}
+  to{transform:translate(-50%,-50%) rotate(.06deg)}
+}
+
+.countdown-pill{
+  position:absolute;
+  left:50%;
+  top:48%;
+  transform:translate(-50%,-50%);
+  min-width:360px;
+  min-height:90px;
+  border-radius:45px;
+  border:5px solid #ffdc69;
+  background:linear-gradient(180deg,rgba(81,48,29,.96),rgba(45,22,10,.96));
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:#fff;
+  font-size:25px;
+  font-weight:1000;
+  z-index:10;
+  box-shadow:0 6px 0 rgba(47,20,6,.8),0 0 20px rgba(255,231,100,.36),inset 0 2px 7px rgba(255,255,255,.2);
+}
+.countdown-pill em{font-style:normal;color:#ffef7b}
+.draw-result{
+  position:absolute;
+  left:50%;
+  top:51%;
+  transform:translate(-50%,-50%) scale(.94);
+  z-index:12;
+  display:none;
+  opacity:0;
+  transition:.24s;
+  width:94%;
+  text-align:center;
+}
+.draw-result.show{
+  display:block;
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+.draw-balls{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+}
+.result-ball{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:25px;
+  font-weight:1000;
+  border:4px solid rgba(255,255,255,.65);
+  box-shadow:inset -10px -12px 16px rgba(0,0,0,.23),inset 5px 5px 10px rgba(255,255,255,.42),0 6px 12px rgba(0,0,0,.28);
+  opacity:0;
+  transform:translateY(-40px) scale(.4);
+  animation:ballDrop .48s cubic-bezier(.18,1.32,.42,1) forwards;
+}
+.result-ball.power{
+  width:78px;
+  height:78px;
+  font-size:30px;
+  border-color:#fff2a8;
+}
+@keyframes ballDrop{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.result-caption{
+  display:inline-block;
+  margin-top:18px;
+  padding:13px 24px;
+  border-radius:28px;
+  border:4px solid #ffdc69;
+  background:linear-gradient(180deg,#51301d,#2d160a);
+  color:#fff;
+  font-size:22px;
+  font-weight:1000;
+  box-shadow:0 5px 0 rgba(47,20,6,.8);
+}
+.logo-text{
+  position:absolute;
+  bottom:16px;
+  left:50%;
+  transform:translateX(-50%);
+  color:rgba(255,224,170,.42);
+  font-weight:1000;
+  font-size:20px;
+  letter-spacing:1px;
+}
+.stats{
+  margin:18px auto 0;
+  width:96%;
+  display:grid;
+  gap:10px;
+}
+.stat-row{
+  display:grid;
+  grid-template-columns:90px 1fr 90px;
+  gap:10px;
+  align-items:center;
+  color:#fff;
+  font-size:18px;
+  font-weight:1000;
+  text-shadow:0 2px 2px #472208;
+}
+.bar{
+  height:32px;
+  border-radius:18px;
+  background:#3c2413;
+  position:relative;
+  overflow:hidden;
+  border:3px solid #77450e;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.38);
+}
+.bar .blue{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  background:repeating-linear-gradient(-35deg,#1587ff 0 10px,#0a63d4 10px 20px);
+  border-radius:18px 0 0 18px;
+}
+.bar .red{
+  position:absolute;
+  right:0;
+  top:0;
+  bottom:0;
+  background:repeating-linear-gradient(35deg,#ff2e38 0 10px,#cf1421 10px 20px);
+  border-radius:0 18px 18px 0;
+}
+.bar-label{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  min-width:112px;
+  height:42px;
+  border-radius:22px;
+  background:linear-gradient(145deg,#285bc0,#0e2c68);
+  border:4px solid #ffdf66;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-weight:1000;
+  z-index:3;
+  box-shadow:0 3px 0 #61330d;
+}
+.summary-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:9px;
+  margin-top:4px;
+}
+.summary-chip{
+  height:34px;
+  border-radius:18px;
+  background:#7b4a1f;
+  border:3px solid #8d5b1b;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  font-size:16px;
+  font-weight:1000;
+}
+.summary-chip i{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-style:normal;
+  color:#fff;
+  border:2px solid #ffe28c;
+}
+.summary-chip i.red{background:var(--red)}
+.summary-chip i.blue{background:var(--blue)}
+.summary-chip i.green{background:var(--green)}
+.footnote{
+  text-align:center;
+  color:#64380f;
+  font-size:18px;
+  font-weight:1000;
+  margin-top:14px;
+}
+.history-body{
+  padding:14px;
+  max-height:530px;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.history-row{
+  min-height:90px;
+  border-radius:10px;
+  margin-bottom:10px;
+  background:rgba(61,31,15,.68);
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.14);
+  padding:9px 8px;
+}
+.round-no{
+  text-align:center;
+  color:#ffc964;
+  font-size:17px;
+  font-weight:1000;
+  margin-bottom:7px;
+}
+.result-pills{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  justify-content:center;
+}
+.pill{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:18px;
+  font-weight:1000;
+  border:3px solid rgba(0,0,0,.22);
+  box-shadow:inset 0 2px 6px rgba(255,255,255,.28),0 3px 0 rgba(0,0,0,.35);
+}
+.pill.red{background:linear-gradient(145deg,#ff4b59,#bd0818)}
+.pill.blue{background:linear-gradient(145deg,#3a9bff,#0c54bd)}
+.pill.green{background:linear-gradient(145deg,#36d78a,#0d8b4d)}
+.pill.yellow{background:linear-gradient(145deg,#ffc52c,#d17a08)}
+.pill.gray{background:linear-gradient(145deg,#9da6b0,#4e5660)}
+.bottom-menu{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  padding:0 14px 14px;
+}
+.history-mode-title{
+  margin:2px 0 10px;
+  padding:10px 12px;
+  border-radius:12px;
+  color:#fff3bc;
+  background:rgba(37,18,8,.5);
+  font-weight:1000;
+  text-align:center;
+}
+.pattern-box{
+  border-radius:12px;
+  background:rgba(61,31,15,.68);
+  padding:14px;
+  margin-bottom:10px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.14);
+}
+.pattern-box b{display:block;color:#ffe28a;font-size:18px;margin-bottom:6px}
+.pattern-box span{display:block;color:#fff;line-height:1.55;font-weight:850}
+.predict-card{
+  min-height:120px;
+  border-radius:14px;
+  background:linear-gradient(145deg,#3a74d8,#15347b);
+  border:3px solid #ffdf66;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:#fff;
+  font-size:22px;
+  font-weight:1000;
+  box-shadow:0 5px 0 #5a2c0d;
+}
+.control-dock{
+  margin-top:18px;
+  border:5px solid #f7cf57;
+  border-radius:24px;
+  background:linear-gradient(180deg,#6a3c20,#3d2110);
+  padding:14px;
+  display:grid;
+  grid-template-columns:280px 1fr 280px;
+  gap:14px;
+  box-shadow:var(--shadow);
+}
+.control-card{
+  border-radius:18px;
+  background:rgba(37,18,8,.58);
+  padding:14px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.15);
+}
+.control-card h3{margin:0 0 10px;color:#ffe6a0;font-size:19px}
+.point-input{
+  width:100%;
+  height:46px;
+  border:0;
+  border-radius:12px;
+  background:#1c0d06;
+  color:#fff;
+  font-size:20px;
+  font-weight:1000;
+  padding:0 14px;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.5);
+}
+.quick-bets{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:9px;
+}
+.quick-bets button{
+  height:38px;
+  border:2px solid rgba(255,255,255,.18);
+  border-radius:10px;
+  background:rgba(255,255,255,.09);
+  color:#fff;
+  font-weight:950;
+}
+.pick-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.pick-btn{
+  min-height:68px;
+  border-radius:16px;
+  border:3px solid rgba(255,230,130,.35);
+  background:linear-gradient(180deg,#5a311a,#2b1509);
+  color:#fff;
+  font-size:18px;
+  font-weight:1000;
+  box-shadow:0 4px 0 #1d0c04,inset 0 2px 8px rgba(255,255,255,.13);
+}
+.pick-btn.active.blue{background:linear-gradient(180deg,#46a8ff,#0452b8);border-color:#ffe36e}
+.pick-btn.active.red{background:linear-gradient(180deg,#ff5863,#b30516);border-color:#ffe36e}
+.pick-btn.active.green{background:linear-gradient(180deg,#36d78a,#0d8b4d);border-color:#ffe36e}
+.pick-btn small{display:block;font-size:12px;margin-top:4px;color:#ffeebd}
+.gold-btn.closed{filter:grayscale(.25);opacity:.65}
+.status-card{text-align:center}
+.status-card .balance{
+  font-size:25px;
+  font-weight:1000;
+  color:#ffe47c;
+  margin-bottom:10px;
+}
+.log-area{
+  max-height:112px;
+  overflow:auto;
+  color:#fff;
+  font-size:13px;
+  line-height:1.55;
+  text-align:left;
+}
+.log-line{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.win{color:#67ffae}.lose{color:#ff7185}
+.chat-popup{
+  position:fixed;
+  left:24px;
+  bottom:24px;
+  z-index:120;
+  width:360px;
+  max-width:calc(100% - 48px);
+  border:4px solid #f7cf57;
+  border-radius:22px;
+  background:linear-gradient(180deg,#7a4829,#3b1f10);
+  box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.16);
+  display:none;
+  overflow:hidden;
+}
+.chat-popup.open{display:block}
+.chat-popup-head{
+  height:54px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 14px;
+  background:linear-gradient(180deg,#995f34,#6b3b20);
+  border-bottom:3px solid #351a0c;
+  color:#fff2c5;
+  font-weight:1000;
+}
+.chat-close{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid #ffdd72;
+  background:#5c2c13;
+  color:#fff;
+  font-size:20px;
+  font-weight:1000;
+}
+.chat-popup-list{
+  height:260px;
+  overflow-y:auto;
+  padding:12px;
+  background:rgba(26,12,5,.45);
+}
+.chat-input-row{
+  display:grid;
+  grid-template-columns:1fr 70px;
+  gap:8px;
+  padding:10px;
+  background:rgba(42,19,8,.72);
+}
+.chat-input-row input{
+  width:100%;
+  height:42px;
+  border:0;
+  border-radius:12px;
+  background:#1c0d06;
+  color:#fff;
+  padding:0 12px;
+  font-weight:800;
+}
+.chat-input-row button{
+  border:0;
+  border-radius:12px;
+  background:linear-gradient(180deg,#fff09f,#ffbd2e 60%,#de8412);
+  color:#4b2508;
+  font-weight:1000;
+}
+.modal-toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%) translateY(120px);
+  z-index:100;
+  background:rgba(38,18,8,.92);
+  border:3px solid #ffcf53;
+  border-radius:18px;
+  color:#fff;
+  padding:14px 20px;
+  font-weight:1000;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+  opacity:0;
+  transition:.25s;
+}
+.modal-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(max-width:1180px){
+  .main-grid{grid-template-columns:1fr}
+  .side-panel{display:none}
+  .control-dock{grid-template-columns:1fr}
+  .center-shell{min-height:auto}
+}
+@media(max-width:720px){
+  .game-wrap{padding:14px 10px}
+  .game-title{font-size:38px}
+  .sub-banner{min-width:0;width:96%;font-size:13px}
+  .center-shell{padding:8px;border-radius:24px}
+  .board{min-height:460px}
+  .machine-area{height:350px;width:100%}
+  .lotto-machine{transform:scale(.78)}
+  
+.ball-field{
+  position:absolute;
+  inset:28px;
+  border-radius:50%;
+  overflow:hidden;
+  z-index:3;
+  clip-path:circle(50% at 50% 50%);
+  contain:paint;
+}
+.mix-ball{
+  position:absolute;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:13px;
+  font-weight:1000;
+  border:2px solid rgba(255,255,255,.55);
+  box-shadow:
+    inset -7px -9px 12px rgba(0,0,0,.24),
+    inset 4px 4px 8px rgba(255,255,255,.42),
+    0 2px 4px rgba(0,0,0,.18);
+  will-change:transform;
+}
+.mix-ball:after{
+  content:"";
+  position:absolute;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  left:8px;
+  top:6px;
+  background:rgba(255,255,255,.72);
+  filter:blur(.2px);
+}
+.mix-ball.fast{
+  animation:ballSpin .62s linear infinite;
+}
+.mix-ball.mid{
+  animation:ballSpin .85s linear infinite reverse;
+}
+.mix-ball.slow{
+  animation:ballSpin 1.1s linear infinite;
+}
+@keyframes ballSpin{
+  from{rotate:0deg}
+  to{rotate:360deg}
+}
+.globe.mixing{
+  animation:machineShake .18s linear infinite alternate;
+}
+@keyframes machineShake{
+  from{transform:translate(-50%,-50%) rotate(-.12deg)}
+  to{transform:translate(-50%,-50%) rotate(.12deg)}
+}
+
+.countdown-pill{min-width:250px;font-size:17px;min-height:68px}
+  .stat-row{grid-template-columns:64px 1fr 64px;font-size:13px}
+  .pick-grid{grid-template-columns:repeat(2,1fr)}
+  .sky-cloud.c1{width:210px;left:-54px;top:80px}
+  .sky-cloud.c2{width:230px;right:-70px;top:82px}
+  .sky-cloud.c3{width:150px;left:20%;top:26px}
+  .sky-cloud.c4{width:155px;right:15%;top:28px}
+  .sky-cloud.c5,.sky-cloud.c6{display:none}
+}
+
+
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="sky-clouds">
+    <svg class="sky-cloud c1" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+      <path class="shade" d="M43 111c55 12 123 7 196 3 62-3 116 1 165 13-9 22-31 36-64 36H56c-28 0-48-16-51-38 10-8 22-13 38-14z"/>
+    </svg>
+    <svg class="sky-cloud c2" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+      <path class="shade" d="M43 111c55 12 123 7 196 3 62-3 116 1 165 13-9 22-31 36-64 36H56c-28 0-48-16-51-38 10-8 22-13 38-14z"/>
+    </svg>
+    <svg class="sky-cloud c3" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+    </svg>
+    <svg class="sky-cloud c4" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+    </svg>
+    <svg class="sky-cloud c5" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+    </svg>
+    <svg class="sky-cloud c6" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+    </svg>
+  </div>
+
+  <div class="game-wrap">
+    <div class="title-area">
+      <div class="game-title"><span class="gold">웹스튜디오</span>파워볼</div><br>
+      <div class="sub-banner">파워볼 첫번째 숫자를 기준으로 30초 단위로 추첨하며 288회차까지 진행</div>
+    </div>
+
+    <div class="main-grid">
+      <aside class="side-panel">
+        <div class="side-title">실시간 대화</div>
+        <div class="chat-body">
+          <div class="live-chat-list" id="sideChatList"></div>
+          <div class="side-buttons">
+            <button class="gold-btn" id="openChatBtn">실시간대화</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="center-shell">
+        <div class="board">
+          <div class="timebar" id="clockText">2026.05.23 23:10:19</div>
+
+          <div class="machine-area">
+            <div class="lotto-machine">
+              <div class="machine-top"></div>
+              <div class="machine-side left"></div>
+              <div class="machine-side right"></div>
+              <div class="machine-base"></div>
+              <div class="machine-hole"></div>
+
+              <div class="globe mixing">
+                <div class="ball-field" id="ballField"></div>
+              </div>
+
+              <div class="countdown-pill" id="countdownPill">
+                <span id="countdownText">0분 30초<br>150회차 추첨 시작</span>
+              </div>
+
+              <div class="draw-result" id="drawResult"></div>
+            </div>
+            <div class="logo-text">WWW.WEBSTUDIO.COM</div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-row">
+            <div>48.15%</div>
+            <div class="bar"><div class="blue" style="width:48%"></div><div class="red" style="width:52%"></div><div class="bar-label">파워볼홀짝</div></div>
+            <div>51.85%</div>
+          </div>
+          <div class="stat-row">
+            <div>55.86%</div>
+            <div class="bar"><div class="blue" style="width:56%"></div><div class="red" style="width:44%"></div><div class="bar-label">파워볼언오버</div></div>
+            <div>44.14%</div>
+          </div>
+          <div class="stat-row">
+            <div>94.08%</div>
+            <div class="bar"><div class="blue" style="width:94%"></div><div class="red" style="width:6%"></div><div class="bar-label">일반홀짝</div></div>
+            <div>5.92%</div>
+          </div>
+          <div class="stat-row">
+            <div>50.00%</div>
+            <div class="bar"><div class="blue" style="width:50%"></div><div class="red" style="width:50%"></div><div class="bar-label">일반언오버</div></div>
+            <div>50.00%</div>
+          </div>
+          <div class="summary-row">
+            <div class="summary-chip"><i class="red">대</i>29.03%</div>
+            <div class="summary-chip"><i class="blue">중</i>43.55%</div>
+            <div class="summary-chip"><i class="green">소</i>27.42%</div>
+          </div>
+        </div>
+        <div class="footnote">본 표는 웹스튜디오 픽분포를 기준으로 표기</div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="side-title">최근 추첨 결과</div>
+        <div class="history-body" id="historyBody"></div>
+        <div class="bottom-menu">
+          <button class="gold-btn history-tab active" data-mode="daily">일별</button>
+          <button class="gold-btn history-tab" data-mode="round">회차</button>
+          <button class="gold-btn history-tab" data-mode="pattern">패턴</button>
+          <button class="gold-btn history-tab" data-mode="predict">예측</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="control-dock">
+      <div class="control-card">
+        <h3>참여 포인트</h3>
+        <input class="point-input" id="betInput" type="number" min="100" step="100" value="1000">
+        <div class="quick-bets">
+          <button onclick="setBet(1000)">1천</button>
+          <button onclick="setBet(5000)">5천</button>
+          <button onclick="setBet(10000)">1만</button>
+          <button onclick="setBet(50000)">5만</button>
+        </div>
+      </div>
+
+      <div class="control-card">
+        <h3>선택</h3>
+        <div class="pick-grid">
+          <button class="pick-btn blue active" data-pick="sumOdd">일반홀<small>x1.95</small></button>
+          <button class="pick-btn red" data-pick="sumEven">일반짝<small>x1.95</small></button>
+          <button class="pick-btn blue" data-pick="powerOdd">파워홀<small>x1.95</small></button>
+          <button class="pick-btn red" data-pick="powerEven">파워짝<small>x1.95</small></button>
+          <button class="pick-btn green" data-pick="small">소<small>x2.60</small></button>
+          <button class="pick-btn blue" data-pick="middle">중<small>x2.20</small></button>
+          <button class="pick-btn red" data-pick="big">대<small>x2.60</small></button>
+          <button class="pick-btn red" data-pick="powerOver">파워오버<small>x1.95</small></button>
+        </div>
+        <button class="gold-btn" id="joinBtn" style="width:100%;margin-top:12px;">이번 회차 참여</button>
+        <button class="gold-btn" id="randomBtn" style="width:100%;margin-top:10px;">무작위 선택</button>
+      </div>
+
+      <div class="control-card status-card">
+        <h3>보유 포인트</h3>
+        <div class="balance" id="balanceText">100,000 P</div>
+        <div class="log-area" id="logArea"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-popup-head">
+    <span>실시간 대화</span>
+    <button class="chat-close" id="closeChatBtn">×</button>
+  </div>
+  <div class="chat-popup-list" id="popupChatList"></div>
+  <div class="chat-input-row">
+    <input id="chatInput" placeholder="메시지를 입력하세요" />
+    <button id="sendChatBtn">전송</button>
+  </div>
+</div>
+
+<div class="modal-toast" id="toast"></div>
+
+<script>
+let balance = Number(localStorage.getItem('powerballBalanceV1') || 100000);
+let selected = 'sumOdd';
+let logs = JSON.parse(localStorage.getItem('powerballLogsV1') || '[]');
+let history = JSON.parse(localStorage.getItem('powerballHistoryV1') || '[]');
+let chatMessages = JSON.parse(localStorage.getItem('powerballChatV1') || '[]');
+let round = Number(localStorage.getItem('powerballRoundV1') || 150);
+let pending = [];
+let leftSec = 30;
+let locked = false;
+let isDrawing = false;
+let historyMode = 'daily';
+
+const $ = s => document.querySelector(s);
+const fmt = n => Number(n).toLocaleString('ko-KR') + ' P';
+const rand = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const sample = arr=>arr[Math.floor(Math.random()*arr.length)];
+
+const ballColors = ['#f03a39','#1e8ee9','#f4b722','#2bbd70','#f17228','#16a6ae','#e94d4a','#ffc035','#8e58ff','#2c79ff','#ef4fa2','#41c46a'];
+let ballAnimStarted = false;
+
+function initMixingBalls(){
+  const field = document.getElementById('ballField');
+  if(!field || ballAnimStarted) return;
+  ballAnimStarted = true;
+
+  field.innerHTML = '';
+
+  const rect = field.getBoundingClientRect();
+  const fieldSize = Math.min(rect.width || 254, rect.height || 254);
+  const fieldRadius = fieldSize / 2;
+
+  /*
+    튀어나가 보이던 반사 방식은 제거.
+    각 공은 투명 원통 안쪽에서 자기만의 원 궤도를 돈다.
+    궤도 반지름은 fieldRadius보다 작게 제한해서 통 밖으로 절대 나가지 않는다.
+  */
+  const count = 46;
+  const minOrbit = fieldRadius * .18;
+  const maxOrbit = fieldRadius * .72;
+
+  for(let i=0; i<count; i++){
+    const orbitRadius = minOrbit + Math.random() * (maxOrbit - minOrbit);
+    const orbitSize = orbitRadius * 2;
+    const ballSize = window.innerWidth <= 720 ? 23 + Math.random() * 5 : 25 + Math.random() * 7;
+
+    const orbit = document.createElement('div');
+    const direction = i % 2 === 0 ? 'cw' : 'ccw';
+    const swing = i % 7 === 0 ? ' swing' : '';
+    orbit.className = `orbit-particle ${direction}${swing}`;
+
+    orbit.style.width = orbitSize + 'px';
+    orbit.style.height = orbitSize + 'px';
+    orbit.style.marginLeft = -(orbitSize / 2) + 'px';
+    orbit.style.marginTop = -(orbitSize / 2) + 'px';
+    orbit.style.animationDuration = (1.45 + Math.random() * 3.2).toFixed(2) + 's';
+    orbit.style.animationDelay = (-Math.random() * 3).toFixed(2) + 's';
+
+    /*
+      궤도 전체를 약간씩 다른 방향으로 돌려 시작점을 랜덤화한다.
+      이후에는 CSS 회전만 하므로 통 밖으로 벗어날 수 없다.
+    */
+    orbit.style.rotate = Math.floor(Math.random() * 360) + 'deg';
+
+    const ball = document.createElement('div');
+    ball.className = 'mix-ball ' + (i % 3 === 0 ? 'spinA' : i % 3 === 1 ? 'spinB' : 'spinC');
+    ball.textContent = i % 10;
+    ball.style.width = ballSize + 'px';
+    ball.style.height = ballSize + 'px';
+    ball.style.fontSize = Math.max(10, ballSize * .42) + 'px';
+    ball.style.background = ballColors[i % ballColors.length];
+
+    /*
+      일부 공은 궤도의 반대편이나 중간 위치에서 시작하게 해서
+      모두 같은 라인으로 도는 느낌을 줄인다.
+    */
+    if(i % 5 === 0){
+      ball.style.left = '0%';
+    }else if(i % 5 === 1){
+      ball.style.left = '78%';
+      ball.style.top = '18%';
+    }else if(i % 5 === 2){
+      ball.style.left = '22%';
+      ball.style.top = '82%';
+    }
+
+    orbit.appendChild(ball);
+    field.appendChild(orbit);
+  }
+}
+
+function rebuildMixingBalls(){
+  ballAnimStarted = false;
+  initMixingBalls();
+}
+
+window.addEventListener('resize', () => {
+  clearTimeout(window.__ballResizeTimer);
+  window.__ballResizeTimer = setTimeout(rebuildMixingBalls, 180);
+});
+
+function updateClock(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  $('#clockText').textContent = `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+function updateBalance(){
+  $('#balanceText').textContent = fmt(balance);
+  localStorage.setItem('powerballBalanceV1', String(balance));
+}
+function updateCountdown(){
+  if(isDrawing) return;
+  $('#countdownPill').style.display = 'grid';
+  $('#countdownText').innerHTML = `0분 ${String(leftSec).padStart(2,'0')}초<br>${round}회차 추첨 시작`;
+}
+function hideDraw(){
+  $('#drawResult').classList.remove('show');
+  $('#drawResult').innerHTML = '';
+}
+function colorClass(n){
+  if(n <= 5) return 'yellow';
+  if(n <= 10) return 'blue';
+  if(n <= 15) return 'red';
+  if(n <= 20) return 'green';
+  if(n <= 25) return 'blue';
+  return 'gray';
+}
+function ballColor(n){
+  if(n <= 5) return '#f3b51d';
+  if(n <= 10) return '#218be9';
+  if(n <= 15) return '#e94140';
+  if(n <= 20) return '#25bb70';
+  if(n <= 25) return '#168fc7';
+  return '#777f88';
+}
+function ensureHistory(){
+  if(history.length) return;
+  history = [
+    {round:149,nums:[18,19,27,24,13],power:6},
+    {round:148,nums:[8,7,21,27,26],power:6},
+    {round:147,nums:[6,19,3,27,22],power:1},
+    {round:146,nums:[21,4,17,18,26],power:0},
+    {round:145,nums:[9,11,4,23,12],power:2},
+    {round:144,nums:[13,5,20,16,28],power:7},
+    {round:143,nums:[2,14,18,25,27],power:3},
+    {round:142,nums:[1,10,15,22,26],power:5},
+    {round:141,nums:[4,6,17,23,24],power:8},
+    {round:140,nums:[7,12,13,21,28],power:4}
+  ];
+}
+function resultRow(h){
+  return `<div class="history-row">
+    <div class="round-no">${h.round} (${971633 + h.round})</div>
+    <div class="result-pills">
+      ${h.nums.map(n=>`<span class="pill ${colorClass(n)}">${n}</span>`).join('')}
+      <span class="pill gray">${h.power}</span>
+    </div>
+  </div>`;
+}
+function renderHistory(){
+  ensureHistory();
+  const body = $('#historyBody');
+
+  if(historyMode === 'daily' || historyMode === 'round'){
+    body.innerHTML = `<div class="history-mode-title">${historyMode === 'daily' ? '일별 결과 · 오늘' : '회차별 결과'}</div>` + history.map(resultRow).join('');
+  }
+
+  if(historyMode === 'pattern'){
+    const odd = history.filter(h => h.nums.reduce((a,b)=>a+b,0)%2===1).length;
+    const even = history.length - odd;
+    const pOdd = history.filter(h => h.power%2===1).length;
+    const pEven = history.length - pOdd;
+    const big = history.filter(h => h.nums.reduce((a,b)=>a+b,0)>=81).length;
+    const middle = history.filter(h => {
+      const s = h.nums.reduce((a,b)=>a+b,0);
+      return s>=65 && s<=80;
+    }).length;
+    const small = history.length - big - middle;
+    body.innerHTML = `
+      <div class="history-mode-title">패턴 분석</div>
+      <div class="pattern-box"><b>일반볼 홀짝</b><span>홀 ${odd}회 · 짝 ${even}회</span></div>
+      <div class="pattern-box"><b>파워볼 홀짝</b><span>홀 ${pOdd}회 · 짝 ${pEven}회</span></div>
+      <div class="pattern-box"><b>대중소</b><span>대 ${big}회 · 중 ${middle}회 · 소 ${small}회</span></div>
+      <div class="pattern-box"><b>최근 흐름</b><span>${history.slice(0,5).map(h=>h.power%2?'파홀':'파짝').join(' → ')}</span></div>
+    `;
+  }
+
+  if(historyMode === 'predict'){
+    const pOdd = history.filter(h => h.power%2===1).length;
+    const pEven = history.length - pOdd;
+    const recommend = pOdd <= pEven ? '파워홀' : '파워짝';
+    body.innerHTML = `
+      <div class="history-mode-title">예측</div>
+      <div class="predict-card">추천 흐름<br>${recommend}</div>
+      <div class="pattern-box" style="margin-top:12px;"><b>기준</b><span>최근 파워볼 홀짝 비율의 반대 흐름 기준으로 표시됩니다.</span></div>
+    `;
+  }
+}
+function renderLogs(){
+  if(!logs.length){
+    $('#logArea').innerHTML = '<div class="log-line">참여 내역이 없습니다.</div>';
+    return;
+  }
+  $('#logArea').innerHTML = logs.slice(0,8).map(l=>`<div class="log-line">${l.round}회차 ${l.pick} · <span class="${l.win?'win':'lose'}">${l.win?'+':'-'}${fmt(Math.abs(l.profit))}</span></div>`).join('');
+}
+function choose(btn){
+  document.querySelectorAll('.pick-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selected = btn.dataset.pick;
+}
+document.querySelectorAll('.pick-btn').forEach(btn=>btn.addEventListener('click',()=>choose(btn)));
+
+$('#randomBtn').onclick = () => {
+  const btns = [...document.querySelectorAll('.pick-btn')];
+  choose(sample(btns));
+  toast('무작위 선택 완료');
+};
+
+$('#joinBtn').onclick = () => {
+  if(locked || isDrawing){
+    toast('마감된 회차입니다. 다음 회차를 기다리세요.');
+    return;
+  }
+  const bet = Math.floor(Number($('#betInput').value || 0));
+  if(!bet || bet < 100){ toast('100P 이상 입력하세요.'); return; }
+  if(bet > balance){ toast('보유 포인트가 부족합니다.'); return; }
+  balance -= bet;
+  pending.push({round,pick:selected,bet});
+  updateBalance();
+  toast(`${round}회차 ${label(selected)} 참여 완료`);
+};
+
+function makeResult(){
+  const nums = [];
+  while(nums.length < 5){
+    const n = rand(1,28);
+    if(!nums.includes(n)) nums.push(n);
+  }
+  nums.sort((a,b)=>a-b);
+  const power = rand(0,9);
+  return {round,nums,power};
+}
+function resultValues(r){
+  const sum = r.nums.reduce((a,b)=>a+b,0);
+  const values = [];
+  values.push(sum % 2 ? 'sumOdd' : 'sumEven');
+  values.push(r.power % 2 ? 'powerOdd' : 'powerEven');
+  values.push(r.power >= 5 ? 'powerOver' : 'powerUnder');
+  if(sum <= 64) values.push('small');
+  else if(sum <= 80) values.push('middle');
+  else values.push('big');
+  return values;
+}
+function showDraw(r){
+  $('#countdownPill').style.display = 'none';
+  const result = $('#drawResult');
+  const allBalls = r.nums.map((n,i)=>`<span class="result-ball" style="background:${ballColor(n)};animation-delay:${i*.28}s">${n}</span>`).join('');
+  const pDelay = r.nums.length * .28;
+  const sum = r.nums.reduce((a,b)=>a+b,0);
+  result.innerHTML = `
+    <div class="draw-balls">
+      ${allBalls}
+      <span class="result-ball power" style="background:${ballColor(r.power)};animation-delay:${pDelay}s">${r.power}</span>
+    </div>
+    <div class="result-caption" style="animation-delay:${pDelay+.4}s">
+      ${r.round}회차 · 일반합 ${sum} / 파워볼 ${r.power}
+    </div>
+  `;
+  result.classList.add('show');
+}
+function startDraw(){
+  isDrawing = true;
+  locked = true;
+  $('#joinBtn').classList.add('closed');
+  $('#countdownPill').style.display = 'grid';
+  $('#countdownText').innerHTML = `${round}회차<br>공 추첨중...`;
+  hideDraw();
+
+  const r = makeResult();
+
+  setTimeout(()=>showDraw(r), 900);
+  setTimeout(()=>finishRound(r), 3100);
+}
+function finishRound(r){
+  const values = resultValues(r);
+  let winCount = 0;
+  let loseCount = 0;
+  let profitSum = 0;
+
+  pending.forEach(p=>{
+    const isWin = values.includes(p.pick);
+    if(isWin){
+      const prize = Math.floor(p.bet * mult(p.pick));
+      const profit = prize - p.bet;
+      balance += prize;
+      profitSum += profit;
+      winCount++;
+      logs.unshift({round:p.round,pick:label(p.pick),profit,win:true});
+    }else{
+      profitSum -= p.bet;
+      loseCount++;
+      logs.unshift({round:p.round,pick:label(p.pick),profit:p.bet,win:false});
+    }
+  });
+
+  logs = logs.slice(0,20);
+  history.unshift(r);
+  history = history.slice(0,60);
+  localStorage.setItem('powerballLogsV1', JSON.stringify(logs));
+  localStorage.setItem('powerballHistoryV1', JSON.stringify(history));
+  localStorage.setItem('powerballRoundV1', String(round + 1));
+
+  renderHistory();
+  renderLogs();
+  updateBalance();
+
+  if(pending.length){
+    toast(`정산 완료: 적중 ${winCount}건 / 미적중 ${loseCount}건`);
+  }
+
+  pending = [];
+  round++;
+
+  setTimeout(()=>{
+    leftSec = 30;
+    locked = false;
+    isDrawing = false;
+    $('#joinBtn').classList.remove('closed');
+    hideDraw();
+    updateCountdown();
+  }, 1800);
+}
+function tick(){
+  if(isDrawing) return;
+
+  leftSec--;
+
+  if(leftSec > 5){
+    locked = false;
+    $('#joinBtn').classList.remove('closed');
+    updateCountdown();
+  }
+
+  if(leftSec <= 5 && leftSec > 0){
+    locked = true;
+    $('#joinBtn').classList.add('closed');
+    $('#countdownPill').style.display = 'grid';
+    $('#countdownText').innerHTML = `${round}회차 마감<br><em>${leftSec}초 후 추첨</em>`;
+  }
+
+  if(leftSec <= 0){
+    startDraw();
+  }
+}
+function renderChat(){
+  if(!chatMessages.length) chatMessages = defaultChats;
+  const html = chatMessages.slice(-30).map(m=>`
+    <div class="chat-msg ${m.me?'me':''}">
+      <div class="name">${m.name}</div>
+      <div class="text">${m.text}</div>
+    </div>
+  `).join('');
+  $('#sideChatList').innerHTML = html;
+  $('#popupChatList').innerHTML = html;
+  $('#sideChatList').scrollTop = $('#sideChatList').scrollHeight;
+  $('#popupChatList').scrollTop = $('#popupChatList').scrollHeight;
+  localStorage.setItem('powerballChatV1', JSON.stringify(chatMessages));
+}
+function sendChat(){
+  const input = $('#chatInput');
+  const text = input.value.trim();
+  if(!text){ toast('대화 내용을 입력하세요.'); return; }
+  chatMessages.push({name:'나',text,me:true});
+  input.value = '';
+  renderChat();
+}
+$('#openChatBtn').onclick = () => $('#chatPopup').classList.add('open');
+$('#closeChatBtn').onclick = () => $('#chatPopup').classList.remove('open');
+$('#sendChatBtn').onclick = sendChat;
+$('#chatInput').addEventListener('keydown', e=>{ if(e.key === 'Enter') sendChat(); });
+
+document.querySelectorAll('.history-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.history-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    historyMode = btn.dataset.mode;
+    renderHistory();
+  });
+});
+
+updateBalance();
+initMixingBalls();
+ensureHistory();
+renderHistory();
+renderLogs();
+renderChat();
+updateClock();
+updateCountdown();
+setInterval(updateClock,1000);
+setInterval(tick,1000);
+</script>
+</body>
+</html>

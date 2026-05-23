@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웹스튜디오 | 코인스왑</title>
+  <style>
+    :root{
+      --bg:#05070d;
+      --bg2:#080d18;
+      --panel:#0d1322;
+      --panel2:#111827;
+      --card:#0f172a;
+      --card2:#121c31;
+      --line:#1f2a44;
+      --line2:#263653;
+      --text:#f8fafc;
+      --sub:#cbd5e1;
+      --muted:#94a3b8;
+      --green:#00d49b;
+      --green2:#00b884;
+      --green-soft:rgba(0,212,155,.13);
+      --blue:#2563eb;
+      --cyan:#06b6d4;
+      --purple:#8b5cf6;
+      --red:#ef4444;
+      --orange:#f97316;
+      --yellow:#facc15;
+      --shadow:0 26px 90px rgba(0,0,0,.38);
+      --max:1220px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% -4%,rgba(0,212,155,.14),transparent 28%),
+        radial-gradient(circle at 88% 2%,rgba(37,99,235,.16),transparent 28%),
+        radial-gradient(circle at 52% 112%,rgba(139,92,246,.10),transparent 26%),
+        var(--bg);
+      min-height:100vh;
+    }
+    body.lock{overflow:hidden}
+    button,input,select,textarea{font-family:inherit}
+    button{cursor:pointer}
+    a{text-decoration:none;color:inherit}
+    .wrap{width:min(var(--max),calc(100% - 36px));margin:0 auto}
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:80;
+      background:rgba(5,7,13,.86);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(148,163,184,.13);
+    }
+    .nav{
+      height:78px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .brand{
+      min-width:220px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:950;
+      letter-spacing:-.045em;
+    }
+    .brand-mark{
+      width:48px;
+      height:48px;
+      border-radius:17px;
+      position:relative;
+      display:grid;
+      place-items:center;
+      color:white;
+      font-size:20px;
+      font-weight:950;
+      background:
+        linear-gradient(135deg,rgba(0,212,155,.95),rgba(6,182,212,.92) 55%,rgba(37,99,235,.92));
+      box-shadow:0 16px 38px rgba(0,212,155,.23), inset 0 1px 0 rgba(255,255,255,.22);
+      overflow:hidden;
+    }
+    .brand-mark:before{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border:1px solid rgba(255,255,255,.35);
+      border-radius:12px;
+    }
+    .brand-mark span{position:relative;z-index:1}
+    .brand-text strong{display:block;font-size:22px}
+    .brand-text small{display:block;margin-top:2px;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:-.01em}
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid rgba(148,163,184,.14);
+      background:rgba(15,23,42,.65);
+      padding:5px;
+      border-radius:999px;
+    }
+    .nav-link{
+      border:0;
+      background:transparent;
+      color:#cbd5e1;
+      border-radius:999px;
+      min-height:40px;
+      padding:0 14px;
+      font-size:13px;
+      font-weight:950;
+    }
+    .nav-link.active,.nav-link:hover{
+      color:white;
+      background:linear-gradient(135deg,rgba(0,212,155,.95),rgba(6,182,212,.84));
+    }
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{
+      border:0;
+      border-radius:14px;
+      min-height:42px;
+      padding:0 15px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      font-size:14px;
+      font-weight:950;
+      white-space:nowrap;
+      transition:.16s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{color:#02130e;background:linear-gradient(135deg,var(--green),#7dd3fc);box-shadow:0 12px 28px rgba(0,212,155,.20)}
+    .btn-dark{color:#e2e8f0;background:#111827;border:1px solid rgba(148,163,184,.15)}
+    .btn-light{color:#e2e8f0;background:#1e293b;border:1px solid rgba(148,163,184,.14)}
+    .btn-danger{color:white;background:var(--red)}
+    .btn-green{color:#052e16;background:#86efac}
+    .btn-ghost{color:#cbd5e1;background:transparent;border:1px solid rgba(148,163,184,.16)}
+    .section{padding:42px 0}
+    .hero{padding:30px 0 28px}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1fr 430px;
+      gap:24px;
+      align-items:start;
+    }
+    .hero-card{
+      min-height:520px;
+      border:1px solid rgba(148,163,184,.14);
+      border-radius:34px;
+      padding:34px;
+      background:
+        linear-gradient(135deg,rgba(13,19,34,.96),rgba(5,7,13,.80)),
+        radial-gradient(circle at 74% 18%,rgba(0,212,155,.16),transparent 28%),
+        radial-gradient(circle at 18% 88%,rgba(37,99,235,.16),transparent 28%);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-card:after{
+      content:"";
+      position:absolute;
+      right:-130px;
+      top:-120px;
+      width:330px;
+      height:330px;
+      border-radius:999px;
+      background:linear-gradient(135deg,rgba(0,212,155,.16),rgba(6,182,212,.10));
+      filter:blur(2px);
+    }
+    .eyebrow{
+      position:relative;
+      z-index:1;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(0,212,155,.11);
+      border:1px solid rgba(0,212,155,.23);
+      color:#67e8f9;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:950;
+    }
+    .pulse{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 0 0 rgba(34,197,94,.75);
+      animation:pulse 1.2s infinite;
+    }
+    @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+    h1{
+      position:relative;
+      z-index:1;
+      margin:20px 0 14px;
+      font-size:clamp(42px,5vw,68px);
+      line-height:1.04;
+      letter-spacing:-.08em;
+    }
+    .grad{
+      background:linear-gradient(135deg,#00d49b,#22d3ee,#93c5fd);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .hero-card p{
+      position:relative;
+      z-index:1;
+      margin:0;
+      max-width:700px;
+      color:#cbd5e1;
+      font-size:16px;
+      line-height:1.72;
+      font-weight:650;
+    }
+    .hero-stats{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:26px;
+    }
+    .stat{
+      border:1px solid rgba(148,163,184,.13);
+      background:rgba(15,23,42,.76);
+      border-radius:20px;
+      padding:16px;
+    }
+    .stat span{
+      display:block;
+      color:#94a3b8;
+      font-size:11px;
+      font-weight:950;
+    }
+    .stat strong{
+      display:block;
+      margin-top:6px;
+      font-size:22px;
+      letter-spacing:-.05em;
+    }
+    .ticker{
+      position:relative;
+      z-index:1;
+      margin-top:22px;
+      display:flex;
+      overflow:hidden;
+      mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    }
+    .ticker-track{display:flex;gap:8px;animation:marquee 38s linear infinite}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ticker-chip{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(148,163,184,.13);
+      background:rgba(2,6,23,.72);
+      border-radius:999px;
+      padding:8px 11px;
+      font-size:12px;
+      font-weight:950;
+      min-width:150px;
+    }
+    .token-dot{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      color:white;
+      font-size:10px;
+      font-weight:950;
+      background:linear-gradient(135deg,#00b386,#00e0a8);
+      flex:0 0 auto;
+    }
+    .up{color:#22c55e}.down{color:#ef4444}
+    .swap-card{
+      position:sticky;
+      top:96px;
+      border:1px solid rgba(148,163,184,.15);
+      background:rgba(13,19,34,.95);
+      border-radius:30px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .swap-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .swap-head h2{margin:0;font-size:23px;letter-spacing:-.055em}
+    .live-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      color:#67e8f9;
+      background:rgba(6,182,212,.10);
+      border:1px solid rgba(6,182,212,.22);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:11px;
+      font-weight:950;
+    }
+    .swap-box{
+      border:1px solid rgba(148,163,184,.14);
+      background:#0f172a;
+      border-radius:22px;
+      padding:14px;
+      margin-bottom:10px;
+    }
+    .swap-label{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+    .swap-row{
+      display:grid;
+      grid-template-columns:1fr 134px;
+      gap:10px;
+      align-items:center;
+    }
+    .amount{
+      width:100%;
+      min-width:0;
+      border:0;
+      background:transparent;
+      color:white;
+      outline:none;
+      font-size:30px;
+      font-weight:950;
+      letter-spacing:-.055em;
+    }
+    .coin-select{
+      min-height:46px;
+      border:1px solid rgba(148,163,184,.16);
+      background:#111827;
+      color:white;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:0 12px;
+      font-weight:950;
+    }
+    .coin-mini{display:flex;align-items:center;gap:8px;min-width:0}
+    .coin-mini span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .swap-center{display:grid;place-items:center;margin:-2px 0}
+    .switch-btn{
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:4px solid rgba(13,19,34,.95);
+      background:linear-gradient(135deg,var(--green),var(--cyan));
+      color:#02130e;
+      font-size:20px;
+      font-weight:950;
+      display:grid;
+      place-items:center;
+      z-index:1;
+    }
+    .swap-info{
+      display:grid;
+      gap:8px;
+      margin:12px 0;
+      color:#94a3b8;
+      font-size:13px;
+      font-weight:800;
+    }
+    .info-line{display:flex;justify-content:space-between;gap:12px}
+    .info-line strong{color:#f8fafc}
+    .exchange-btn{width:100%;min-height:54px;border-radius:18px;font-size:16px}
+    .swap-options{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:12px;
+    }
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size:clamp(26px,3.2vw,40px);
+      letter-spacing:-.065em;
+    }
+    .section-title p{
+      margin:8px 0 0;
+      color:#94a3b8;
+      line-height:1.6;
+      font-size:15px;
+      font-weight:650;
+    }
+    .panel{
+      background:rgba(13,19,34,.86);
+      border:1px solid rgba(148,163,184,.14);
+      border-radius:28px;
+      box-shadow:0 14px 38px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .market-tools{
+      display:grid;
+      grid-template-columns:1fr 180px;
+      gap:10px;
+      padding:16px;
+      border-bottom:1px solid rgba(148,163,184,.12);
+    }
+    .input,.select,.textarea{
+      width:100%;
+      border:1px solid rgba(148,163,184,.16);
+      background:#0f172a;
+      color:#e2e8f0;
+      outline:none;
+      border-radius:14px;
+      min-height:44px;
+      padding:0 12px;
+      font-weight:850;
+    }
+    .textarea{padding:12px;min-height:110px;resize:vertical;line-height:1.55}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;min-width:780px}
+    th,td{
+      padding:14px 16px;
+      text-align:left;
+      border-bottom:1px solid rgba(148,163,184,.10);
+      vertical-align:middle;
+      font-size:14px;
+    }
+    th{
+      background:rgba(15,23,42,.95);
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:950;
+    }
+    tr:hover td{background:rgba(0,212,155,.045)}
+    .token-cell,.pair-cell{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:950;
+    }
+    .token-cell small,.pair-cell small{display:block;color:#94a3b8;font-size:11px;margin-top:2px;font-weight:800}
+    .spark{width:90px;height:30px}
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      color:#22c55e;
+      font-size:12px;
+      font-weight:950;
+    }
+    .status:before{content:"";width:7px;height:7px;border-radius:999px;background:#22c55e}
+    .pair-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+    .pair-card{
+      border:1px solid rgba(148,163,184,.14);
+      background:linear-gradient(180deg,rgba(15,23,42,.94),rgba(13,19,34,.88));
+      border-radius:24px;
+      padding:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.16);
+    }
+    .pair-icons{display:flex;align-items:center;margin-bottom:14px}
+    .pair-icons .token-dot:nth-child(2){margin-left:-8px}
+    .pair-card h3{margin:0;font-size:18px;letter-spacing:-.045em}
+    .pair-card p{margin:7px 0 12px;color:#94a3b8;font-size:13px;line-height:1.45;font-weight:750}
+    .pair-meta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding-top:12px;
+      border-top:1px solid rgba(148,163,184,.12);
+      color:#cbd5e1;
+      font-size:12px;
+      font-weight:850;
+    }
+    .why-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+    .why-card{
+      border:1px solid rgba(148,163,184,.14);
+      background:rgba(13,19,34,.86);
+      border-radius:24px;
+      padding:20px;
+    }
+    .why-card strong{
+      display:block;
+      color:#5eead4;
+      font-size:30px;
+      letter-spacing:-.06em;
+    }
+    .why-card h3{margin:8px 0 8px;font-size:17px;letter-spacing:-.04em}
+    .why-card p{margin:0;color:#94a3b8;line-height:1.55;font-size:13px;font-weight:650}
+    .faq-grid{
+      border:1px solid rgba(148,163,184,.14);
+      border-radius:24px;
+      overflow:hidden;
+      background:rgba(13,19,34,.86);
+    }
+    .faq-item{border-bottom:1px solid rgba(148,163,184,.10)}
+    .faq-item:last-child{border-bottom:0}
+    .faq-q{
+      width:100%;
+      border:0;
+      background:transparent;
+      min-height:64px;
+      padding:0 18px;
+      color:#f8fafc;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      font-size:16px;
+      font-weight:950;
+      text-align:left;
+    }
+    .faq-a{
+      display:none;
+      padding:0 18px 18px;
+      color:#94a3b8;
+      line-height:1.65;
+      font-size:14px;
+      font-weight:650;
+    }
+    .faq-item.open .faq-a{display:block}
+    .admin-layout{
+      display:grid;
+      grid-template-columns:270px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .admin-side{
+      position:sticky;
+      top:96px;
+      display:grid;
+      gap:8px;
+      background:rgba(13,19,34,.86);
+      border:1px solid rgba(148,163,184,.14);
+      border-radius:24px;
+      padding:12px;
+    }
+    .admin-tab{
+      border:0;
+      background:transparent;
+      color:#cbd5e1;
+      border-radius:14px;
+      min-height:44px;
+      padding:0 13px;
+      text-align:left;
+      font-size:14px;
+      font-weight:950;
+    }
+    .admin-tab.active,.admin-tab:hover{
+      background:rgba(0,212,155,.12);
+      color:#67e8f9;
+    }
+    .admin-panel{display:none}
+    .admin-panel.active{display:block}
+    .admin-card{
+      background:rgba(13,19,34,.86);
+      border:1px solid rgba(148,163,184,.14);
+      border-radius:24px;
+      padding:18px;
+      margin-bottom:14px;
+    }
+    .admin-card h3{margin:0 0 14px;font-size:20px;letter-spacing:-.05em}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .field{margin-bottom:12px}
+    .field label{display:block;color:#94a3b8;font-size:12px;font-weight:950;margin-bottom:6px}
+    .admin-list{display:grid;gap:10px}
+    .admin-item{
+      border:1px solid rgba(148,163,184,.12);
+      background:#0f172a;
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+    }
+    .admin-item strong{display:block}
+    .admin-item span{display:block;color:#94a3b8;font-size:12px;margin-top:4px;font-weight:800}
+    .admin-actions{display:flex;gap:7px;flex-wrap:wrap}
+    .small-btn{
+      min-height:34px;
+      padding:0 10px;
+      border-radius:12px;
+      border:0;
+      font-size:12px;
+      font-weight:950;
+    }
+    .footer{
+      padding:36px 0;
+      border-top:1px solid rgba(148,163,184,.12);
+      background:#03050a;
+      color:#94a3b8;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.4fr repeat(3,1fr);
+      gap:20px;
+    }
+    .footer h3,.footer h4{margin:0 0 10px;color:white}
+    .footer p,.footer a{display:block;margin:8px 0;color:#94a3b8;font-size:13px;line-height:1.55;font-weight:750}
+    .modal{
+      position:fixed;
+      inset:0;
+      z-index:140;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.72);
+      padding:18px;
+    }
+    .modal.show{display:flex}
+    .modal-box{
+      width:min(540px,100%);
+      max-height:88vh;
+      overflow:auto;
+      background:#0d1322;
+      border:1px solid rgba(148,163,184,.16);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .modal-head h3{margin:0;font-size:20px;letter-spacing:-.05em}
+    .close{
+      border:0;
+      background:#1e293b;
+      color:white;
+      border-radius:12px;
+      width:36px;
+      height:36px;
+      font-size:18px;
+    }
+    .coin-list{display:grid;gap:8px}
+    .coin-item{
+      border:1px solid rgba(148,163,184,.12);
+      background:#0f172a;
+      border-radius:16px;
+      padding:11px;
+      display:grid;
+      grid-template-columns:38px 1fr auto;
+      gap:10px;
+      align-items:center;
+      color:white;
+    }
+    .coin-item:hover{border-color:rgba(0,212,155,.38);background:#111c31}
+    .coin-item strong{display:block}
+    .coin-item span{display:block;color:#94a3b8;font-size:12px;font-weight:800;margin-top:2px}
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:28px;
+      z-index:220;
+      transform:translateX(-50%) translateY(18px);
+      width:min(420px,calc(100% - 28px));
+      background:#e2e8f0;
+      color:#0f172a;
+      border-radius:16px;
+      padding:13px 15px;
+      font-size:14px;
+      font-weight:950;
+      text-align:center;
+      opacity:0;
+      pointer-events:none;
+      transition:.18s;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .bottom-nav{display:none}
+
+    body:not(.admin-mode) #admin{display:none !important}
+    body.admin-mode #exchange,
+    body.admin-mode #market,
+    body.admin-mode #pairs,
+    body.admin-mode #why,
+    body.admin-mode #fiat,
+    body.admin-mode #faq,
+    body.admin-mode .footer{display:none !important}
+    body.admin-mode #admin{display:block !important}
+
+    .fiat-wrap{
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:18px;
+      align-items:stretch;
+    }
+    .fiat-main{
+      border:1px solid rgba(148,163,184,.14);
+      background:
+        linear-gradient(135deg,rgba(13,19,34,.95),rgba(15,23,42,.86)),
+        radial-gradient(circle at 82% 16%,rgba(0,212,155,.13),transparent 30%);
+      border-radius:28px;
+      padding:26px;
+      box-shadow:0 14px 38px rgba(0,0,0,.18);
+    }
+    .fiat-main h2{
+      margin:0 0 10px;
+      font-size:clamp(28px,3.2vw,42px);
+      letter-spacing:-.065em;
+    }
+    .fiat-main p{
+      margin:0;
+      color:#94a3b8;
+      line-height:1.65;
+      font-size:15px;
+      font-weight:700;
+    }
+    .fiat-benefits{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:20px;
+    }
+    .fiat-benefit{
+      border:1px solid rgba(148,163,184,.12);
+      background:#0f172a;
+      border-radius:20px;
+      padding:16px;
+    }
+    .fiat-benefit strong{
+      display:block;
+      color:#67e8f9;
+      font-size:18px;
+      letter-spacing:-.04em;
+      margin-bottom:7px;
+    }
+    .fiat-benefit span{
+      display:block;
+      color:#cbd5e1;
+      font-size:13px;
+      line-height:1.5;
+      font-weight:750;
+    }
+    .fiat-card{
+      border:1px solid rgba(148,163,184,.14);
+      background:rgba(13,19,34,.92);
+      border-radius:28px;
+      padding:18px;
+      box-shadow:0 14px 38px rgba(0,0,0,.18);
+    }
+    .fiat-card h3{
+      margin:0 0 12px;
+      font-size:21px;
+      letter-spacing:-.05em;
+    }
+    .wallet-options{
+      display:grid;
+      gap:9px;
+    }
+    .wallet-option{
+      border:1px solid rgba(148,163,184,.14);
+      background:#0f172a;
+      color:white;
+      border-radius:16px;
+      padding:13px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      font-weight:950;
+    }
+
+    .qr-panel{
+      display:none;
+      margin-top:12px;
+      border:1px solid rgba(148,163,184,.14);
+      background:#0f172a;
+      border-radius:18px;
+      padding:12px;
+    }
+    .qr-panel.show{display:block}
+    .qr-video{
+      width:100%;
+      max-height:320px;
+      border-radius:14px;
+      background:#020617;
+      object-fit:cover;
+      border:1px solid rgba(148,163,184,.12);
+    }
+    .qr-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+    .qr-result{
+      margin-top:10px;
+      color:#cbd5e1;
+      font-size:12px;
+      line-height:1.5;
+      font-weight:800;
+      word-break:break-all;
+    }
+
+    .wallet-option span{
+      display:block;
+      color:#94a3b8;
+      font-size:12px;
+      margin-top:4px;
+      font-weight:800;
+    }
+
+    @media(max-width:1080px){
+      .hero-grid,.admin-layout{grid-template-columns:1fr}
+      .swap-card,.admin-side{position:static}
+      .pair-grid,.why-grid{grid-template-columns:repeat(2,1fr)}
+      .footer-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:760px){
+      .wrap{width:calc(100% - 26px)}
+      .nav{height:68px}
+      .brand{min-width:0}
+      .brand-text strong{font-size:18px}
+      .brand-text small{display:none}
+      .nav-links{display:none}
+      .nav-actions .btn-dark{display:none}
+      .hero{padding:18px 0}
+      .hero-card{min-height:auto;padding:22px;border-radius:26px}
+      h1{font-size:35px}
+      .hero-card p{font-size:14px}
+      .hero-stats{grid-template-columns:repeat(2,1fr)}
+      .swap-row{grid-template-columns:1fr 120px}
+      .amount{font-size:25px}
+      .market-tools{grid-template-columns:1fr}
+      .section-head{display:block}
+      .section-head .btn{margin-top:12px}
+      .form-grid{grid-template-columns:1fr}
+
+      .fiat-wrap{grid-template-columns:1fr}
+      .fiat-benefits{grid-template-columns:1fr}
+    }
+    @media(max-width:430px){
+      .page-pad{padding-bottom:74px}
+      .brand-mark{width:40px;height:40px;border-radius:14px;font-size:16px}
+      .nav-actions .btn-primary{min-height:38px;padding:0 11px;font-size:12px}
+      .hero-stats{gap:8px}
+      .stat{padding:12px}
+      .pair-grid,.why-grid{grid-template-columns:1fr}
+      .swap-options{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+      .admin-item{grid-template-columns:1fr}
+      .bottom-nav{
+        position:fixed;
+        left:0;right:0;bottom:0;
+        z-index:100;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:4px;
+        padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+        background:rgba(5,7,13,.92);
+        backdrop-filter:blur(16px);
+        border-top:1px solid rgba(148,163,184,.13);
+      }
+      .bottom-tab{
+        border:0;
+        background:transparent;
+        color:#94a3b8;
+        min-height:52px;
+        border-radius:14px;
+        display:grid;
+        place-items:center;
+        gap:2px;
+        font-size:10px;
+        font-weight:950;
+      }
+      .bottom-tab svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2.2}
+      .bottom-tab.active{background:rgba(0,212,155,.13);color:#67e8f9}
+      .modal{align-items:end;padding:0}
+      .modal-box{border-radius:24px 24px 0 0;max-height:88vh}
+      .toast{bottom:84px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#" data-scroll="exchange">
+        <span class="brand-mark"><span>웹</span></span>
+        <span class="brand-text"><strong id="siteNameTop">웹스튜디오</strong><small>실시간 코인 스왑 플랫폼</small></span>
+      </a>
+      <nav class="nav-links">
+        <button class="nav-link active" data-scroll="exchange">스왑</button>
+        <button class="nav-link" data-scroll="market">시세 리스트</button>
+        <button class="nav-link" data-scroll="pairs">인기 코인</button>
+        <button class="nav-link" data-scroll="fiat">코인 구매</button>
+        <button class="nav-link" data-scroll="faq">자주 묻는 질문</button>
+        <button class="nav-link" data-scroll="admin">관리자</button>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn btn-dark" id="statusBtn">교환 상태 조회</button>
+        <button class="btn btn-primary" id="walletBtn">지갑 연결</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-pad">
+    <section class="hero" id="exchange">
+      <div class="wrap hero-grid">
+        <section class="hero-card">
+          <span class="eyebrow"><span class="pulse"></span> 1초마다 코인 시세 자동 갱신</span>
+          <h1 id="heroTitle">테더 USD ERC20<br><span class="grad">코인 교환 및 스왑</span></h1>
+          <p id="heroSubtitle">
+            웹스튜디오 코인스왑 페이지입니다. 
+            
+          </p>
+          <div class="hero-stats">
+            <div class="stat"><span>등록 코인</span><strong id="statCoins">0개</strong></div>
+            <div class="stat"><span>24시간 거래량</span><strong id="statVolume">-</strong></div>
+            <div class="stat"><span>기본 수수료</span><strong id="statFee">0.4%</strong></div>
+            <div class="stat"><span>갱신 주기</span><strong id="statTick">1초</strong></div>
+          </div>
+          <div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+        </section>
+
+        <aside class="swap-card">
+          <div class="swap-head">
+            <h2>코인 스왑</h2>
+            <span class="live-badge"><span class="pulse"></span> 실시간</span>
+          </div>
+
+          <div class="swap-box">
+            <div class="swap-label"><span>보내는 코인</span><span id="sendUsd">$0.00</span></div>
+            <div class="swap-row">
+              <input class="amount" id="sendAmount" value="0.1" inputmode="decimal">
+              <button class="coin-select" data-select="from">
+                <span class="coin-mini"><span class="token-dot" id="fromDot">BTC</span><span id="fromSymbol">BTC</span></span>
+                <span>▾</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="swap-center"><button class="switch-btn" id="switchBtn">↓</button></div>
+
+          <div class="swap-box">
+            <div class="swap-label"><span>받는 코인</span><span id="getUsd">$0.00</span></div>
+            <div class="swap-row">
+              <input class="amount" id="getAmount" readonly value="0">
+              <button class="coin-select" data-select="to">
+                <span class="coin-mini"><span class="token-dot" id="toDot">USDT</span><span id="toSymbol">USDT</span></span>
+                <span>▾</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="swap-info">
+            <div class="info-line"><span>모든 수수료 포함</span><strong id="feeText">$0.00</strong></div>
+            <div class="info-line"><span>예상 환율</span><strong id="rateText">-</strong></div>
+            <div class="info-line"><span>교환 방식</span><strong id="modeText">변동 환율</strong></div>
+            <div class="info-line"><span>최소 수령량</span><strong id="minText">0 USDT</strong></div>
+          </div>
+
+          <button class="btn btn-primary exchange-btn" id="exchangeBtn">교환하기</button>
+
+          <div class="swap-options">
+            <button class="btn btn-light" id="fixedBtn">고정 환율</button>
+            <button class="btn btn-light" id="floatBtn">변동 환율</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="market">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-title">
+            <h2 id="marketTitle">코인별 현재 시세 리스트</h2>
+            <p id="marketDesc">코인별 현재가·1초 변동률·24시간 변동률·거래량을 확인할 수 있습니다.</p>
+          </div>
+          <button class="btn btn-ghost" id="forceRefreshBtn">강제 갱신</button>
+        </div>
+
+        <div class="panel">
+          <div class="market-tools">
+            <input class="input" id="marketSearch" placeholder="코인명 또는 심볼 검색">
+            <select class="select" id="marketSort">
+              <option value="volume">거래량순</option>
+              <option value="price">가격순</option>
+              <option value="change">상승률순</option>
+              <option value="name">이름순</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>코인</th>
+                  <th>현재가</th>
+                  <th>1초 변동</th>
+                  <th>24시간 변동</th>
+                  <th>24시간 거래량</th>
+                  <th>차트</th>
+                  <th>스왑</th>
+                </tr>
+              </thead>
+              <tbody id="marketRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pairs">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-title">
+            <h2 id="pairTitle">USDT ERC20과 자주 교환되는 인기 코인</h2>
+            <p id="pairDesc">자주 교환되는 인기 코인을 확인할 수 있습니다.</p>
+          </div>
+          <button class="btn btn-primary" data-scroll="admin">관리자에서 추가</button>
+        </div>
+        <div class="pair-grid" id="pairGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-title">
+            <h2>웹스튜디오 스왑 특징</h2>
+            
+          </div>
+        </div>
+        <div class="why-grid">
+          <div class="why-card"><strong>1초</strong><h3>실시간 갱신</h3><p>현재가는 1초마다 자동으로 움직이며, 추후 API 응답값으로 대체할 수 있습니다.</p></div>
+          <div class="why-card"><strong>관리자</strong><h3>화면 제어</h3><p>메인 문구, 시세 코인, 인기 코인, 수수료, 섹션 표시를 관리자에서 수정합니다.</p></div>
+          <div class="why-card"><strong>스왑</strong><h3>예상 수령량 계산</h3><p>보내는 코인과 받는 코인 가격에 따라 예상 수령량과 최소 수령량이 계산됩니다.</p></div>
+          <div class="why-card"><strong>확장</strong><h3>API 연동 준비</h3><p>데모 데이터 구조가 분리되어 있어 실제 거래소/가격 API로 교체하기 쉽습니다.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fiat">
+      <div class="wrap">
+        <div class="fiat-wrap">
+          <div class="fiat-main">
+            <span class="eyebrow"><span class="pulse"></span> 체크카드/신용카드 구매 진입 화면</span>
+            <h2 id="fiatTitle">법정화폐로 암호화폐 구매하기</h2>
+            <p id="fiatDesc">체크카드/신용카드로 코인 30개 이상을 구매하고, 구매한 암호화폐를 사용자의 지갑으로 직접 받을 수 있는 구매 진입 화면입니다.</p>
+            <div class="fiat-benefits">
+              <div class="fiat-benefit"><strong>단순한</strong><span>체크카드/신용카드로 코인 30개 이상 구매하세요.</span></div>
+              <div class="fiat-benefit"><strong>유리한</strong><span>시장 선도적인 금리 혜택을 누리세요.</span></div>
+              <div class="fiat-benefit"><strong>안전한</strong><span>암호화폐를 지갑으로 직접 받으세요.</span></div>
+            </div>
+          </div>
+          <aside class="fiat-card">
+            <h3>카드로 코인 구매</h3>
+            <div class="field"><label>결제 통화</label><select class="select" id="fiatCurrency"><option value="USD">미국 달러 USD</option><option value="KRW">원화 KRW</option><option value="EUR">유로 EUR</option></select></div>
+            <div class="field"><label>결제 금액</label><input class="input" id="fiatAmount" type="number" value="200"></div>
+            <div class="field"><label>받을 코인</label><select class="select" id="fiatCoin"></select></div>
+            <div class="info-line" style="margin:10px 0 14px;"><span>예상 수령량</span><strong id="fiatQuote">-</strong></div>
+            <button class="btn btn-primary" style="width:100%;" id="fiatBuyBtn">구매 화면으로 이동</button>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-title">
+            <h2>자주 묻는 질문</h2>
+            <p>코인스왑 데모에서 설명해야 할 기본 질문입니다.</p>
+          </div>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item open"><button class="faq-q">현재 실제 코인이 교환되나요?<span>+</span></button><div class="faq-a"> 시세 갱신, 예상 수령량 계산, 지갑 연결 상태, 교환 요청 저장은 작동하지만 실제 블록체인 전송은 연결되어 있지 않습니다.</div></div>
+          <div class="faq-item"><button class="faq-q">실제 시세는 어떻게 연결하나요?<span>+</span></button><div class="faq-a"></div></div>
+          <div class="faq-item"><button class="faq-q">관리자에서 무엇을 수정할 수 있나요?<span>+</span></button><div class="faq-a">메인 제목, 설명, 시세 리스트 코인, 인기 교환 코인, 수수료, 최소 거래금액, 화면 섹션 표시 여부를 수정할 수 있습니다.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="admin">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-title">
+            <h2>관리자 페이지</h2>
+            <p></p>
+          </div>
+          <button class="btn btn-danger" id="resetBtn">초기화</button>
+        </div>
+
+        <div class="admin-layout">
+          <aside class="admin-side">
+            <button class="admin-tab active" data-admin="main">메인 화면 관리</button>
+            <button class="admin-tab" data-admin="coins">시세 코인 관리</button>
+            <button class="admin-tab" data-admin="pairs">인기 코인 관리</button>
+            <button class="admin-tab" data-admin="swap">스왑 설정</button>
+            <button class="admin-tab" data-admin="display">화면 표시 설정</button>
+          </aside>
+
+          <div>
+            <div class="admin-panel active" id="adminMain">
+              <div class="admin-card">
+                <h3>메인 문구 수정</h3>
+                <div class="field"><label>사이트명</label><input class="input" id="adminSiteName"></div>
+                <div class="field"><label>메인 제목</label><textarea class="textarea" id="adminHeroTitle"></textarea></div>
+                <div class="field"><label>메인 설명</label><textarea class="textarea" id="adminHeroSubtitle"></textarea></div>
+                <div class="field"><label>시세 리스트 제목</label><input class="input" id="adminMarketTitle"></div>
+                <div class="field"><label>시세 리스트 설명</label><textarea class="textarea" id="adminMarketDesc"></textarea></div>
+                <div class="field"><label>인기 코인 제목</label><input class="input" id="adminPairTitle"></div>
+                <div class="field"><label>인기 코인 설명</label><textarea class="textarea" id="adminPairDesc"></textarea></div>
+                <button class="btn btn-primary" id="saveMainBtn">메인 화면 저장</button>
+              </div>
+            </div>
+
+            <div class="admin-panel" id="adminCoins">
+              <div class="admin-card">
+                <h3>시세 코인 추가</h3>
+                <div class="form-grid">
+                  <div class="field"><label>심볼</label><input class="input" id="coinSymbol" placeholder="예: BTC"></div>
+                  <div class="field"><label>코인명</label><input class="input" id="coinName" placeholder="예: 비트코인"></div>
+                  <div class="field"><label>현재가 USD</label><input class="input" id="coinPrice" type="number" value="100"></div>
+                  <div class="field"><label>24시간 거래량 USD</label><input class="input" id="coinVolume" type="number" value="1000000"></div>
+                </div>
+                <button class="btn btn-primary" id="addCoinBtn">코인 추가</button>
+              </div>
+              <div class="admin-card">
+                <h3>등록된 시세 코인</h3>
+                <div class="admin-list" id="adminCoinList"></div>
+              </div>
+            </div>
+
+            <div class="admin-panel" id="adminPairs">
+              <div class="admin-card">
+                <h3>인기 코인 추가</h3>
+                <div class="form-grid">
+                  <div class="field"><label>교환 코인 심볼</label><select class="select" id="pairCoin"></select></div>
+                  <div class="field"><label>표시 문구</label><input class="input" id="pairDescInput" placeholder="예: 가장 많이 교환되는 대표 페어"></div>
+                  <div class="field"><label>예상 환율 문구</label><input class="input" id="pairRateInput" placeholder="예: 1 USDT ≈ 0.000013 BTC"></div>
+                  <div class="field"><label>상태</label><select class="select" id="pairStatusInput"><option>교환 가능</option><option>점검 예정</option><option>인기 급상승</option></select></div>
+                </div>
+                <button class="btn btn-primary" id="addPairBtn">인기 코인 추가</button>
+              </div>
+              <div class="admin-card">
+                <h3>등록된 인기 코인</h3>
+                <div class="admin-list" id="adminPairList"></div>
+              </div>
+            </div>
+
+            <div class="admin-panel" id="adminSwap">
+              <div class="admin-card">
+                <h3>스왑 설정</h3>
+                <div class="form-grid">
+                  <div class="field"><label>플랫폼 수수료 (%)</label><input class="input" id="adminFee" type="number" step="0.1"></div>
+                  <div class="field"><label>슬리피지 (%)</label><input class="input" id="adminSlippage" type="number" step="0.1"></div>
+                  <div class="field"><label>최소 거래금액 USD</label><input class="input" id="adminMinTrade" type="number"></div>
+                  <div class="field"><label>기본 환율 방식</label><select class="select" id="adminMode"><option value="floating">변동 환율</option><option value="fixed">고정 환율</option></select></div>
+                </div>
+                <button class="btn btn-primary" id="saveSwapBtn">스왑 설정 저장</button>
+              </div>
+            </div>
+
+            <div class="admin-panel" id="adminDisplay">
+              <div class="admin-card">
+                <h3>화면 표시 설정</h3>
+                <label class="field"><input type="checkbox" id="showMarket"> 시세 리스트 보이기</label>
+                <label class="field"><input type="checkbox" id="showPairs"> 인기 코인 보이기</label>
+                <label class="field"><input type="checkbox" id="showWhy"> 특징 카드 보이기</label>
+                <label class="field"><input type="checkbox" id="showFiat"> 법정화폐 구매 섹션 보이기</label>
+                <label class="field"><input type="checkbox" id="showFaq"> 자주 묻는 질문 보이기</label>
+                <button class="btn btn-primary" id="saveDisplayBtn">표시 설정 저장</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div><h3>웹스튜디오</h3><p>검은색 기반 코인스왑 데모 사이트입니다. 시세 리스트, 인기 코인, 관리자 제어 기능을 포함합니다.</p></div>
+      <div><h4>스왑</h4><a href="#exchange" data-scroll="exchange">코인 교환</a><a href="#pairs" data-scroll="pairs">인기 페어</a></div>
+      <div><h4>시세</h4><a href="#market" data-scroll="market">실시간 시세</a><a href="#admin" data-scroll="admin">코인 관리</a></div>
+      <div><h4>관리</h4><a href="#admin" data-scroll="admin">관리자 페이지</a><a href="#faq" data-scroll="faq">자주 묻는 질문</a></div>
+    </div>
+  </footer>
+
+  <nav class="bottom-nav">
+    <button class="bottom-tab active" data-scroll="exchange"><svg viewBox="0 0 24 24"><path d="M7 7h11l-4-4M17 17H6l4 4"/></svg><span>스왑</span></button>
+    <button class="bottom-tab" data-scroll="market"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-9"/></svg><span>시세</span></button>
+    <button class="bottom-tab" data-scroll="pairs"><svg viewBox="0 0 24 24"><path d="M17 7H6l4-4M7 17h11l-4 4"/></svg><span>인기</span></button>
+    <button class="bottom-tab" data-scroll="faq"><svg viewBox="0 0 24 24"><path d="M9 9a3 3 0 1 1 5 2.2c-.9.7-2 1.2-2 2.8M12 18h.01"/></svg><span>질문</span></button>
+    <button class="bottom-tab" data-scroll="admin"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2.1 2.1 0 0 1-2.97 2.97l-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21a2.1 2.1 0 0 1-4.2 0v-.06a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.04.04a2.1 2.1 0 0 1-2.97-2.97l.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3a2.1 2.1 0 0 1 0-4.2h.06A1.8 1.8 0 0 0 4.72 8.6a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2.1 2.1 0 0 1 2.97-2.97l.04.04A1.8 1.8 0 0 0 9.3 4a1.8 1.8 0 0 0 1.1-1.66V2a2.1 2.1 0 0 1 4.2 0v.06A1.8 1.8 0 0 0 15.7 3.7a1.8 1.8 0 0 0 1.98-.36l.04-.04a2.1 2.1 0 0 1 2.97 2.97l-.04.04a1.8 1.8 0 0 0-.36 1.98c.26.68.92 1.1 1.66 1.1H22a2.1 2.1 0 0 1 0 4.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>관리</span></button>
+  </nav>
+
+  <div class="modal" id="walletModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>지갑 연결</h3>
+        <button class="close" id="closeWalletModal">×</button>
+      </div>
+      <div class="wallet-options">
+        <button class="wallet-option" id="connectMetaMask">
+          <div>메타마스크<span>이더리움 계열 지갑 연결</span></div>
+          <strong>연결</strong>
+        </button>
+        <button class="wallet-option" id="connectTrustWallet">
+          <div>트러스트월렛<span>트러스트월렛 내장 브라우저/확장 연결</span></div>
+          <strong>연결</strong>
+        </button>
+        <button class="wallet-option" id="connectPhantom">
+          <div>팬텀 지갑<span>솔라나 계열 지갑 연결</span></div>
+          <strong>연결</strong>
+        </button>
+        <button class="wallet-option" id="openQrScanner">
+          <div>QR 인식<span>지갑 주소 QR을 카메라로 읽기</span></div>
+          <strong>스캔</strong>
+        </button>
+        <button class="wallet-option" id="connectWalletConnect">
+          <div>월렛커넥트<span>QR 세션 연결 준비</span></div>
+          <strong>연결</strong>
+        </button>
+      </div>
+      <div class="qr-panel" id="qrPanel">
+        <video class="qr-video" id="qrVideo" playsinline muted></video>
+        <div class="qr-actions">
+          <button class="btn btn-primary" id="startQrBtn">카메라 시작</button>
+          <button class="btn btn-light" id="stopQrBtn">중지</button>
+        </div>
+        <input class="input" id="qrManualInput" placeholder="QR에서 읽은 주소 또는 직접 붙여넣기" style="margin-top:10px;">
+        <button class="btn btn-primary" id="applyQrBtn" style="width:100%;margin-top:8px;">주소 적용</button>
+        <div class="qr-result" id="qrResult">QR 인식 대기중</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="fiatModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>법정화폐 구매 확인</h3>
+        <button class="close" id="closeFiatModal">×</button>
+      </div>
+      <div class="swap-box">
+        <div class="swap-label"><span>결제 금액</span><strong id="fiatModalPay">-</strong></div>
+        <div class="swap-label"><span>받을 코인</span><strong id="fiatModalCoin">-</strong></div>
+        <div class="swap-label"><span>예상 수령량</span><strong id="fiatModalReceive">-</strong></div>
+      </div>
+      <div class="field"><label>받을 지갑 주소</label><input class="input" id="fiatWalletAddress" placeholder="지갑 연결 시 자동 입력 또는 직접 입력"></div>
+      <button class="btn btn-primary" style="width:100%;" id="confirmFiatBtn">구매 요청 생성</button>
+    </div>
+  </div>
+
+  <div class="modal" id="coinModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>코인 선택</h3>
+        <button class="close" id="closeCoinModal">×</button>
+      </div>
+      <input class="input" id="coinSearch" placeholder="비트코인, 이더리움, 테더 검색">
+      <div class="coin-list" id="coinList"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STATE_KEY = "webstudio_black_swap_state_v1";
+    const HISTORY_KEY = "webstudio_black_swap_history_v1";
+
+    const defaultState = {
+      siteName:"웹스튜디오",
+      heroTitle:'테더 USD ERC20<br><span class="grad">코인 교환 및 스왑</span>',
+      heroSubtitle:"웹스튜디오 코인스왑 페이지입니다.  ",
+      marketTitle:"코인별 현재 시세 리스트",
+      marketDesc:"코인별 현재가·1초 변동률·24시간 변동률·거래량을 확인할 수 있습니다.",
+      pairTitle:"USDT ERC20과 자주 교환되는 인기 코인",
+      pairDesc:"자주 교환되는 인기 코인을 확인할 수 있습니다.",
+      fee:0.4,
+      slippage:0.5,
+      minTrade:5,
+      mode:"floating",
+      showMarket:true,
+      showPairs:true,
+      showWhy:true,
+      showFiat:true,
+      showFaq:true,
+      coins:[
+        {s:"BTC",n:"비트코인",p:76730.39,v:12800000000,c:2.14,prev:76730.39,h:[76000,76200,75900,76800,76730]},
+        {s:"ETH",n:"이더리움",p:3480.22,v:9400000000,c:1.25,prev:3480.22,h:[3400,3420,3450,3470,3480]},
+        {s:"USDT",n:"테더 USD",p:0.999,v:64218483356,c:-0.01,prev:0.999,h:[1,0.999,1.001,0.998,0.999]},
+        {s:"BNB",n:"비앤비",p:612.4,v:1850000000,c:0.74,prev:612.4,h:[600,605,610,609,612]},
+        {s:"SOL",n:"솔라나",p:158.7,v:3200000000,c:3.2,prev:158.7,h:[150,154,156,157,158]},
+        {s:"XRP",n:"리플",p:0.62,v:1900000000,c:-0.42,prev:0.62,h:[0.64,0.63,0.62,0.61,0.62]},
+        {s:"USDC",n:"USD 코인",p:1.00,v:6200000000,c:0.01,prev:1.0,h:[1,1.001,1,0.999,1]},
+        {s:"TRX",n:"트론",p:0.12,v:410000000,c:0.56,prev:0.12,h:[0.118,0.119,0.12,0.121,0.12]},
+        {s:"TON",n:"톤코인",p:6.85,v:890000000,c:1.82,prev:6.85,h:[6.5,6.7,6.8,6.75,6.85]},
+        {s:"LTC",n:"라이트코인",p:84.5,v:410000000,c:-1.1,prev:84.5,h:[86,85,84,83.9,84.5]},
+        {s:"DOT",n:"폴카닷",p:7.15,v:310000000,c:0.64,prev:7.15,h:[7.0,7.1,7.2,7.14,7.15]},
+        {s:"LINK",n:"체인링크",p:17.9,v:520000000,c:2.3,prev:17.9,h:[17.1,17.4,17.6,17.8,17.9]},
+        {s:"MATIC",n:"폴리곤",p:0.71,v:380000000,c:-0.5,prev:0.71,h:[0.73,0.72,0.71,0.715,0.71]},
+        {s:"AVAX",n:"아발란체",p:37.2,v:620000000,c:1.4,prev:37.2,h:[36,36.4,36.8,37.1,37.2]},
+        {s:"DOGE",n:"도지코인",p:0.15,v:1400000000,c:3.8,prev:0.15,h:[0.14,0.145,0.148,0.149,0.15]}
+      ],
+      pairs:[
+        {s:"BTC",desc:"USDT와 가장 많이 교환되는 대표 페어",rate:"1 USDT ≈ 0.000013 BTC",status:"교환 가능"},
+        {s:"ETH",desc:"디파이와 지갑 이용자에게 인기 있는 페어",rate:"1 USDT ≈ 0.000287 ETH",status:"교환 가능"},
+        {s:"SOL",desc:"빠른 전송 속도로 인기가 높은 페어",rate:"1 USDT ≈ 0.0063 SOL",status:"인기 급상승"},
+        {s:"BNB",desc:"BNB 체인 이용자에게 자주 쓰이는 페어",rate:"1 USDT ≈ 0.00163 BNB",status:"교환 가능"},
+        {s:"XRP",desc:"소액 교환과 빠른 이동에 자주 쓰이는 페어",rate:"1 USDT ≈ 1.61 XRP",status:"교환 가능"},
+        {s:"DOGE",desc:"밈코인 교환 수요가 많은 페어",rate:"1 USDT ≈ 6.66 DOGE",status:"교환 가능"},
+        {s:"AVAX",desc:"아발란체 네트워크 이용자용 페어",rate:"1 USDT ≈ 0.026 AVAX",status:"교환 가능"},
+        {s:"LINK",desc:"오라클 대표 코인 교환 페어",rate:"1 USDT ≈ 0.055 LINK",status:"교환 가능"}
+      ]
+    };
+
+    let state = loadState();
+    let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    let from = "BTC";
+    let to = "USDT";
+    let selectedSide = "from";
+    let wallet = false;
+    let tick = 0;
+    window.__detectedEvmProviders = [];
+    window.addEventListener("eip6963:announceProvider", event=>{
+      if(event && event.detail && event.detail.provider){
+        window.__detectedEvmProviders.push(event.detail);
+      }
+    });
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STATE_KEY);
+        if(!raw){
+          localStorage.setItem(STATE_KEY, JSON.stringify(defaultState));
+          return JSON.parse(JSON.stringify(defaultState));
+        }
+        const parsed = JSON.parse(raw);
+        return {...JSON.parse(JSON.stringify(defaultState)), ...parsed};
+      }catch{
+        return JSON.parse(JSON.stringify(defaultState));
+      }
+    }
+    function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
+    function coin(sym){ return state.coins.find(c=>c.s===sym); }
+    function usd(n){ return "$" + Number(n || 0).toLocaleString("en-US",{maximumFractionDigits:n>10?2:6}); }
+    function fmt(n,d=6){ return Number(n || 0).toLocaleString("en-US",{maximumFractionDigits:d}); }
+    function vol(n){ return n>=1e9 ? "약 " + (n/1e8).toFixed(1) + "억 달러" : "약 " + (n/1e4).toFixed(1) + "만 달러"; }
+    function pct(n){ return (n>=0?"+":"") + Number(n||0).toFixed(2) + "%"; }
+    function color(sym){
+      let k = [...sym].reduce((a,c)=>a+c.charCodeAt(0),0);
+      const arr = [["#00b386","#00e0a8"],["#2563eb","#06b6d4"],["#7c3aed","#ec4899"],["#f97316","#eab308"],["#ef4444","#f97316"]][k%5];
+      return `linear-gradient(135deg,${arr[0]},${arr[1]})`;
+    }
+    function escapeHtml(v){
+      return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+
+    function updatePrices(){
+      tick++;
+      state.coins.forEach(c=>{
+        c.prev = c.p;
+        const amp = c.s==="USDT" || c.s==="USDC" ? 0.00008 : c.p < 1 ? 0.012 : 0.0045;
+        c.p = Math.max(0.000001, c.p * (1 + (Math.random() - 0.5) * amp));
+        c.c += (Math.random() - 0.5) * 0.05;
+        c.v = Math.max(1000, c.v * (1 + (Math.random() - 0.5) * 0.005));
+        c.h = c.h || [];
+        c.h.push(c.p);
+        c.h = c.h.slice(-20);
+      });
+      renderLive();
+    }
+
+    function quote(){
+      const amount = parseFloat($("#sendAmount").value.replace(/,/g,"")) || 0;
+      const fc = coin(from) || state.coins[0];
+      const tc = coin(to) || state.coins[2];
+      const usdValue = amount * fc.p;
+      const fee = usdValue * (Number(state.fee || 0) / 100);
+      const receive = ((usdValue - fee) / tc.p) * (state.mode === "fixed" ? 0.997 : 0.999);
+      const min = receive * (1 - Number(state.slippage || 0) / 100);
+      return {amount,fc,tc,usdValue,fee,receive,min};
+    }
+
+    function renderSwap(){
+      if(!coin(from)) from = state.coins[0]?.s || "BTC";
+      if(!coin(to)) to = state.coins.find(c=>c.s==="USDT")?.s || state.coins[1]?.s || from;
+      if(from === to && state.coins.length > 1) to = state.coins.find(c=>c.s!==from).s;
+
+      const q = quote();
+      $("#fromSymbol").innerText = from;
+      $("#toSymbol").innerText = to;
+      $("#fromDot").innerText = from.slice(0,4);
+      $("#toDot").innerText = to.slice(0,4);
+      $("#fromDot").style.background = color(from);
+      $("#toDot").style.background = color(to);
+      $("#sendUsd").innerText = usd(q.usdValue);
+      $("#getUsd").innerText = usd(q.receive * q.tc.p);
+      $("#getAmount").value = fmt(q.receive, q.receive > 1 ? 4 : 8);
+      $("#feeText").innerText = usd(q.fee);
+      $("#rateText").innerText = `1 ${from} ≈ ${fmt(q.fc.p / q.tc.p,8)} ${to}`;
+      $("#modeText").innerText = state.mode === "fixed" ? "고정 환율" : "변동 환율";
+      $("#minText").innerText = `${fmt(q.min, q.min > 1 ? 4 : 8)} ${to}`;
+    }
+
+    function sparkline(values){
+      const w=90,h=30,p=4;
+      const min=Math.min(...values), max=Math.max(...values);
+      const range=max-min || 1;
+      const pts=values.map((v,i)=>{
+        const x=p + i*(w-p*2)/(values.length-1 || 1);
+        const y=h-p - ((v-min)/range)*(h-p*2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(" ");
+      const rising = values[values.length-1] >= values[0];
+      return `<svg class="spark" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${rising ? '#22c55e' : '#ef4444'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    }
+
+    function renderMarket(){
+      const q = $("#marketSearch").value.trim().toLowerCase();
+      const sort = $("#marketSort").value;
+      let rows = state.coins.filter(c=>!q || c.s.toLowerCase().includes(q) || c.n.toLowerCase().includes(q));
+      rows.sort((a,b)=>{
+        if(sort==="price") return b.p-a.p;
+        if(sort==="change") return b.c-a.c;
+        if(sort==="name") return a.s.localeCompare(b.s);
+        return b.v-a.v;
+      });
+      $("#marketRows").innerHTML = rows.map(c=>{
+        const one = ((c.p - c.prev) / (c.prev || c.p)) * 100;
+        return `<tr>
+          <td><div class="token-cell"><span class="token-dot" style="background:${color(c.s)}">${c.s.slice(0,4)}</span><div><strong>${c.s}</strong><small>${escapeHtml(c.n)}</small></div></div></td>
+          <td>${usd(c.p)}</td>
+          <td class="${one>=0?'up':'down'}">${pct(one)}</td>
+          <td class="${c.c>=0?'up':'down'}">${pct(c.c)}</td>
+          <td>${vol(c.v)}</td>
+          <td>${sparkline(c.h || [c.p])}</td>
+          <td><button class="btn btn-light" style="min-height:34px;padding:0 10px;font-size:12px;" onclick="setMarketPair('${c.s}')">스왑</button></td>
+        </tr>`;
+      }).join("");
+    }
+
+    function renderPairs(){
+      $("#pairGrid").innerHTML = state.pairs.map((p,idx)=>{
+        const c = coin(p.s) || {s:p.s,n:p.s,p:1};
+        return `<article class="pair-card">
+          <div class="pair-icons"><span class="token-dot" style="background:${color('USDT')}">USDT</span><span class="token-dot" style="background:${color(c.s)}">${c.s.slice(0,4)}</span></div>
+          <h3>USDT / ${c.s}</h3>
+          <p>${escapeHtml(p.desc || c.n)}</p>
+          <div class="pair-meta"><span>${escapeHtml(p.rate || ("1 USDT ≈ " + fmt(1/c.p,6) + " " + c.s))}</span><span class="${p.status==='점검 예정'?'down':'up'}">${escapeHtml(p.status || '교환 가능')}</span></div>
+          <button class="btn btn-primary" style="width:100%;margin-top:14px;" onclick="setPair('${c.s}')">교환하기</button>
+        </article>`;
+      }).join("");
+    }
+
+    function renderTicker(){
+      const hot = [...state.coins].sort((a,b)=>b.v-a.v).slice(0,16);
+      const html = hot.concat(hot).map(c=>{
+        const one = ((c.p-c.prev)/(c.prev||c.p))*100;
+        return `<div class="ticker-chip"><span class="token-dot" style="background:${color(c.s)}">${c.s.slice(0,4)}</span><span>${c.s}</span><span>${usd(c.p)}</span><span class="${one>=0?'up':'down'}">${pct(one)}</span></div>`;
+      }).join("");
+      $("#tickerTrack").innerHTML = html;
+    }
+
+    function renderStats(){
+      const volume = state.coins.reduce((sum,c)=>sum + Number(c.v||0),0);
+      $("#siteNameTop").innerText = state.siteName;
+      document.title = `${state.siteName} | 코인스왑`;
+      $("#heroTitle").innerHTML = state.heroTitle;
+      $("#heroSubtitle").innerText = state.heroSubtitle;
+      $("#marketTitle").innerText = state.marketTitle;
+      $("#marketDesc").innerText = state.marketDesc;
+      $("#pairTitle").innerText = state.pairTitle;
+      $("#pairDesc").innerText = state.pairDesc;
+      $("#statCoins").innerText = state.coins.length + "개";
+      $("#statVolume").innerText = vol(volume);
+      $("#statFee").innerText = Number(state.fee).toFixed(1) + "%";
+      $("#statTick").innerText = "1초";
+      $("#market").style.display = state.showMarket ? "" : "none";
+      $("#pairs").style.display = state.showPairs ? "" : "none";
+      $("#why").style.display = state.showWhy ? "" : "none";
+      $("#fiat").style.display = state.showFiat ? "" : "none";
+      $("#faq").style.display = state.showFaq ? "" : "none";
+      renderFiatOptions();
+    }
+
+    function renderAdmin(){
+      $("#adminSiteName").value = state.siteName;
+      $("#adminHeroTitle").value = state.heroTitle;
+      $("#adminHeroSubtitle").value = state.heroSubtitle;
+      $("#adminMarketTitle").value = state.marketTitle;
+      $("#adminMarketDesc").value = state.marketDesc;
+      $("#adminPairTitle").value = state.pairTitle;
+      $("#adminPairDesc").value = state.pairDesc;
+      $("#adminFee").value = state.fee;
+      $("#adminSlippage").value = state.slippage;
+      $("#adminMinTrade").value = state.minTrade;
+      $("#adminMode").value = state.mode;
+      $("#showMarket").checked = state.showMarket;
+      $("#showPairs").checked = state.showPairs;
+      $("#showWhy").checked = state.showWhy;
+      $("#showFiat").checked = state.showFiat;
+      $("#showFaq").checked = state.showFaq;
+      $("#pairCoin").innerHTML = state.coins.map(c=>`<option value="${c.s}">${c.s} - ${escapeHtml(c.n)}</option>`).join("");
+
+      $("#adminCoinList").innerHTML = state.coins.map(c=>`
+        <div class="admin-item">
+          <div><strong>${c.s} - ${escapeHtml(c.n)}</strong><span>현재가 ${usd(c.p)} · 거래량 ${vol(c.v)}</span></div>
+          <div class="admin-actions">
+            <button class="small-btn btn-light" onclick="setMarketPair('${c.s}')">스왑</button>
+            <button class="small-btn btn-danger" onclick="deleteCoin('${c.s}')">삭제</button>
+          </div>
+        </div>
+      `).join("");
+
+      $("#adminPairList").innerHTML = state.pairs.map((p,i)=>`
+        <div class="admin-item">
+          <div><strong>USDT / ${p.s}</strong><span>${escapeHtml(p.desc)} · ${escapeHtml(p.status)}</span></div>
+          <div class="admin-actions">
+            <button class="small-btn btn-light" onclick="setPair('${p.s}')">적용</button>
+            <button class="small-btn btn-danger" onclick="deletePair(${i})">삭제</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderLive(){
+      renderSwap();
+      renderMarket();
+      renderPairs();
+      renderTicker();
+      renderStats();
+      renderAdmin();
+    }
+
+    function openCoinModal(which){
+      selectedSide = which;
+      $("#coinModal").classList.add("show");
+      document.body.classList.add("lock");
+      renderCoinList();
+    }
+    function closeModal(){
+      $("#coinModal").classList.remove("show");
+      document.body.classList.remove("lock");
+    }
+    function renderCoinList(){
+      const q = $("#coinSearch").value.trim().toLowerCase();
+      const rows = state.coins.filter(c=>!q || c.s.toLowerCase().includes(q) || c.n.toLowerCase().includes(q));
+      $("#coinList").innerHTML = rows.map(c=>`
+        <button class="coin-item" onclick="chooseCoin('${c.s}')">
+          <span class="token-dot" style="background:${color(c.s)}">${c.s.slice(0,4)}</span>
+          <div style="text-align:left"><strong>${c.s}</strong><span>${escapeHtml(c.n)}</span></div>
+          <strong>${usd(c.p)}</strong>
+        </button>
+      `).join("");
+    }
+    function chooseCoin(sym){
+      if(selectedSide === "from"){
+        from = sym;
+        if(from === to) to = state.coins.find(c=>c.s!==from)?.s || to;
+      }else{
+        to = sym;
+        if(from === to) from = state.coins.find(c=>c.s!==to)?.s || from;
+      }
+      closeModal();
+      renderLive();
+    }
+    function switchCoins(){
+      const temp = from;
+      from = to;
+      to = temp;
+      renderLive();
+    }
+    function setMarketPair(sym){
+      from = sym;
+      to = sym === "USDT" ? "BTC" : "USDT";
+      scrollToSection("exchange");
+      renderLive();
+      toast(`${sym} 스왑 페어가 적용되었습니다.`);
+    }
+    function setPair(sym){
+      from = "USDT";
+      to = sym;
+      scrollToSection("exchange");
+      renderLive();
+      toast(`USDT → ${sym} 페어가 적용되었습니다.`);
+    }
+    function executeExchange(){
+      const q = quote();
+      if(!wallet){toast("먼저 지갑을 연결하세요."); return;}
+      if(q.usdValue < Number(state.minTrade)){toast(`최소 교환 금액은 ${usd(state.minTrade)} 입니다.`); return;}
+      history.push({from,to,send:q.amount,get:q.min,time:Date.now()});
+      history = history.slice(-80);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      toast("교환 요청이 생성되었습니다.");
+    }
+    function shortAddress(addr){
+      if(!addr) return "";
+      return addr.slice(0,6) + "..." + addr.slice(-4);
+    }
+    function setWalletConnected(addr, type){
+      wallet = true;
+      window.connectedWalletAddress = addr;
+      $("#walletBtn").innerText = shortAddress(addr) + " 연결됨";
+      $("#walletBtn").className = "btn btn-green";
+      $("#fiatWalletAddress").value = addr;
+      closeWalletModal();
+      toast(type + " 지갑이 실제로 연결되었습니다.");
+    }
+    function openWalletModal(){
+      $("#walletModal").classList.add("show");
+      document.body.classList.add("lock");
+    }
+    function closeWalletModal(){
+      stopQrScanner();
+      $("#walletModal").classList.remove("show");
+      document.body.classList.remove("lock");
+    }
+    async function connectEthereumWallet(){
+      const provider = getEthereumProvider("metamask");
+      await requestEvmAccounts(provider, "메타마스크");
+    }
+    async function connectPhantomWallet(){
+      if(!window.solana || !window.solana.isPhantom){
+        toast("팬텀 지갑이 감지되지 않았습니다. 확장 프로그램 설치 후 다시 시도하세요.");
+        return;
+      }
+      try{
+        const resp = await window.solana.connect();
+        if(resp && resp.publicKey) setWalletConnected(resp.publicKey.toString(), "팬텀");
+      }catch(err){
+        toast("팬텀 지갑 연결이 취소되었거나 실패했습니다.");
+      }
+    }
+    function getEthereumProvider(kind){
+      window.dispatchEvent(new Event("eip6963:requestProvider"));
+      const eth = window.ethereum;
+      const injected = eth && Array.isArray(eth.providers) ? eth.providers : [];
+      const announced = (window.__detectedEvmProviders || []).map(x=>x.provider).filter(Boolean);
+      const providers = [...announced, ...injected, eth, window.trustwallet].filter(Boolean);
+
+      if(kind === "trust"){
+        return providers.find(p=>p.isTrust || p.isTrustWallet) ||
+          providers.find((p,idx)=>((window.__detectedEvmProviders || [])[idx]?.info?.name || "").toLowerCase().includes("trust")) ||
+          null;
+      }
+      if(kind === "metamask"){
+        return providers.find(p=>p.isMetaMask && !(p.isTrust || p.isTrustWallet)) ||
+          providers.find((p,idx)=>((window.__detectedEvmProviders || [])[idx]?.info?.name || "").toLowerCase().includes("metamask")) ||
+          eth || null;
+      }
+      return eth || providers[0] || null;
+    }
+    async function requestEvmAccounts(provider, walletName){
+      if(!provider || typeof provider.request !== "function"){
+        toast(walletName + " 지갑이 감지되지 않았습니다.");
+        return;
+      }
+      try{
+        const accounts = await provider.request({method:"eth_requestAccounts"});
+        if(accounts && accounts[0]) setWalletConnected(accounts[0], walletName);
+      }catch(err){
+        toast(walletName + " 연결이 취소되었거나 실패했습니다.");
+      }
+    }
+    async function connectTrustWallet(){
+      const provider = getEthereumProvider("trust");
+      if(provider && typeof provider.request === "function"){
+        await requestEvmAccounts(provider, "트러스트월렛");
+        return;
+      }
+      toast("트러스트월렛이 감지되지 않았습니다.");
+    }
+    let qrStream = null;
+    let qrScanTimer = null;
+    function openQrPanel(){
+      $("#qrPanel").classList.toggle("show");
+      if($("#qrPanel").classList.contains("show")){
+        $("#qrResult").innerText = "카메라 시작 버튼을 누르세요.";
+      }else{
+        stopQrScanner();
+      }
+    }
+    async function startQrScanner(){
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        toast("이 브라우저에서는 카메라 접근을 지원하지 않습니다.");
+        return;
+      }
+      if(!("BarcodeDetector" in window)){
+        toast("이 브라우저는 QR 자동 인식을 지원하지 않습니다. 직접 붙여넣기를 사용하세요.");
+        return;
+      }
+      try{
+        qrStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}, audio:false});
+        const video = $("#qrVideo");
+        video.srcObject = qrStream;
+        await video.play();
+        const detector = new BarcodeDetector({formats:["qr_code"]});
+        clearInterval(qrScanTimer);
+        qrScanTimer = setInterval(async ()=>{
+          try{
+            if(video.readyState < 2) return;
+            const codes = await detector.detect(video);
+            if(codes && codes[0]){
+              handleQrValue(codes[0].rawValue || "");
+            }
+          }catch(err){}
+        }, 650);
+        $("#qrResult").innerText = "QR을 카메라에 비춰주세요.";
+      }catch(err){
+        toast("카메라 권한이 거부되었거나 사용할 수 없습니다.");
+      }
+    }
+    function stopQrScanner(){
+      clearInterval(qrScanTimer);
+      qrScanTimer = null;
+      if(qrStream){
+        qrStream.getTracks().forEach(t=>t.stop());
+        qrStream = null;
+      }
+      const video = $("#qrVideo");
+      if(video) video.srcObject = null;
+    }
+    function extractWalletAddress(value){
+      const text = String(value || "").trim();
+      const evm = text.match(/0x[a-fA-F0-9]{40}/);
+      if(evm) return evm[0];
+      const sol = text.match(/[1-9A-HJ-NP-Za-km-z]{32,44}/);
+      if(sol) return sol[0];
+      return text;
+    }
+    function handleQrValue(value){
+      const address = extractWalletAddress(value);
+      $("#qrManualInput").value = address;
+      $("#qrResult").innerText = "인식됨: " + address;
+      if($("#fiatWalletAddress")) $("#fiatWalletAddress").value = address;
+      stopQrScanner();
+      toast("QR 주소를 인식했습니다.");
+    }
+    function applyQrAddress(){
+      const value = $("#qrManualInput").value.trim();
+      if(!value){
+        toast("적용할 주소가 없습니다.");
+        return;
+      }
+      const address = extractWalletAddress(value);
+      $("#qrManualInput").value = address;
+      if($("#fiatWalletAddress")) $("#fiatWalletAddress").value = address;
+      toast("지갑 주소가 적용되었습니다.");
+    }
+    function connectWallet(){
+      openWalletModal();
+    }
+    function scrollToSection(id){
+      const isAdmin = id === "admin";
+      document.body.classList.toggle("admin-mode", isAdmin);
+      const target = document.getElementById(id);
+      if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+      $$(".nav-link,.bottom-tab").forEach(x=>x.classList.toggle("active", x.dataset.scroll === id));
+    }
+
+    function saveMain(){
+      state.siteName = $("#adminSiteName").value.trim() || "웹스튜디오";
+      state.heroTitle = $("#adminHeroTitle").value.trim() || defaultState.heroTitle;
+      state.heroSubtitle = $("#adminHeroSubtitle").value.trim() || defaultState.heroSubtitle;
+      state.marketTitle = $("#adminMarketTitle").value.trim() || defaultState.marketTitle;
+      state.marketDesc = $("#adminMarketDesc").value.trim() || defaultState.marketDesc;
+      state.pairTitle = $("#adminPairTitle").value.trim() || defaultState.pairTitle;
+      state.pairDesc = $("#adminPairDesc").value.trim() || defaultState.pairDesc;
+      saveState();
+      renderLive();
+      toast("메인 화면이 저장되었습니다.");
+    }
+    function addCoin(){
+      const s = $("#coinSymbol").value.trim().toUpperCase();
+      const n = $("#coinName").value.trim();
+      const p = Number($("#coinPrice").value || 0);
+      const v = Number($("#coinVolume").value || 0);
+      if(!s || !n || !p){toast("심볼, 코인명, 현재가를 입력하세요."); return;}
+      if(state.coins.some(c=>c.s===s)){toast("이미 등록된 심볼입니다."); return;}
+      state.coins.push({s,n,p,v,c:0,prev:p,h:[p*0.98,p*0.99,p,p*1.01,p]});
+      saveState();
+      $("#coinSymbol").value = "";
+      $("#coinName").value = "";
+      renderLive();
+      toast("시세 코인이 추가되었습니다.");
+    }
+    function deleteCoin(sym){
+      if(sym==="USDT"){toast("USDT는 기본 페어라 삭제할 수 없습니다."); return;}
+      if(!confirm(`${sym} 코인을 삭제할까요?`)) return;
+      state.coins = state.coins.filter(c=>c.s!==sym);
+      state.pairs = state.pairs.filter(p=>p.s!==sym);
+      if(from===sym) from="BTC";
+      if(to===sym) to="USDT";
+      saveState();
+      renderLive();
+      toast("코인이 삭제되었습니다.");
+    }
+    function addPair(){
+      const s = $("#pairCoin").value;
+      const desc = $("#pairDescInput").value.trim() || "관리자가 추가한 인기 교환 페어입니다.";
+      const c = coin(s);
+      const rate = $("#pairRateInput").value.trim() || `1 USDT ≈ ${fmt(1/(c?.p || 1),6)} ${s}`;
+      const status = $("#pairStatusInput").value;
+      if(state.pairs.some(p=>p.s===s)){toast("이미 등록된 인기 코인입니다."); return;}
+      state.pairs.push({s,desc,rate,status});
+      saveState();
+      $("#pairDescInput").value = "";
+      $("#pairRateInput").value = "";
+      renderLive();
+      toast("인기 코인이 추가되었습니다.");
+    }
+    function deletePair(idx){
+      state.pairs.splice(idx,1);
+      saveState();
+      renderLive();
+      toast("인기 코인이 삭제되었습니다.");
+    }
+    function saveSwap(){
+      state.fee = Number($("#adminFee").value || 0);
+      state.slippage = Number($("#adminSlippage").value || 0);
+      state.minTrade = Number($("#adminMinTrade").value || 0);
+      state.mode = $("#adminMode").value;
+      saveState();
+      renderLive();
+      toast("스왑 설정이 저장되었습니다.");
+    }
+
+    function renderFiatOptions(){
+      const sel = $("#fiatCoin");
+      if(sel){
+        const current = sel.value || "BTC";
+        sel.innerHTML = state.coins.filter(c=>c.s !== "USDT").map(c=>`<option value="${c.s}">${c.s} - ${escapeHtml(c.n)}</option>`).join("");
+        if(state.coins.some(c=>c.s === current)) sel.value = current;
+      }
+      renderFiatQuote();
+    }
+    function renderFiatQuote(){
+      const fiatSel = $("#fiatCurrency");
+      const amountEl = $("#fiatAmount");
+      const coinSel = $("#fiatCoin");
+      if(!fiatSel || !amountEl || !coinSel || !coin(coinSel.value)) return;
+      const currency = fiatSel.value;
+      const amount = Number(amountEl.value || 0);
+      const rates = {USD:1, KRW:0.00074, EUR:1.08};
+      const usdAmount = amount * (rates[currency] || 1);
+      const target = coin(coinSel.value);
+      const receive = usdAmount / target.p * 0.985;
+      $("#fiatQuote").innerText = `${fmt(receive, receive > 1 ? 4 : 8)} ${target.s}`;
+    }
+    function openFiatModal(){
+      renderFiatQuote();
+      const currency = $("#fiatCurrency").value;
+      const amount = Number($("#fiatAmount").value || 0);
+      const target = coin($("#fiatCoin").value);
+      $("#fiatModalPay").innerText = `${amount.toLocaleString("ko-KR")} ${currency}`;
+      $("#fiatModalCoin").innerText = `${target.s} - ${target.n}`;
+      $("#fiatModalReceive").innerText = $("#fiatQuote").innerText;
+      if(window.connectedWalletAddress) $("#fiatWalletAddress").value = window.connectedWalletAddress;
+      $("#fiatModal").classList.add("show");
+      document.body.classList.add("lock");
+    }
+    function closeFiatModal(){
+      $("#fiatModal").classList.remove("show");
+      document.body.classList.remove("lock");
+    }
+    function confirmFiatBuy(){
+      const addr = $("#fiatWalletAddress").value.trim();
+      if(!addr){
+        toast("받을 지갑 주소를 입력하거나 지갑을 먼저 연결하세요.");
+        openWalletModal();
+        return;
+      }
+
+      closeFiatModal();
+    }
+
+    function saveDisplay(){
+      state.showMarket = $("#showMarket").checked;
+      state.showPairs = $("#showPairs").checked;
+      state.showWhy = $("#showWhy").checked;
+      state.showFiat = $("#showFiat").checked;
+      state.showFaq = $("#showFaq").checked;
+      saveState();
+      renderLive();
+      toast("화면 표시 설정이 저장되었습니다.");
+    }
+    function resetAll(){
+      if(!confirm("모든 데모 데이터를 초기화할까요?")) return;
+      state = JSON.parse(JSON.stringify(defaultState));
+      saveState();
+      renderLive();
+      toast("초기화되었습니다.");
+    }
+    function toast(msg){
+      const el = $("#toast");
+      el.innerText = msg;
+      el.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=>el.classList.remove("show"),2200);
+    }
+
+    $$("[data-scroll]").forEach(btn=>btn.addEventListener("click",e=>{
+      e.preventDefault();
+      scrollToSection(btn.dataset.scroll);
+    }));
+    $$(".coin-select").forEach(btn=>btn.addEventListener("click",()=>openCoinModal(btn.dataset.select)));
+    $$(".faq-q").forEach(btn=>btn.addEventListener("click",()=>btn.closest(".faq-item").classList.toggle("open")));
+    $$(".admin-tab").forEach(btn=>btn.addEventListener("click",()=>{
+      $$(".admin-tab").forEach(x=>x.classList.remove("active"));
+      $$(".admin-panel").forEach(x=>x.classList.remove("active"));
+      btn.classList.add("active");
+      $("#admin" + btn.dataset.admin.charAt(0).toUpperCase() + btn.dataset.admin.slice(1)).classList.add("active");
+    }));
+    $("#sendAmount").addEventListener("input",renderLive);
+    $("#switchBtn").addEventListener("click",switchCoins);
+    $("#exchangeBtn").addEventListener("click",executeExchange);
+    $("#fixedBtn").addEventListener("click",()=>{state.mode="fixed";saveState();renderLive();toast("고정 환율이 선택되었습니다.");});
+    $("#floatBtn").addEventListener("click",()=>{state.mode="floating";saveState();renderLive();toast("변동 환율이 선택되었습니다.");});
+    $("#walletBtn").addEventListener("click",connectWallet);
+    $("#statusBtn").addEventListener("click",()=>toast(history.length ? "최근 교환 요청이 있습니다." : "조회할 교환 내역이 없습니다."));
+    $("#forceRefreshBtn").addEventListener("click",()=>{updatePrices();toast("시세를 강제 갱신했습니다.");});
+    $("#marketSearch").addEventListener("input",renderMarket);
+    $("#marketSort").addEventListener("change",renderMarket);
+    $("#closeCoinModal").addEventListener("click",closeModal);
+    $("#coinModal").addEventListener("click",e=>{if(e.target.id==="coinModal")closeModal();});
+    $("#coinSearch").addEventListener("input",renderCoinList);
+    $("#saveMainBtn").addEventListener("click",saveMain);
+    $("#addCoinBtn").addEventListener("click",addCoin);
+    $("#addPairBtn").addEventListener("click",addPair);
+    $("#saveSwapBtn").addEventListener("click",saveSwap);
+    $("#saveDisplayBtn").addEventListener("click",saveDisplay);
+    $("#resetBtn").addEventListener("click",resetAll);
+
+    $("#connectMetaMask").addEventListener("click",connectEthereumWallet);
+    $("#connectTrustWallet").addEventListener("click",connectTrustWallet);
+    $("#openQrScanner").addEventListener("click",openQrPanel);
+    $("#startQrBtn").addEventListener("click",startQrScanner);
+    $("#stopQrBtn").addEventListener("click",stopQrScanner);
+    $("#applyQrBtn").addEventListener("click",applyQrAddress);
+    $("#connectPhantom").addEventListener("click",connectPhantomWallet);
+    $("#connectWalletConnect").addEventListener("click",()=>toast("운영 버전에서는 WalletConnect SDK를 연결해야 합니다."));
+    $("#closeWalletModal").addEventListener("click",closeWalletModal);
+    $("#walletModal").addEventListener("click",e=>{if(e.target.id==="walletModal")closeWalletModal();});
+    $("#fiatCurrency").addEventListener("change",renderFiatQuote);
+    $("#fiatAmount").addEventListener("input",renderFiatQuote);
+    $("#fiatCoin").addEventListener("change",renderFiatQuote);
+    $("#fiatBuyBtn").addEventListener("click",openFiatModal);
+    $("#closeFiatModal").addEventListener("click",closeFiatModal);
+    $("#fiatModal").addEventListener("click",e=>{if(e.target.id==="fiatModal")closeFiatModal();});
+    $("#confirmFiatBtn").addEventListener("click",confirmFiatBuy);
+
+    document.body.classList.remove("admin-mode");
+    renderLive();
+    setInterval(updatePrices,1000);
+
+    window.setPair = setPair;
+    window.setMarketPair = setMarketPair;
+    window.deleteCoin = deleteCoin;
+    window.deletePair = deletePair;
+    window.chooseCoin = chooseCoin;
+  </script>
+</body>
+</html>

@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>웹스튜디오 파워사다리 데모</title>
+<style>
+:root{
+  --sky1:#0d83d9;
+  --sky2:#7ad7ff;
+  --brown:#6b3f25;
+  --brown2:#3d2417;
+  --brown3:#8b5630;
+  --gold:#ffd35a;
+  --gold2:#b9781e;
+  --gold3:#fff1a2;
+  --cream:#fff5ca;
+  --blue:#1268d9;
+  --red:#e32637;
+  --green:#45e999;
+  --dark:#26140d;
+  --panel:#7b4829;
+  --line:#d0903b;
+  --shadow:0 14px 30px rgba(55,28,8,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#0f7fd5;color:#fff;overflow-x:hidden}
+button,input{font-family:inherit}
+button{cursor:pointer}
+.stage{
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,#0b8fe8 0%,#28b7f7 42%,#a6ecff 76%,#69cf63 76%,#31974a 100%);
+}
+
+
+
+.sky-clouds{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+.sky-cloud{
+  position:absolute;
+  display:block;
+  opacity:.96;
+  filter:drop-shadow(0 9px 10px rgba(19,91,142,.16));
+}
+.sky-cloud path.main{
+  fill:url(#cloudGrad);
+}
+.sky-cloud path.shade{
+  fill:rgba(169,219,242,.32);
+}
+.sky-cloud.c1{width:310px;left:4%;top:86px}
+.sky-cloud.c2{width:350px;right:3%;top:86px}
+.sky-cloud.c3{width:220px;left:24%;top:34px;opacity:.82}
+.sky-cloud.c4{width:230px;right:23%;top:40px;opacity:.82}
+.sky-cloud.c5{width:230px;left:-72px;top:198px;opacity:.72}
+.sky-cloud.c6{width:245px;right:-84px;top:202px;opacity:.72}
+.top-icons{display:none!important}
+
+.stage:before{
+  content:"";
+  position:absolute;
+  left:-3%;
+  right:-3%;
+  bottom:0;
+  height:150px;
+  background:
+    radial-gradient(ellipse at 7% 100%,#10652d 0 90px,transparent 92px),
+    radial-gradient(ellipse at 18% 100%,#1a8d3c 0 130px,transparent 132px),
+    radial-gradient(ellipse at 78% 100%,#157636 0 120px,transparent 122px),
+    radial-gradient(ellipse at 92% 100%,#0e5d2b 0 100px,transparent 102px);
+  opacity:.95;
+}
+.game-wrap{
+  position:relative;
+  z-index:3;
+  width:min(1420px,100%);
+  margin:0 auto;
+  padding:20px 24px 24px;
+}
+.top-icons{
+  position:absolute;
+  top:28px;
+  left:26px;
+  right:26px;
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+  z-index:8;
+}
+.icon-group{display:flex;gap:12px;pointer-events:auto}
+.round-icon{
+  width:58px;height:58px;border-radius:50%;
+  border:4px solid #ffe18b;
+  background:linear-gradient(145deg,#9b6636,#5c321b);
+  box-shadow:0 4px 0 #3d1d0d, inset 0 4px 8px rgba(255,255,255,.25);
+  display:grid;place-items:center;
+  color:#fff5c4;font-size:27px;font-weight:900;
+}
+.icon-label{font-size:13px;text-align:center;margin-top:4px;text-shadow:0 2px 3px #27140c;font-weight:900}
+.title-area{text-align:center;height:150px;position:relative;z-index:4}
+.game-title{
+  display:inline-block;
+  margin-top:8px;
+  position:relative;
+  padding:0 38px;
+  font-size:56px;
+  line-height:1;
+  letter-spacing:-4px;
+  color:#fff;
+  text-shadow:
+    0 4px 0 #5c2c0b,
+    0 7px 0 #2a1205,
+    0 0 1px #000;
+  font-weight:1000;
+}
+.game-title .gold{
+  color:#ffd852;
+  text-shadow:
+    0 4px 0 #8e4a0b,
+    0 7px 0 #3b1804,
+    0 0 1px #000;
+}
+.game-title:before,.game-title:after{
+  content:"";
+  position:absolute;
+  top:6px;
+  width:88px;height:60px;
+  background:
+    radial-gradient(ellipse at 74% 20%,#fff 0 18px,transparent 19px),
+    linear-gradient(145deg,#fff,#e7edf2);
+  filter:drop-shadow(0 4px 1px #5a2c0c);
+  clip-path:polygon(0 45%,25% 0,60% 30%,100% 12%,75% 55%,100% 86%,54% 78%,20% 100%);
+}
+.game-title:before{right:100%;transform:scaleX(-1)}
+.game-title:after{left:100%}
+.sub-banner{
+  display:inline-block;
+  min-width:520px;
+  margin-top:10px;
+  padding:12px 28px;
+  color:#ffeeb4;
+  font-weight:950;
+  font-size:18px;
+  background:linear-gradient(#6f421f,#3d2110);
+  border:4px solid var(--gold);
+  border-radius:0 0 18px 18px;
+  box-shadow:0 4px 0 #5f300b, inset 0 2px 8px rgba(255,255,255,.18);
+  clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);
+}
+.main-grid{
+  display:grid;
+  grid-template-columns:360px 1fr 360px;
+  gap:18px;
+  align-items:start;
+}
+.side-panel,.center-shell{
+  border:5px solid #f7cf57;
+  border-radius:22px;
+  background:linear-gradient(180deg,#8a512d,#5b341f 18%,#4b2a18);
+  box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.18);
+  overflow:hidden;
+}
+.side-title{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  color:#fff2c5;
+  font-size:25px;
+  font-weight:1000;
+  text-shadow:0 3px 0 #3a1807;
+  background:linear-gradient(180deg,#995f34,#6b3b20);
+  border-bottom:4px solid #351a0c;
+}
+.side-title:before,.side-title:after{content:"⌁";color:#ffe090;font-size:25px}
+.chat-body{padding:14px}
+.live-chat-list{
+  min-height:410px;
+  max-height:410px;
+  overflow-y:auto;
+  border-radius:12px;
+  background:rgba(37,18,8,.58);
+  padding:13px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.18);
+}
+.live-chat-list::-webkit-scrollbar,
+.history-body::-webkit-scrollbar{width:10px}
+.live-chat-list::-webkit-scrollbar-track,
+.history-body::-webkit-scrollbar-track{background:rgba(35,16,7,.45);border-radius:99px}
+.live-chat-list::-webkit-scrollbar-thumb,
+.history-body::-webkit-scrollbar-thumb{background:linear-gradient(#ffe380,#d08a16);border-radius:99px}
+.chat-msg{
+  margin-bottom:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(72,36,16,.72);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.chat-msg .name{color:#ffe28a;font-weight:1000;font-size:14px;margin-bottom:4px}
+.chat-msg .text{color:#fff;font-weight:800;font-size:14px;line-height:1.45}
+.chat-msg.me{background:rgba(27,91,156,.62)}
+.chat-msg.me .name{color:#9ee9ff}
+.chat-popup{
+  position:fixed;
+  left:24px;
+  bottom:24px;
+  z-index:120;
+  width:360px;
+  max-width:calc(100% - 48px);
+  border:4px solid #f7cf57;
+  border-radius:22px;
+  background:linear-gradient(180deg,#7a4829,#3b1f10);
+  box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.16);
+  display:none;
+  overflow:hidden;
+}
+.chat-popup.open{display:block}
+.chat-popup-head{
+  height:54px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 14px;
+  background:linear-gradient(180deg,#995f34,#6b3b20);
+  border-bottom:3px solid #351a0c;
+  color:#fff2c5;
+  font-weight:1000;
+}
+.chat-close{
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid #ffdd72;
+  background:#5c2c13;
+  color:#fff;
+  font-size:20px;
+  font-weight:1000;
+}
+.chat-popup-list{
+  height:260px;
+  overflow-y:auto;
+  padding:12px;
+  background:rgba(26,12,5,.45);
+}
+.chat-input-row{
+  display:grid;
+  grid-template-columns:1fr 70px;
+  gap:8px;
+  padding:10px;
+  background:rgba(42,19,8,.72);
+}
+.chat-input-row input{
+  width:100%;
+  height:42px;
+  border:0;
+  border-radius:12px;
+  background:#1c0d06;
+  color:#fff;
+  padding:0 12px;
+  font-weight:800;
+}
+.chat-input-row button{
+  border:0;
+  border-radius:12px;
+  background:linear-gradient(180deg,#fff09f,#ffbd2e 60%,#de8412);
+  color:#4b2508;
+  font-weight:1000;
+}
+
+.rank-card{
+  background:rgba(37,18,8,.58);
+  border-radius:10px;
+  min-height:260px;
+  padding:18px 14px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.18);
+}
+.rank-top{font-weight:900;color:#ffe5a1;font-size:18px}
+.avatar{
+  width:104px;height:104px;border-radius:50%;
+  margin:10px auto;
+  display:grid;place-items:center;
+  background:
+    radial-gradient(circle,#fff 0 28%,transparent 29%),
+    conic-gradient(#ff2b2b,#111,#ff8a00,#001bff,#ff2b2b);
+  box-shadow:0 6px 20px rgba(0,0,0,.35);
+  position:relative;
+}
+.avatar:after{
+  content:"빼어롤";
+  color:#fff;
+  font-weight:1000;
+  font-size:22px;
+  text-shadow:2px 2px #d00000,-2px 2px #001eff,0 4px #000;
+  transform:rotate(-8deg);
+}
+.chat-text{text-align:center;font-size:18px;line-height:1.65;font-weight:850;color:#fff}
+.notice-row{
+  height:46px;border-radius:9px;margin-top:8px;
+  background:rgba(62,31,14,.72);
+  display:flex;align-items:center;gap:10px;
+  padding:0 14px;color:#ffe3a2;font-weight:900;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.notice-row span:first-child{font-size:22px;color:#ffd55a}
+.side-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.gold-btn.closed{filter:grayscale(.25);opacity:.65}
+.gold-btn{
+  min-height:52px;border:0;border-radius:10px;
+  color:#4b2508;font-size:18px;font-weight:1000;
+  background:linear-gradient(180deg,#fff09f,#ffbd2e 60%,#de8412);
+  box-shadow:0 5px 0 #7a3a09, inset 0 2px 0 rgba(255,255,255,.7);
+}
+.center-shell{
+  border-radius:36px;
+  background:linear-gradient(180deg,#ffda62,#f5bc27 56%,#e49a1a);
+  padding:12px 24px 22px;
+  position:relative;
+  min-height:760px;
+}
+.board{
+  border:5px solid #f9dc77;
+  border-radius:34px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#8b5232,#663a24);
+  box-shadow:inset 0 0 0 3px rgba(75,32,11,.28),0 8px 18px rgba(0,0,0,.24);
+  min-height:560px;
+  position:relative;
+}
+.timebar{
+  width:330px;height:50px;border-radius:0 0 28px 28px;
+  background:linear-gradient(#57301b,#412211);
+  margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
+  color:#e9ae6a;font-size:20px;font-weight:900;
+}
+.ladder-area{
+  position:relative;
+  width:92%;
+  height:415px;
+  margin:10px auto 0;
+}
+.ladder-svg{position:absolute;inset:0;width:100%;height:100%}
+.pipe{stroke:#8b5a39;stroke-width:12;stroke-linecap:round;filter:drop-shadow(0 2px 0 rgba(0,0,0,.5))}
+.pipe-light{stroke:#d99c5d;stroke-width:4;stroke-linecap:round;opacity:.55}
+.path{
+  fill:none;
+  stroke:#ffe14f;
+  stroke-width:9;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 7px #fff06a) drop-shadow(0 0 4px #ff9c00);
+  stroke-dasharray:1200;
+  stroke-dashoffset:1200;
+  transition:stroke-dashoffset 1.2s ease;
+}
+.path.on{stroke-dashoffset:0}
+.node{
+  position:absolute;width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;font-size:25px;font-weight:1000;color:#fff;
+  border:4px solid #ffdf66;box-shadow:0 4px 0 #5b2d0d,inset 0 3px 6px rgba(255,255,255,.35);
+  z-index:5;text-shadow:0 2px 0 rgba(0,0,0,.3);
+}
+.node.blue{background:linear-gradient(145deg,#298bf7,#034bb5)}
+.node.red{background:linear-gradient(145deg,#ff4d57,#b70417)}
+.node.dim{opacity:.35;filter:saturate(.5)}
+.node.top1{left:8%;top:0}.node.top2{left:34%;top:0}.node.top3{left:60%;top:0}.node.top4{left:86%;top:0}
+.node.bot1{left:8%;bottom:0}.node.bot2{left:34%;bottom:0}.node.bot3{left:60%;bottom:0}.node.bot4{left:86%;bottom:0}
+.result-bubble{
+  position:absolute;left:50%;top:48%;transform:translate(-50%,-50%) scale(.92);
+  min-width:440px;min-height:92px;border-radius:46px;
+  border:5px solid #ffdc69;
+  background:linear-gradient(180deg,#51301d,#2d160a);
+  color:#fff;display:none;place-items:center;
+  font-size:28px;font-weight:1000;text-align:center;
+  box-shadow:0 6px 0 rgba(47,20,6,.8),0 0 20px rgba(255,231,100,.36),inset 0 2px 7px rgba(255,255,255,.2);
+  z-index:8;
+  opacity:0;
+  transition:.22s ease;
+}
+.result-bubble.show{
+  display:grid;
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+.result-bubble em{font-style:normal;color:#ff4f57}
+
+.round-status{
+  margin:12px auto 0;
+  width:min(520px,92%);
+  min-height:50px;
+  border-radius:28px;
+  border:4px solid #ffdc69;
+  background:linear-gradient(180deg,#55311d,#2f170b);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  font-weight:1000;
+  box-shadow:0 4px 0 rgba(47,20,6,.7), inset 0 2px 7px rgba(255,255,255,.18);
+  text-align:center;
+}
+.round-status em{font-style:normal;color:#ffef7b}
+.path{
+  opacity:0;
+}
+.path.on{
+  opacity:1;
+  stroke-dashoffset:0;
+}
+
+.logo-text{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  color:rgba(255,224,170,.42);font-weight:1000;font-size:20px;letter-spacing:1px;
+}
+.stats{
+  margin:18px auto 0;
+  width:96%;
+  display:grid;
+  gap:10px;
+}
+.stat-row{display:grid;grid-template-columns:90px 1fr 90px;gap:10px;align-items:center;color:#fff;font-size:18px;font-weight:1000;text-shadow:0 2px 2px #472208}
+.bar{
+  height:32px;border-radius:18px;background:#3c2413;position:relative;overflow:hidden;
+  border:3px solid #77450e;box-shadow:inset 0 3px 8px rgba(0,0,0,.38);
+}
+.bar .blue{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(-35deg,#1587ff 0 10px,#0a63d4 10px 20px);border-radius:18px 0 0 18px}
+.bar .red{position:absolute;right:0;top:0;bottom:0;background:repeating-linear-gradient(35deg,#ff2e38 0 10px,#cf1421 10px 20px);border-radius:0 18px 18px 0}
+.bar-label{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  min-width:74px;height:46px;border-radius:50%;
+  background:linear-gradient(145deg,#285bc0,#0e2c68);
+  border:4px solid #ffdf66;
+  display:grid;place-items:center;color:#fff;font-weight:1000;z-index:3;
+  box-shadow:0 3px 0 #61330d;
+}
+.footnote{text-align:center;color:#64380f;font-size:18px;font-weight:1000;margin-top:14px}
+.history-body{padding:14px;max-height:530px;overflow-y:auto;overflow-x:hidden}
+.history-row{
+  height:86px;border-radius:10px;margin-bottom:10px;
+  background:rgba(61,31,15,.68);
+  display:grid;grid-template-columns:72px 1fr;align-items:center;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.14);
+}
+.round-no{text-align:center;color:#ffc964;font-size:21px;font-weight:1000}
+.result-pills{display:flex;gap:10px;align-items:center;justify-content:center}
+.pill{
+  width:50px;height:50px;border-radius:50%;
+  display:grid;place-items:center;color:#fff;font-size:24px;font-weight:1000;
+  border:3px solid rgba(0,0,0,.22);box-shadow:inset 0 2px 6px rgba(255,255,255,.28),0 3px 0 rgba(0,0,0,.35);
+}
+.pill.blue{background:linear-gradient(145deg,#3a9bff,#0c54bd)}
+.pill.red{background:linear-gradient(145deg,#ff4b59,#bd0818)}
+.bottom-menu{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 14px 14px}
+.bottom-menu .gold-btn.active{
+  color:#fff;
+  background:linear-gradient(180deg,#4aa7ff,#0753ba);
+  box-shadow:0 5px 0 #062b64, inset 0 2px 0 rgba(255,255,255,.45);
+}
+.history-mode-title{
+  margin:2px 0 10px;
+  padding:10px 12px;
+  border-radius:12px;
+  color:#fff3bc;
+  background:rgba(37,18,8,.5);
+  font-weight:1000;
+  text-align:center;
+}
+.pattern-box{
+  border-radius:12px;
+  background:rgba(61,31,15,.68);
+  padding:14px;
+  margin-bottom:10px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.14);
+}
+.pattern-box b{display:block;color:#ffe28a;font-size:18px;margin-bottom:6px}
+.pattern-box span{display:block;color:#fff;line-height:1.55;font-weight:850}
+.predict-card{
+  min-height:120px;
+  border-radius:14px;
+  background:linear-gradient(145deg,#3a74d8,#15347b);
+  border:3px solid #ffdf66;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:#fff;
+  font-size:22px;
+  font-weight:1000;
+  box-shadow:0 5px 0 #5a2c0d;
+}
+.path.running{
+  animation:ladderGlow .32s linear infinite alternate;
+}
+@keyframes ladderGlow{
+  from{filter:drop-shadow(0 0 4px #fff06a) drop-shadow(0 0 3px #ff9c00)}
+  to{filter:drop-shadow(0 0 13px #fff06a) drop-shadow(0 0 8px #ff9c00)}
+}
+
+.control-dock{
+  margin-top:18px;
+  border:5px solid #f7cf57;border-radius:24px;
+  background:linear-gradient(180deg,#6a3c20,#3d2110);
+  padding:14px;
+  display:grid;grid-template-columns:280px 1fr 280px;gap:14px;
+  box-shadow:var(--shadow);
+}
+.control-card{
+  border-radius:18px;background:rgba(37,18,8,.58);
+  padding:14px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15);
+}
+.control-card h3{margin:0 0 10px;color:#ffe6a0;font-size:19px}
+.point-input{
+  width:100%;height:46px;border:0;border-radius:12px;background:#1c0d06;color:#fff;font-size:20px;font-weight:1000;padding:0 14px;box-shadow:inset 0 3px 8px rgba(0,0,0,.5)
+}
+.quick-bets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px}
+.quick-bets button{
+  height:38px;border:2px solid rgba(255,255,255,.18);border-radius:10px;background:rgba(255,255,255,.09);color:#fff;font-weight:950
+}
+.pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pick-btn{
+  min-height:70px;border-radius:16px;border:3px solid rgba(255,230,130,.35);
+  background:linear-gradient(180deg,#5a311a,#2b1509);
+  color:#fff;font-size:22px;font-weight:1000;
+  box-shadow:0 4px 0 #1d0c04,inset 0 2px 8px rgba(255,255,255,.13);
+}
+.pick-btn.active.blue{background:linear-gradient(180deg,#46a8ff,#0452b8);border-color:#ffe36e}
+.pick-btn.active.red{background:linear-gradient(180deg,#ff5863,#b30516);border-color:#ffe36e}
+.pick-btn small{display:block;font-size:12px;margin-top:4px;color:#ffeebd}
+.status-card{text-align:center}
+.status-card .balance{font-size:25px;font-weight:1000;color:#ffe47c;margin-bottom:10px}
+.log-area{max-height:112px;overflow:auto;color:#fff;font-size:13px;line-height:1.55;text-align:left}
+.log-line{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.win{color:#67ffae}.lose{color:#ff7185}
+.modal-toast{
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);z-index:100;
+  background:rgba(38,18,8,.92);border:3px solid #ffcf53;border-radius:18px;color:#fff;padding:14px 20px;
+  font-weight:1000;box-shadow:0 12px 30px rgba(0,0,0,.35);opacity:0;transition:.25s;
+}
+.modal-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(max-width:1180px){
+  .main-grid{grid-template-columns:1fr}
+  .side-panel{display:none}
+  .control-dock{grid-template-columns:1fr}
+  .center-shell{min-height:auto}
+}
+@media(max-width:720px){
+  .game-wrap{padding:14px 10px}
+  .game-title{font-size:38px}
+  .sub-banner{min-width:0;width:96%;font-size:13px}
+  .top-icons{display:none}
+  .center-shell{padding:8px;border-radius:24px}
+  .board{min-height:440px}
+  .ladder-area{height:330px;width:100%}
+  .node{width:44px;height:44px;font-size:18px}
+  .result-bubble{min-width:260px;font-size:18px;min-height:70px}
+  .stat-row{grid-template-columns:64px 1fr 64px;font-size:13px}
+  .pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+
+
+@media(max-width:720px){
+  .sky-cloud.c1{width:210px;left:-54px;top:80px}
+  .sky-cloud.c2{width:230px;right:-70px;top:82px}
+  .sky-cloud.c3{width:150px;left:20%;top:26px}
+  .sky-cloud.c4{width:155px;right:15%;top:28px}
+  .sky-cloud.c5,.sky-cloud.c6{display:none}
+  .round-status{font-size:16px;min-height:42px;width:94%}
+}
+
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="sky-clouds">
+    <svg class="sky-cloud c1" viewBox="0 0 420 150" aria-hidden="true">
+      <defs>
+        <linearGradient id="cloudGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#e8f8ff"/>
+        </linearGradient>
+      </defs>
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+      <path class="shade" d="M43 111c55 12 123 7 196 3 62-3 116 1 165 13-9 22-31 36-64 36H56c-28 0-48-16-51-38 10-8 22-13 38-14z"/>
+    </svg>
+    <svg class="sky-cloud c2" viewBox="0 0 420 150" aria-hidden="true">
+      <use href="#cloudTemplate"></use>
+      <defs>
+        <linearGradient id="cloudGrad2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#e8f8ff"/>
+        </linearGradient>
+      </defs>
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z" fill="url(#cloudGrad2)"/>
+      <path class="shade" d="M43 111c55 12 123 7 196 3 62-3 116 1 165 13-9 22-31 36-64 36H56c-28 0-48-16-51-38 10-8 22-13 38-14z"/>
+    </svg>
+    <svg class="sky-cloud c3" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+      <path class="shade" d="M43 111c55 12 123 7 196 3 62-3 116 1 165 13-9 22-31 36-64 36H56c-28 0-48-16-51-38 10-8 22-13 38-14z"/>
+    </svg>
+    <svg class="sky-cloud c4" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+      <path class="shade" d="M43 111c55 12 123 7 196 3 62-3 116 1 165 13-9 22-31 36-64 36H56c-28 0-48-16-51-38 10-8 22-13 38-14z"/>
+    </svg>
+    <svg class="sky-cloud c5" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+    </svg>
+    <svg class="sky-cloud c6" viewBox="0 0 420 150" aria-hidden="true">
+      <path class="main" d="M56 114c-30 0-51-18-51-43 0-24 22-43 51-43 7 0 14 1 21 4C92 13 119 1 149 1c39 0 72 20 83 48 14-8 31-13 50-13 41 0 74 24 77 54 31 2 56 20 56 43 0 25-29 45-64 45H56z"/>
+    </svg>
+  </div>
+
+  <div class="game-wrap">
+
+    <div class="title-area">
+      <div class="game-title"><span class="gold">웹스튜디오</span>파워사다리</div><br>
+      <div class="sub-banner">파워볼 첫번째 숫자를 기준으로 30초 단위로 추첨하며 288회차까지 진행</div>
+    </div>
+
+    <div class="main-grid">
+      <aside class="side-panel">
+        <div class="side-title">실시간 대화</div>
+        <div class="chat-body">
+          <div class="live-chat-list" id="sideChatList"></div>
+          <div class="side-buttons" style="grid-template-columns:1fr;">
+            <button class="gold-btn" id="openChatBtn">실시간대화</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="center-shell">
+        <div class="board">
+          <div class="timebar" id="clockText">2026.05.23 21:48:51</div>
+
+          <div class="ladder-area">
+            <svg class="ladder-svg" viewBox="0 0 720 415" preserveAspectRatio="none">
+              <line class="pipe" x1="100" y1="58" x2="100" y2="350"/>
+              <line class="pipe-light" x1="100" y1="58" x2="100" y2="350"/>
+              <line class="pipe" x1="265" y1="58" x2="265" y2="350"/>
+              <line class="pipe-light" x1="265" y1="58" x2="265" y2="350"/>
+              <line class="pipe" x1="455" y1="58" x2="455" y2="350"/>
+              <line class="pipe-light" x1="455" y1="58" x2="455" y2="350"/>
+              <line class="pipe" x1="620" y1="58" x2="620" y2="350"/>
+              <line class="pipe-light" x1="620" y1="58" x2="620" y2="350"/>
+
+              <line class="pipe" x1="100" y1="116" x2="265" y2="116"/>
+              <line class="pipe-light" x1="100" y1="116" x2="265" y2="116"/>
+              <line class="pipe" x1="265" y1="170" x2="455" y2="170"/>
+              <line class="pipe-light" x1="265" y1="170" x2="455" y2="170"/>
+              <line class="pipe" x1="455" y1="234" x2="620" y2="234"/>
+              <line class="pipe-light" x1="455" y1="234" x2="620" y2="234"/>
+              <line class="pipe" x1="100" y1="286" x2="265" y2="286"/>
+              <line class="pipe-light" x1="100" y1="286" x2="265" y2="286"/>
+
+              <path id="pathLine" class="path" d="M100 58 L100 116 L265 116 L265 170 L455 170 L455 234 L620 234 L620 350"/>
+            </svg>
+
+            <div class="node blue top1">좌</div>
+            <div class="node blue top2">홀</div>
+            <div class="node blue top3 dim">우</div>
+            <div class="node red top4">짝</div>
+
+            <div class="node blue bot1">홀</div>
+            <div class="node red bot2">짝</div>
+            <div class="node blue bot3">좌</div>
+            <div class="node red bot4" id="finalNode">짝</div>
+
+            <div class="result-bubble" id="resultBubble">이번 회차 참여 대기중</div>
+            <div class="logo-text">WWW.WEBSTUDIO.COM</div>
+          </div>
+          <div class="round-status" id="roundStatus">회차 준비중</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-row">
+            <div>52.04%</div>
+            <div class="bar"><div class="blue" style="width:52%"></div><div class="red" style="width:48%"></div><div class="bar-label">홀짝</div></div>
+            <div>47.96%</div>
+          </div>
+          <div class="stat-row">
+            <div>46.32%</div>
+            <div class="bar"><div class="blue" style="width:46%"></div><div class="red" style="width:54%"></div><div class="bar-label">좌/우</div></div>
+            <div>53.68%</div>
+          </div>
+          <div class="stat-row">
+            <div>43.68%</div>
+            <div class="bar"><div class="blue" style="width:44%"></div><div class="red" style="width:56%"></div><div class="bar-label">좌/짝</div></div>
+            <div>56.32%</div>
+          </div>
+        </div>
+        <div class="footnote">본 표는 웹스튜디오 픽분포를 기준으로 표기</div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="side-title">지난 회차</div>
+        <div class="history-body" id="historyBody"></div>
+        <div class="bottom-menu">
+          <button class="gold-btn history-tab active" data-mode="daily">일별</button>
+          <button class="gold-btn history-tab" data-mode="round">회차</button>
+          <button class="gold-btn history-tab" data-mode="pattern">패턴</button>
+          <button class="gold-btn history-tab" data-mode="predict">예측</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="control-dock">
+      <div class="control-card">
+        <h3>참여 포인트</h3>
+        <input class="point-input" id="betInput" type="number" min="100" step="100" value="1000">
+        <div class="quick-bets">
+          <button onclick="setBet(1000)">1천</button>
+          <button onclick="setBet(5000)">5천</button>
+          <button onclick="setBet(10000)">1만</button>
+          <button onclick="setBet(50000)">5만</button>
+        </div>
+      </div>
+
+      <div class="control-card">
+        <h3>선택</h3>
+        <div class="pick-grid">
+          <button class="pick-btn blue active" data-pick="left">좌<small>x1.95</small></button>
+          <button class="pick-btn red" data-pick="right">우<small>x1.95</small></button>
+          <button class="pick-btn blue" data-pick="three">3줄<small>x1.95</small></button>
+          <button class="pick-btn red" data-pick="four">4줄<small>x1.95</small></button>
+        </div>
+        <button class="gold-btn" id="joinBtn" style="width:100%;margin-top:12px;">이번 회차 참여</button>
+        <button class="btn" id="randomBtn" style="width:100%;margin-top:10px;">무작위 선택</button>
+      </div>
+
+      <div class="control-card status-card">
+        <h3>보유 포인트</h3>
+        <div class="balance" id="balanceText">100,000 P</div>
+        <div class="log-area" id="logArea"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-popup-head">
+    <span>실시간 대화</span>
+    <button class="chat-close" id="closeChatBtn">×</button>
+  </div>
+  <div class="chat-popup-list" id="popupChatList"></div>
+  <div class="chat-input-row">
+    <input id="chatInput" placeholder="메시지를 입력하세요" />
+    <button id="sendChatBtn">전송</button>
+  </div>
+</div>
+<div class="modal-toast" id="toast"></div>
+
+<script>
+let balance = Number(localStorage.getItem('ladderPremiumBalanceV2') || 100000);
+let selected = 'left';
+let logs = JSON.parse(localStorage.getItem('ladderPremiumLogsV2') || '[]');
+let history = JSON.parse(localStorage.getItem('ladderPremiumHistoryV2') || '[]');
+let chatMessages = JSON.parse(localStorage.getItem('ladderPremiumChatV2') || '[]');
+let round = Number(localStorage.getItem('ladderPremiumRoundV2') || 150);
+let pending = [];
+let leftSec = 30;
+let locked = false;
+let isDrawing = false;
+let historyMode = 'daily';
+
+const fmt = n => Number(n).toLocaleString('ko-KR') + ' P';
+const $ = s => document.querySelector(s);
+const rand = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const sample = arr=>arr[Math.floor(Math.random()*arr.length)];
+
+const defaultChats = [
+  {name:'픽스터A', text:'이번 회차는 좌/3줄 흐름 좋아보입니다.'},
+  {name:'분석왕', text:'최근 짝 비율이 조금 높네요.'},
+  {name:'웹스튜디오', text:'마감 5초 전에는 참여가 잠깁니다.'},
+  {name:'회원07', text:'방금 참여 완료했습니다.'},
+  {name:'실시간봇', text:'30초 단위 회차가 진행중입니다.'}
+];
+
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+function setBet(v){ $('#betInput').value = v; }
+function showResultPopup(markup){
+  const box = $('#resultBubble');
+  box.innerHTML = markup;
+  box.classList.add('show');
+  $('#roundStatus').innerHTML = '결과 발표 완료';
+}
+function hideResultPopup(){
+  const box = $('#resultBubble');
+  if(box) box.classList.remove('show');
+}
+function updateClock(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  $('#clockText').textContent = `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+function updateBalance(){
+  $('#balanceText').textContent = fmt(balance);
+  localStorage.setItem('ladderPremiumBalanceV2', String(balance));
+}
+function label(v){
+  return {left:'좌',right:'우',three:'3줄',four:'4줄'}[v] || v;
+}
+function ensureHistory(){
+  if(history.length) return;
+  const seed = [
+    {round:149,side:'right',line:'three',parity:'홀'},
+    {round:148,side:'left',line:'four',parity:'홀'},
+    {round:147,side:'right',line:'three',parity:'홀'},
+    {round:146,side:'left',line:'four',parity:'홀'},
+    {round:145,side:'left',line:'three',parity:'짝'},
+    {round:144,side:'left',line:'four',parity:'홀'},
+    {round:143,side:'left',line:'three',parity:'짝'},
+    {round:142,side:'right',line:'four',parity:'짝'},
+    {round:141,side:'left',line:'three',parity:'홀'},
+    {round:140,side:'right',line:'three',parity:'짝'},
+    {round:139,side:'left',line:'four',parity:'홀'},
+    {round:138,side:'right',line:'four',parity:'짝'},
+    {round:137,side:'left',line:'three',parity:'홀'},
+    {round:136,side:'right',line:'four',parity:'짝'}
+  ];
+  history = seed;
+}
+function renderLogs(){
+  if(!logs.length){
+    $('#logArea').innerHTML = '<div class="log-line">참여 내역이 없습니다.</div>';
+    return;
+  }
+  $('#logArea').innerHTML = logs.slice(0,8).map(l=>`<div class="log-line">${l.round}회차 ${l.pick} · <span class="${l.win?'win':'lose'}">${l.win?'+':'-'}${fmt(Math.abs(l.profit))}</span></div>`).join('');
+}
+function resultRow(h){
+  const sideText = h.side === 'left' ? '좌' : '우';
+  const lineText = h.line === 'three' ? '3' : '4';
+  const pari = h.parity;
+  return `<div class="history-row">
+      <div class="round-no">${h.round}</div>
+      <div class="result-pills">
+        <span class="pill ${h.side==='left'?'blue':'red'}">${sideText}</span>
+        <span class="pill ${h.line==='three'?'blue':'red'}">${lineText}</span>
+        <span class="pill ${pari==='홀'?'blue':'red'}">${pari}</span>
+      </div>
+    </div>`;
+}
+function renderHistory(){
+  ensureHistory();
+  const body = $('#historyBody');
+
+  if(historyMode === 'daily'){
+    body.innerHTML = `<div class="history-mode-title">일별 결과 · 오늘</div>` + history.map(resultRow).join('');
+  }
+
+  if(historyMode === 'round'){
+    body.innerHTML = `<div class="history-mode-title">회차별 결과</div>` + history.map(resultRow).join('');
+  }
+
+  if(historyMode === 'pattern'){
+    const left = history.filter(h=>h.side==='left').length;
+    const right = history.filter(h=>h.side==='right').length;
+    const three = history.filter(h=>h.line==='three').length;
+    const four = history.filter(h=>h.line==='four').length;
+    const odd = history.filter(h=>h.parity==='홀').length;
+    const even = history.filter(h=>h.parity==='짝').length;
+    body.innerHTML = `
+      <div class="history-mode-title">패턴 분석</div>
+      <div class="pattern-box"><b>좌/우 패턴</b><span>좌 ${left}회 · 우 ${right}회</span></div>
+      <div class="pattern-box"><b>줄수 패턴</b><span>3줄 ${three}회 · 4줄 ${four}회</span></div>
+      <div class="pattern-box"><b>홀짝 패턴</b><span>홀 ${odd}회 · 짝 ${even}회</span></div>
+      <div class="pattern-box"><b>최근 흐름</b><span>${history.slice(0,5).map(h=>label(h.side)+'/'+(h.line==='three'?'3줄':'4줄')).join(' → ')}</span></div>
+    `;
+  }
+
+  if(historyMode === 'predict'){
+    const left = history.filter(h=>h.side==='left').length;
+    const right = history.filter(h=>h.side==='right').length;
+    const three = history.filter(h=>h.line==='three').length;
+    const four = history.filter(h=>h.line==='four').length;
+    const pickSide = left <= right ? '좌' : '우';
+    const pickLine = three <= four ? '3줄' : '4줄';
+    body.innerHTML = `
+      <div class="history-mode-title">예측</div>
+      <div class="predict-card">추천 흐름<br>${pickSide} / ${pickLine}</div>
+      <div class="pattern-box" style="margin-top:12px;"><b>기준</b><span>최근 회차의 반대 흐름과 비율 보정 기준으로 표시됩니다.</span></div>
+    `;
+  }
+}
+function choose(btn){
+  document.querySelectorAll('.pick-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selected = btn.dataset.pick;
+}
+document.querySelectorAll('.pick-btn').forEach(btn=>btn.addEventListener('click',()=>choose(btn)));
+
+$('#randomBtn').onclick = () => {
+  const btns = [...document.querySelectorAll('.pick-btn')];
+  choose(sample(btns));
+  toast('무작위 선택 완료');
+};
+
+$('#joinBtn').onclick = () => {
+  if(locked || isDrawing){ toast('마감된 회차입니다. 다음 회차를 기다리세요.'); return; }
+  const bet = Math.floor(Number($('#betInput').value || 0));
+  if(!bet || bet < 100){ toast('100P 이상 입력하세요.'); return; }
+  if(bet > balance){ toast('보유 포인트가 부족합니다.'); return; }
+  balance -= bet;
+  pending.push({round,pick:selected,bet});
+  updateBalance();
+  $('#roundStatus').innerHTML = `${round}회차 ${label(selected)} 참여 완료`; hideResultPopup();
+  toast(`${round}회차 참여 완료`);
+};
+
+function makeResult(){
+  const side = sample(['left','right']);
+  const line = sample(['three','four']);
+  const parity = sample(['홀','짝']);
+  return {round,side,line,parity};
+}
+function animatePath(res){
+  const path = $('#pathLine');
+  path.classList.remove('on');
+  path.classList.remove('running');
+  let d;
+  if(res.side === 'left' && res.line === 'three'){
+    d = "M100 58 L100 116 L265 116 L265 170 L455 170 L455 234 L620 234 L620 350";
+  }else if(res.side === 'left' && res.line === 'four'){
+    d = "M100 58 L100 116 L265 116 L265 286 L100 286 L100 350";
+  }else if(res.side === 'right' && res.line === 'three'){
+    d = "M620 58 L620 234 L455 234 L455 170 L265 170 L265 350";
+  }else{
+    d = "M620 58 L620 234 L455 234 L455 170 L265 170 L265 116 L100 116 L100 350";
+  }
+  path.setAttribute('d', d);
+  setTimeout(()=>{
+    path.classList.add('running');
+    path.classList.add('on');
+  },80);
+}
+function startDraw(){
+  isDrawing = true;
+  locked = true;
+  $('#joinBtn').classList.add('closed');
+
+  const res = makeResult();
+  $('#roundStatus').innerHTML = `${round}회차 사다리 진행중...`; hideResultPopup();
+  animatePath(res);
+
+  setTimeout(()=>finishRound(res), 1850);
+}
+function finishRound(res){
+  let profitSum = 0;
+  let winCount = 0;
+  let loseCount = 0;
+
+  pending.forEach(p=>{
+    const isWin = p.pick === res.side || p.pick === res.line;
+    if(isWin){
+      const prize = Math.floor(p.bet * 1.95);
+      const profit = prize - p.bet;
+      balance += prize;
+      profitSum += profit;
+      winCount++;
+      logs.unshift({round:p.round,pick:label(p.pick),profit,win:true});
+    }else{
+      profitSum -= p.bet;
+      loseCount++;
+      logs.unshift({round:p.round,pick:label(p.pick),profit:p.bet,win:false});
+    }
+  });
+
+  logs = logs.slice(0,20);
+  history.unshift(res);
+  history = history.slice(0,40);
+  localStorage.setItem('ladderPremiumLogsV2', JSON.stringify(logs));
+  localStorage.setItem('ladderPremiumHistoryV2', JSON.stringify(history));
+
+  showResultPopup(`${round}회차 결과는 <em>[${label(res.side)} / ${res.line==='three'?'3줄':'4줄'}]</em> 입니다.`);
+  renderHistory();
+  renderLogs();
+  updateBalance();
+
+  if(pending.length){
+    toast(`정산 완료: 적중 ${winCount}건 / 미적중 ${loseCount}건`);
+  }
+
+  pending = [];
+  round++;
+  localStorage.setItem('ladderPremiumRoundV2', String(round));
+
+  setTimeout(()=>{
+    leftSec = 30;
+    locked = false;
+    isDrawing = false;
+    $('#joinBtn').classList.remove('closed');
+    $('#pathLine').classList.remove('running');
+    $('#roundStatus').innerHTML = `${round}회차 접수중 · <em>${leftSec}초</em> 남음`; hideResultPopup();
+  }, 1200);
+}
+function tick(){
+  if(isDrawing) return;
+  leftSec--;
+
+  if(leftSec > 5){
+    locked = false;
+    $('#joinBtn').classList.remove('closed');
+    if(!pending.length){
+      $('#roundStatus').innerHTML = `${round}회차 접수중 · <em>${leftSec}초</em> 남음`; hideResultPopup();
+    }else{
+      $('#roundStatus').innerHTML = `${round}회차 참여 ${pending.length}건 · <em>${leftSec}초</em> 남음`; hideResultPopup();
+    }
+  }
+
+  if(leftSec <= 5 && leftSec > 0){
+    locked = true;
+    $('#joinBtn').classList.add('closed');
+    $('#roundStatus').innerHTML = `${round}회차 마감 · <em>${leftSec}초</em> 후 사다리 진행`; hideResultPopup();
+  }
+
+  if(leftSec <= 0){
+    startDraw();
+  }
+}
+
+function renderChat(){
+  if(!chatMessages.length){
+    chatMessages = defaultChats;
+  }
+  const sideList = $('#sideChatList');
+  const popupList = $('#popupChatList');
+  const html = chatMessages.slice(-30).map(m=>`
+    <div class="chat-msg ${m.me?'me':''}">
+      <div class="name">${m.name}</div>
+      <div class="text">${m.text}</div>
+    </div>
+  `).join('');
+  sideList.innerHTML = html;
+  popupList.innerHTML = html;
+  sideList.scrollTop = sideList.scrollHeight;
+  popupList.scrollTop = popupList.scrollHeight;
+  localStorage.setItem('ladderPremiumChatV2', JSON.stringify(chatMessages));
+}
+function sendChat(){
+  const input = $('#chatInput');
+  const text = input.value.trim();
+  if(!text){ toast('대화 내용을 입력하세요.'); return; }
+  chatMessages.push({name:'나', text, me:true});
+  input.value = '';
+  renderChat();
+}
+$('#openChatBtn').onclick = () => $('#chatPopup').classList.add('open');
+$('#closeChatBtn').onclick = () => $('#chatPopup').classList.remove('open');
+$('#sendChatBtn').onclick = sendChat;
+$('#chatInput').addEventListener('keydown', e=>{
+  if(e.key === 'Enter') sendChat();
+});
+
+document.querySelectorAll('.history-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.history-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    historyMode = btn.dataset.mode;
+    renderHistory();
+  });
+});
+
+$('#resetBtn')?.addEventListener('click',()=>{
+  balance = 100000;
+  logs = [];
+  history = [];
+  pending = [];
+  round = 150;
+  leftSec = 30;
+  locked = false;
+  isDrawing = false;
+  localStorage.removeItem('ladderPremiumBalanceV2');
+  localStorage.removeItem('ladderPremiumLogsV2');
+  localStorage.removeItem('ladderPremiumHistoryV2');
+  localStorage.removeItem('ladderPremiumRoundV2');
+  updateBalance();
+  renderLogs();
+  renderHistory();
+  $('#joinBtn').classList.remove('closed');
+  $('#roundStatus').innerHTML = `${round}회차 접수중 · <em>${leftSec}초</em> 남음`; hideResultPopup();
+  toast('초기화 완료');
+});
+
+updateBalance();
+ensureHistory();
+renderHistory();
+renderLogs();
+renderChat();
+updateClock();
+$('#roundStatus').innerHTML = `${round}회차 접수중 · <em>${leftSec}초</em> 남음`; hideResultPopup();
+setInterval(updateClock,1000);
+setInterval(tick,1000);
+</script>
+</body>
+</html>

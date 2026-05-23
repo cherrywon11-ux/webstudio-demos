@@ -1,0 +1,1795 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>웹스튜디오 커뮤니티</title>
+  <style>
+    :root{
+      --bg:#eef1f7;
+      --paper:#fff;
+      --paper2:#f8f9fd;
+      --text:#1f2633;
+      --muted:#727b8d;
+      --line:#d5dbea;
+      --soft:#edf1fb;
+      --blue:#284fc8;
+      --blue2:#15317f;
+      --red:#e4333a;
+      --orange:#f28a00;
+      --green:#158451;
+      --purple:#7354d6;
+      --shadow:0 8px 24px rgba(20,34,70,.08);
+      --radius:10px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      font-size:13px;
+    }
+    body.dark{
+      --bg:#101725;
+      --paper:#172235;
+      --paper2:#121b2c;
+      --text:#e9eef8;
+      --muted:#98a5bd;
+      --line:#2d3a53;
+      --soft:#202d44;
+      --blue:#7497ff;
+      --blue2:#96adff;
+      --shadow:0 8px 24px rgba(0,0,0,.25);
+    }
+
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .hide{display:none!important}
+
+    .topbar{
+      background:#203975;
+      color:#dce6ff;
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .topbar-inner{
+      max-width:1240px;
+      margin:0 auto;
+      min-height:34px;
+      padding:0 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .top-mini{
+      display:flex;
+      gap:13px;
+      align-items:center;
+      white-space:nowrap;
+      font-size:12px;
+    }
+    .top-mini b{color:#fff}
+    .top-mini span{opacity:.95}
+
+    .header{
+      background:var(--paper);
+      border-bottom:1px solid var(--line);
+    }
+    .header-inner{
+      max-width:1240px;
+      margin:0 auto;
+      padding:16px 12px 12px;
+      display:grid;
+      grid-template-columns:260px minmax(0,1fr) 250px;
+      gap:18px;
+      align-items:center;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .brand-mark{
+      width:48px;height:48px;border-radius:12px;
+      display:grid;place-items:center;
+      background:linear-gradient(145deg,#345ee9,#152b7c);
+      color:#fff;
+      font-size:23px;
+      font-weight:900;
+      box-shadow:0 10px 24px rgba(49,89,212,.28);
+    }
+    .brand-title strong{
+      display:block;
+      font-size:24px;
+      letter-spacing:-1px;
+      color:var(--blue2);
+      line-height:1.05;
+    }
+    .brand-title span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .search{
+      height:44px;
+      border:2px solid var(--blue);
+      border-radius:7px;
+      overflow:hidden;
+      display:flex;
+      background:var(--paper);
+    }
+    .search select{
+      border:0;
+      border-right:1px solid var(--line);
+      background:var(--paper2);
+      color:var(--text);
+      padding:0 9px;
+      outline:none;
+      width:105px;
+    }
+    .search input{
+      flex:1;
+      border:0;
+      outline:none;
+      padding:0 12px;
+      background:transparent;
+      color:var(--text);
+    }
+    .search button{
+      border:0;
+      width:72px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:900;
+    }
+
+    .quick-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:7px;
+    }
+    .qbtn{
+      border:1px solid var(--line);
+      background:var(--paper);
+      color:var(--text);
+      border-radius:7px;
+      height:34px;
+      font-weight:800;
+    }
+    .qbtn.primary{
+      background:var(--blue);
+      border-color:var(--blue);
+      color:#fff;
+    }
+
+    .gnb{
+      background:var(--paper);
+      border-top:1px solid var(--line);
+    }
+    .gnb-inner{
+      max-width:1240px;
+      margin:0 auto;
+      padding:0 12px;
+      display:flex;
+      gap:2px;
+      overflow:auto;
+      align-items:center;
+    }
+    .gnb button{
+      border:0;
+      background:transparent;
+      color:var(--text);
+      padding:12px 13px 10px;
+      border-bottom:3px solid transparent;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .gnb button.active{
+      color:var(--blue);
+      border-bottom-color:var(--blue);
+    }
+
+    .market-strip{
+      background:#f7f8fc;
+      border-bottom:1px solid var(--line);
+    }
+    body.dark .market-strip{background:#121b2d}
+    .market-inner{
+      max-width:1240px;
+      margin:0 auto;
+      padding:8px 12px;
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:8px;
+    }
+    .metric{
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--paper);
+      padding:8px 9px;
+      min-width:0;
+    }
+    .metric span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      margin-bottom:3px;
+    }
+    .metric b{
+      font-size:14px;
+      color:var(--blue2);
+    }
+
+    .layout{
+      max-width:1240px;
+      margin:12px auto 38px;
+      padding:0 12px;
+      display:grid;
+      grid-template-columns:210px minmax(0,1fr) 280px;
+      gap:12px;
+      align-items:start;
+    }
+
+    .box{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-bottom:12px;
+    }
+    .box-head{
+      min-height:38px;
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(40,79,200,.1),rgba(40,79,200,.02));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      font-weight:900;
+    }
+    .box-head small{color:var(--muted);font-weight:700}
+
+    .login-area{padding:10px}
+    .login-area input{
+      width:100%;
+      height:33px;
+      margin-bottom:6px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:transparent;
+      color:var(--text);
+      padding:0 8px;
+      outline:none;
+    }
+    .login-area button{
+      width:100%;
+      height:34px;
+      border:0;
+      border-radius:6px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:900;
+    }
+    .login-links{
+      margin-top:7px;
+      display:flex;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .side-menu{
+      list-style:none;
+      margin:0;
+      padding:6px;
+    }
+    .side-menu li{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:8px 8px;
+      border-radius:7px;
+      cursor:pointer;
+    }
+    .side-menu li:hover,.side-menu li.active{
+      background:rgba(40,79,200,.1);
+      color:var(--blue2);
+      font-weight:900;
+    }
+    .side-menu b{
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .tag-cloud{
+      padding:9px;
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+    .tag{
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:var(--paper2);
+      color:var(--text);
+      padding:6px 8px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .tag:hover{border-color:var(--blue);color:var(--blue2)}
+
+    .issue-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .hero{
+      min-height:220px;
+      border-radius:var(--radius);
+      overflow:hidden;
+      position:relative;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(circle at 18% 25%,rgba(255,255,255,.35),transparent 18%),
+        radial-gradient(circle at 75% 45%,rgba(255,255,255,.23),transparent 22%),
+        linear-gradient(135deg,#1e3b96,#3563f0 52%,#6b4be8);
+      box-shadow:var(--shadow);
+      color:#fff;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -55px auto;
+      width:190px;height:190px;border-radius:50%;
+      background:rgba(255,255,255,.12);
+    }
+    .hero-kicker{
+      display:inline-flex;
+      width:max-content;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:999px;
+      padding:6px 10px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .hero h1{
+      margin:16px 0 6px;
+      font-size:25px;
+      line-height:1.25;
+      letter-spacing:-1px;
+    }
+    .hero p{
+      margin:0;
+      max-width:540px;
+      color:rgba(255,255,255,.85);
+      line-height:1.55;
+    }
+    .hero-bottom{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
+    .hero-pill{
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:8px;
+      padding:8px 10px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .issue-side{
+      display:grid;
+      gap:8px;
+    }
+    .mini-card{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:var(--radius);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:82px minmax(0,1fr);
+      min-height:68px;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+    }
+    .mini-card:hover .mini-title{text-decoration:underline}
+    .mini-body{
+      padding:8px 9px;
+      min-width:0;
+    }
+    .mini-title{
+      font-weight:900;
+      margin-bottom:5px;
+      font-size:13px;
+    }
+    .mini-meta{
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .thumb{
+      width:100%;
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .thumb:before{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.32),transparent 26%),radial-gradient(circle at 75% 70%,rgba(255,255,255,.2),transparent 25%);
+      transform:rotate(14deg);
+      z-index:-1;
+    }
+    .thumb span{
+      font-size:25px;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,.22));
+    }
+    .t-blue{background:linear-gradient(135deg,#3159d4,#122a73)}
+    .t-red{background:linear-gradient(135deg,#ef4444,#941b1b)}
+    .t-green{background:linear-gradient(135deg,#18a058,#075d32)}
+    .t-purple{background:linear-gradient(135deg,#7b61ff,#46218f)}
+    .t-orange{background:linear-gradient(135deg,#f59e0b,#a14300)}
+    .t-dark{background:linear-gradient(135deg,#334155,#0f172a)}
+
+    .notice-line{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:var(--paper);
+      overflow:hidden;
+      margin-bottom:12px;
+    }
+    .notice-item{
+      display:grid;
+      grid-template-columns:74px minmax(0,1fr) 86px;
+      gap:8px;
+      padding:9px 12px;
+      border-bottom:1px solid var(--line);
+      align-items:center;
+    }
+    .notice-item:last-child{border-bottom:0}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      min-width:42px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(228,51,58,.12);
+      color:var(--red);
+      font-weight:900;
+      font-size:11px;
+    }
+    .badge.blue{background:rgba(40,79,200,.12);color:var(--blue2)}
+    .badge.green{background:rgba(21,132,81,.12);color:var(--green)}
+    .badge.orange{background:rgba(242,138,0,.14);color:var(--orange)}
+    .badge.purple{background:rgba(115,84,214,.14);color:var(--purple)}
+
+    .board-tools{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:9px;
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      margin-bottom:12px;
+      box-shadow:var(--shadow);
+    }
+    .tool-left,.tool-right{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+    .chip{
+      min-height:30px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:var(--paper2);
+      color:var(--text);
+      padding:6px 10px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .chip.active{
+      background:var(--blue);
+      color:#fff;
+      border-color:var(--blue);
+    }
+    .select{
+      height:31px;
+      border:1px solid var(--line);
+      border-radius:7px;
+      background:var(--paper);
+      color:var(--text);
+      padding:0 8px;
+      outline:none;
+    }
+
+    .board{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .board-top{
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      background:linear-gradient(180deg,rgba(40,79,200,.09),rgba(40,79,200,.02));
+    }
+    .board-top h2{
+      margin:0;
+      font-size:16px;
+      letter-spacing:-.5px;
+    }
+    .board-count{
+      display:flex;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .board-count b{color:var(--blue2)}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      table-layout:fixed;
+    }
+    th{
+      height:35px;
+      border-bottom:1px solid var(--line);
+      background:var(--paper2);
+      color:var(--muted);
+      font-size:12px;
+    }
+    td{
+      height:48px;
+      padding:6px;
+      border-bottom:1px solid var(--line);
+      text-align:center;
+      vertical-align:middle;
+    }
+    tr:hover td{background:rgba(40,79,200,.035)}
+    tr:last-child td{border-bottom:0}
+    .col-no{width:56px;color:var(--muted)}
+    .col-thumb{width:62px}
+    .col-writer{width:96px}
+    .col-time{width:72px;color:var(--muted);font-size:12px}
+    .col-view,.col-like{width:58px;color:var(--muted);font-size:12px}
+    .title-cell{text-align:left}
+    .title-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+    .title-line{
+      display:flex;
+      align-items:center;
+      gap:5px;
+      min-width:0;
+      cursor:pointer;
+    }
+    .title-line:hover .post-title{text-decoration:underline}
+    .post-title{font-weight:700}
+    .comment{color:var(--red);font-weight:900;font-size:12px}
+    .mark{font-size:11px;font-weight:900}
+    .mark.hot{color:var(--orange)}
+    .mark.new{color:var(--blue)}
+    .title-meta{
+      color:var(--muted);
+      font-size:11px;
+      display:none;
+    }
+    .row-thumb{
+      width:48px;height:36px;border-radius:7px;
+      font-size:18px;
+      margin:0 auto;
+    }
+    .row-thumb.empty{
+      background:var(--soft);
+      color:var(--muted);
+    }
+
+    .pagination{
+      padding:13px 8px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:center;
+      gap:4px;
+      background:var(--paper);
+    }
+    .page{
+      min-width:30px;
+      height:30px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:var(--paper);
+      color:var(--text);
+      font-weight:900;
+    }
+    .page.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+    .rank-list{
+      list-style:none;
+      margin:0;
+      padding:6px 10px;
+    }
+    .rank-list li{
+      display:grid;
+      grid-template-columns:22px minmax(0,1fr) auto;
+      gap:7px;
+      align-items:center;
+      padding:8px 0;
+      border-bottom:1px solid var(--line);
+      cursor:pointer;
+    }
+    .rank-list li:last-child{border-bottom:0}
+    .rank-num{
+      width:19px;height:19px;border-radius:5px;
+      background:rgba(40,79,200,.12);
+      color:var(--blue2);
+      display:grid;
+      place-items:center;
+      font-size:11px;
+      font-weight:900;
+    }
+    .rank-list em{
+      font-style:normal;
+      color:var(--red);
+      font-weight:900;
+      font-size:11px;
+    }
+    .rank-sub{
+      color:var(--muted);
+      font-size:11px;
+      margin-top:2px;
+    }
+
+    .image-wall{
+      padding:9px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .wall-card{
+      border:1px solid var(--line);
+      border-radius:8px;
+      overflow:hidden;
+      cursor:pointer;
+      background:var(--paper2);
+    }
+    .wall-card .thumb{
+      height:78px;
+      min-height:78px;
+    }
+    .wall-card p{
+      margin:0;
+      padding:7px;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.35;
+      height:48px;
+      overflow:hidden;
+    }
+
+    .ad{
+      min-height:126px;
+      border:1px dashed var(--line);
+      border-radius:var(--radius);
+      background:
+        radial-gradient(circle at 20% 20%,rgba(40,79,200,.2),transparent 25%),
+        radial-gradient(circle at 80% 70%,rgba(228,51,58,.13),transparent 30%),
+        var(--paper);
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:16px;
+      color:var(--muted);
+    }
+    .ad strong{
+      display:block;
+      color:var(--blue2);
+      font-size:18px;
+      margin-bottom:4px;
+    }
+
+    .crawler{
+      padding:10px;
+    }
+    .crawler textarea{
+      width:100%;
+      min-height:92px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--paper2);
+      color:var(--text);
+      padding:9px;
+      resize:vertical;
+      outline:none;
+      font-size:12px;
+    }
+    .crawler-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:7px;
+      margin-top:7px;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.48);
+    }
+    .modal.show{display:flex}
+    .modal-card{
+      width:min(820px,100%);
+      max-height:90vh;
+      overflow:auto;
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow:0 20px 70px rgba(0,0,0,.35);
+    }
+    .modal-head{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+    .modal-head h2{margin:0;font-size:18px}
+    .close{
+      width:34px;height:34px;border-radius:50%;
+      border:1px solid var(--line);
+      background:var(--paper2);
+      color:var(--text);
+      font-size:18px;
+      font-weight:900;
+    }
+    .modal-body{padding:16px}
+    .post-meta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:12px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--line);
+    }
+    .post-image{
+      margin-top:14px;
+      height:210px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+    .post-image .thumb span{font-size:58px}
+    .post-content{
+      padding:18px 0;
+      min-height:120px;
+      line-height:1.8;
+      white-space:pre-wrap;
+    }
+    .reaction{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      padding:11px 0 18px;
+      border-bottom:1px solid var(--line);
+    }
+    .reaction button{
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:var(--paper2);
+      color:var(--text);
+      padding:9px 13px;
+      font-weight:900;
+    }
+    .reply{
+      display:grid;
+      grid-template-columns:90px minmax(0,1fr);
+      gap:9px;
+      padding:9px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .reply b{color:var(--blue2)}
+    .reply p{margin:0;line-height:1.5}
+    .reply small{color:var(--muted)}
+    .reply-form{
+      display:flex;
+      gap:7px;
+      margin-top:10px;
+    }
+    .reply-form input{
+      flex:1;
+      height:38px;
+      border:1px solid var(--line);
+      border-radius:7px;
+      background:var(--paper2);
+      color:var(--text);
+      padding:0 10px;
+      outline:none;
+    }
+    .reply-form button{
+      width:80px;
+      border:0;
+      border-radius:7px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:900;
+    }
+
+    .write-grid{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:10px;
+      align-items:center;
+    }
+    .write-grid label{font-weight:900;color:var(--muted)}
+    .write-grid input,.write-grid select,.write-grid textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--paper2);
+      color:var(--text);
+      padding:9px;
+      outline:none;
+    }
+    .write-grid textarea{
+      min-height:170px;
+      resize:vertical;
+    }
+    .write-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:23px;
+      z-index:90;
+      transform:translateX(-50%) translateY(18px);
+      background:#172033;
+      color:white;
+      border-radius:999px;
+      padding:11px 15px;
+      opacity:0;
+      transition:.2s;
+      pointer-events:none;
+      box-shadow:0 12px 30px rgba(0,0,0,.25);
+      font-weight:900;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media(max-width:1120px){
+      .header-inner{grid-template-columns:240px 1fr}
+      .quick-actions{grid-column:1/-1;grid-template-columns:repeat(4,1fr)}
+      .layout{grid-template-columns:190px minmax(0,1fr)}
+      .right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+      .right .box,.right .ad{margin-bottom:0}
+      .market-inner{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(max-width:780px){
+      .topbar-inner{align-items:flex-start;padding-top:8px;padding-bottom:8px}
+      .top-mini:last-child{display:none}
+      .header-inner{display:block;padding:13px 10px}
+      .brand{margin-bottom:11px}
+      .brand-title strong{font-size:21px}
+      .search{height:42px}
+      .search select{display:none}
+      .quick-actions{display:grid;grid-template-columns:1fr 1fr;margin-top:9px}
+      .gnb-inner{padding:0 8px}
+      .gnb button{padding:11px 10px}
+      .market-inner{grid-template-columns:repeat(2,1fr);padding:8px}
+      .layout{display:block;padding:0 8px;margin-top:10px}
+      .left{display:none}
+      .right{display:block;margin-top:12px}
+      .issue-grid{grid-template-columns:1fr}
+      .hero{min-height:190px}
+      .hero h1{font-size:21px}
+      .issue-side{grid-template-columns:1fr 1fr}
+      .mini-card{grid-template-columns:1fr}
+      .mini-card .thumb{height:74px}
+      .board-tools{display:block}
+      .tool-right{margin-top:8px}
+      .notice-item{grid-template-columns:62px minmax(0,1fr)}
+      .notice-item span:last-child{display:none}
+      .col-no,.col-thumb,.col-writer,.col-time,.col-view,.col-like{display:none}
+      th:nth-child(1),th:nth-child(2),th:nth-child(4),th:nth-child(5),th:nth-child(6),th:nth-child(7){display:none}
+      td{height:auto;padding:10px}
+      .title-meta{display:block}
+      .board-top{display:block}
+      .board-count{justify-content:flex-start;margin-top:6px}
+      .image-wall{grid-template-columns:1fr 1fr 1fr}
+      .write-grid{display:block}
+      .write-grid label{display:block;margin:10px 0 5px}
+      .reply{grid-template-columns:1fr}
+    }
+    @media(max-width:480px){
+      .market-inner{grid-template-columns:1fr 1fr}
+      .issue-side{grid-template-columns:1fr}
+      .image-wall{grid-template-columns:1fr 1fr}
+      .top-mini{gap:8px}
+      .quick-actions{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="top-mini">
+        <b>WEBSTUDIO COMMUNITY</b>
+        <span>갤러리</span>
+        <span>마이너</span>
+        <span>인기글</span>
+        <span>이슈</span>
+        <span>광고문의</span>
+      </div>
+      <div class="top-mini">
+        <span id="today"></span>
+        <span>어제 <b>12,847</b>개 게시글</span>
+        <span>댓글 <b>39,104</b>개</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="#" onclick="resetView();return false;">
+        <div class="brand-mark">W</div>
+        <div class="brand-title">
+          <strong>웹스튜디오 커뮤니티</strong>
+          <span>제작 · 마케팅 · AI · 디자인 · 개발 갤러리</span>
+        </div>
+      </a>
+
+      <form class="search" id="searchForm">
+        <select id="searchType">
+          <option value="all">통합검색</option>
+          <option value="title">제목</option>
+          <option value="writer">글쓴이</option>
+          <option value="content">내용</option>
+        </select>
+        <input id="searchInput" placeholder="게시글, 갤러리, 키워드 검색" autocomplete="off">
+        <button>검색</button>
+      </form>
+
+      <div class="quick-actions">
+        <button class="qbtn" onclick="toggleDark()">야간모드</button>
+        <button class="qbtn" onclick="sampleCrawl()">수집샘플</button>
+        <button class="qbtn" onclick="openGuide()">크롤링안내</button>
+        <button class="qbtn primary" onclick="openWrite()">글쓰기</button>
+      </div>
+    </div>
+
+    <nav class="gnb">
+      <div class="gnb-inner" id="topTabs"></div>
+    </nav>
+  </header>
+
+  <section class="market-strip">
+    <div class="market-inner">
+      <div class="metric"><span>오늘 게시글</span><b id="todayPosts">0</b></div>
+      <div class="metric"><span>오늘 댓글</span><b id="todayReplies">0</b></div>
+      <div class="metric"><span>실시간 인기</span><b id="hotPosts">0</b></div>
+      <div class="metric"><span>전체 갤러리</span><b>124개</b></div>
+      <div class="metric"><span>접속자</span><b>2,837명</b></div>
+      <div class="metric"><span>수집 가능</span><b>DC 일부</b></div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <aside class="left">
+      <section class="box">
+        <div class="box-head">회원 로그인 <small>demo</small></div>
+        <div class="login-area">
+          <input placeholder="아이디">
+          <input type="password" placeholder="비밀번호">
+          <button onclick="toast('데모 로그인 처리 완료')">로그인</button>
+          <div class="login-links"><span>회원가입</span><span>아이디찾기</span><span>비번찾기</span></div>
+        </div>
+      </section>
+
+      <section class="box">
+        <div class="box-head">갤러리 목록 <small>전체</small></div>
+        <ul class="side-menu" id="sideBoards"></ul>
+      </section>
+
+      <section class="box">
+        <div class="box-head">인기 키워드</div>
+        <div class="tag-cloud" id="tags"></div>
+      </section>
+
+      <section class="box">
+        <div class="box-head">최근 방문</div>
+        <ul class="side-menu">
+          <li><span>디자인 갤러리</span><b>new</b></li>
+          <li><span>마케팅 갤러리</span><b>hot</b></li>
+          <li><span>AI툴 갤러리</span><b>37</b></li>
+          <li><span>창업 갤러리</span><b>19</b></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main>
+      <section class="issue-grid">
+        <div class="hero">
+          <div>
+            <span class="hero-kicker">웹스튜디오 커뮤니티 오픈 데모</span>
+            <h1>홈페이지 제작, AI 이미지, 마케팅 실무 이야기를 한곳에서</h1>
+            <p>디시인사이드식 게시판 구조를 참고해 메인 화면이 비어 보이지 않도록 실시간 인기글, 썸네일 글목록, 갤러리 랭킹, 이슈박스를 한 화면에 꽉 채웠습니다.</p>
+          </div>
+          <div class="hero-bottom">
+            <span class="hero-pill">#홈페이지제작</span>
+            <span class="hero-pill">#AI편집</span>
+            <span class="hero-pill">#상세페이지</span>
+            <span class="hero-pill">#마케팅</span>
+          </div>
+        </div>
+        <div class="issue-side" id="issueCards"></div>
+      </section>
+
+      <section class="notice-line">
+        <div class="notice-item">
+          <span class="badge">공지</span>
+          <b class="ellipsis">웹스튜디오 커뮤니티 이용 안내 및 광고/제휴 문의</b>
+          <span>관리자</span>
+        </div>
+        <div class="notice-item">
+          <span class="badge blue">안내</span>
+          <span class="ellipsis">디시 갤러리 일부 목록은 서버에서 수집 가능하나, 브라우저 단독 fetch는 CORS로 막힐 수 있습니다.</span>
+          <span>system</span>
+        </div>
+        <div class="notice-item">
+          <span class="badge green">샘플</span>
+          <span class="ellipsis">수집샘플 버튼을 누르면 디시 스타일의 임의 썸네일 글이 목록에 추가됩니다.</span>
+          <span>crawler</span>
+        </div>
+      </section>
+
+      <section class="board-tools">
+        <div class="tool-left" id="sortButtons">
+          <button class="chip active" data-sort="latest">전체글</button>
+          <button class="chip" data-sort="hot">개념글</button>
+          <button class="chip" data-sort="view">조회순</button>
+          <button class="chip" data-sort="reply">댓글순</button>
+          <button class="chip" data-sort="image">사진글</button>
+        </div>
+        <div class="tool-right">
+          <select class="select" id="pageSize">
+            <option value="18">18개씩</option>
+            <option value="30">30개씩</option>
+            <option value="50">50개씩</option>
+          </select>
+          <button class="chip" onclick="clearData()">초기화</button>
+        </div>
+      </section>
+
+      <section class="board">
+        <div class="board-top">
+          <h2 id="boardTitle">전체 갤러리</h2>
+          <div class="board-count">
+            <span>게시글 <b id="totalCount">0</b></span>
+            <span>사진글 <b id="imageCount">0</b></span>
+            <span>추천글 <b id="conceptCount">0</b></span>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-no">번호</th>
+              <th class="col-thumb">사진</th>
+              <th>제목</th>
+              <th class="col-writer">글쓴이</th>
+              <th class="col-time">작성일</th>
+              <th class="col-view">조회</th>
+              <th class="col-like">추천</th>
+            </tr>
+          </thead>
+          <tbody id="postRows"></tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
+      </section>
+    </main>
+
+    <aside class="right">
+      <section class="box">
+        <div class="box-head">실시간 베스트 <small>HOT</small></div>
+        <ul class="rank-list" id="hotList"></ul>
+      </section>
+
+      <section class="box">
+        <div class="box-head">이미지 인기글 <small>thumb</small></div>
+        <div class="image-wall" id="imageWall"></div>
+      </section>
+
+      <section class="box">
+        <div class="box-head">흥한 갤러리 <small>rank</small></div>
+        <ul class="rank-list" id="boardRank"></ul>
+      </section>
+
+      <section class="ad">
+        <div>
+          <strong>AD AREA</strong>
+          홈페이지 제작 · 상세페이지 · AI 이미지 편집 홍보 배너
+        </div>
+      </section>
+
+      <section class="box" style="margin-top:12px">
+        <div class="box-head">크롤링 JSON 붙여넣기</div>
+        <div class="crawler">
+          <textarea id="jsonInput" placeholder='[{"board":"AI툴","title":"제목","writer":"ㅇㅇ","content":"본문","hasImage":true}]'></textarea>
+          <div class="crawler-actions">
+            <button class="qbtn" onclick="importJson()">JSON 불러오기</button>
+            <button class="qbtn" onclick="fillJsonExample()">예시입력</button>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="modal" id="postModal">
+    <article class="modal-card">
+      <div class="modal-head">
+        <h2 id="modalTitle">게시글</h2>
+        <button class="close" onclick="closeModal('postModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="post-meta" id="modalMeta"></div>
+        <div class="post-image" id="modalImage"></div>
+        <div class="post-content" id="modalContent"></div>
+        <div class="reaction">
+          <button onclick="likePost()">추천 <span id="modalLike">0</span></button>
+          <button onclick="toast('스크랩되었습니다')">스크랩</button>
+          <button onclick="toast('신고가 접수되었습니다')">신고</button>
+        </div>
+        <div style="padding-top:14px">
+          <b>댓글</b>
+          <div id="replyList"></div>
+          <div class="reply-form">
+            <input id="replyInput" placeholder="댓글을 입력하세요">
+            <button onclick="addReply()">등록</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="modal" id="writeModal">
+    <article class="modal-card">
+      <div class="modal-head">
+        <h2>글쓰기</h2>
+        <button class="close" onclick="closeModal('writeModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="write-grid">
+          <label>갤러리</label>
+          <select id="writeBoard"></select>
+          <label>작성자</label>
+          <input id="writeWriter" value="ㅇㅇ">
+          <label>제목</label>
+          <input id="writeTitle" placeholder="제목 입력">
+          <label>사진글</label>
+          <select id="writeImage">
+            <option value="true">썸네일 있음</option>
+            <option value="false">썸네일 없음</option>
+          </select>
+          <label>본문</label>
+          <textarea id="writeContent" placeholder="본문 입력"></textarea>
+        </div>
+        <div class="write-actions">
+          <button class="qbtn" onclick="closeModal('writeModal')">취소</button>
+          <button class="qbtn primary" onclick="submitPost()">등록</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="modal" id="guideModal">
+    <article class="modal-card">
+      <div class="modal-head">
+        <h2>크롤링 연결 안내</h2>
+        <button class="close" onclick="closeModal('guideModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="line-height:1.8;margin-top:0">
+          이 index.html은 프론트 데모라서 외부 사이트를 직접 크롤링하지 않습니다.
+          실제 운영에서는 Python 또는 Node 서버가 디시 갤러리 목록을 수집하고,
+          제목·작성자·조회수·추천수·댓글수·썸네일 여부를 JSON으로 저장한 뒤 이 화면에 전달하는 구조가 좋습니다.
+        </p>
+        <div class="notice-line">
+          <div class="notice-item">
+            <span class="badge blue">가능</span>
+            <span class="ellipsis">gall.dcinside.com의 일부 공개 갤러리 목록 HTML 수집</span>
+            <span>server</span>
+          </div>
+          <div class="notice-item">
+            <span class="badge orange">주의</span>
+            <span class="ellipsis">www.dcinside.com 루트는 robots 기준 일반 봇 전체 차단</span>
+            <span>robots</span>
+          </div>
+          <div class="notice-item">
+            <span class="badge">금지</span>
+            <span class="ellipsis">로그인 우회, 캡차 우회, 과도한 요청, 차단 회피 목적 자동화</span>
+            <span>policy</span>
+          </div>
+        </div>
+        <pre style="white-space:pre-wrap;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:12px;line-height:1.55;font-size:12px">권장 흐름:
+1. Python/Node 서버에서 게시판 목록 HTML 요청
+2. BeautifulSoup/Cheerio로 제목, 작성자, URL, 조회수, 추천수 추출
+3. 이미지가 있는 글은 hasImage:true 또는 썸네일 URL 저장
+4. /posts.json 같은 JSON API로 프론트에 전달
+5. 이 index.html에서 fetch('/posts.json')로 표시</pre>
+      </div>
+    </article>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const BOARDS = [
+      {name:"전체", desc:"전체 갤러리 최신글"},
+      {name:"홈페이지제작", desc:"랜딩페이지, 회사소개, 예약폼, 관리자페이지"},
+      {name:"디자인", desc:"썸네일, 배너, 상세페이지, 합성"},
+      {name:"AI툴", desc:"이미지 생성, 영상 생성, 자동화"},
+      {name:"마케팅", desc:"네이버, 인스타, 유튜브, 광고대행"},
+      {name:"개발", desc:"프론트, 서버, 워드프레스, 자동화"},
+      {name:"창업", desc:"사업아이디어, 견적, 영업, 운영"},
+      {name:"자유", desc:"일상, 잡담, 질문"}
+    ];
+
+    const TAGS = ["홈페이지제작","상세페이지","AI이미지","랜딩페이지","디시크롤링","워드프레스","네이버SEO","인스타광고","썸네일","자동화"];
+
+    const EMOJI = {
+      "홈페이지제작":"🖥️",
+      "디자인":"🎨",
+      "AI툴":"🤖",
+      "마케팅":"📣",
+      "개발":"💻",
+      "창업":"🚀",
+      "자유":"💬",
+      "전체":"🔥"
+    };
+    const THUMB_CLASS = ["t-blue","t-red","t-green","t-purple","t-orange","t-dark"];
+
+    const SAMPLE = [
+      ["홈페이지제작","디시인사이드 느낌 커뮤니티 데모 만들 때 메인 배치","ㅇㅇ","메인 화면이 비어 보이지 않으려면 게시판 목록만 두면 안 됩니다. 인기글, 이슈박스, 이미지글, 갤러리 랭킹을 같이 넣어야 합니다.",2213,74,28,true],
+      ["디자인","AI 이미지 편집 대행 배너 이렇게 만들면 문의 잘 올까?","디자이너","글자는 적게, 결과물 예시는 크게, 가격표는 별도 카드로 빼는 게 좋습니다.",1682,42,16,true],
+      ["마케팅","네이버 블로그 상위노출 글 쓸 때 제목에 키워드 몇 개 넣음?","마케터","키워드를 억지로 반복하면 사람이 보기 어색합니다. 제목 1회, 본문 자연 삽입, 사진 설명에 한 번 정도가 안정적입니다.",1148,19,21,false],
+      ["AI툴","요즘 AI 영상툴 써본 후기 정리함","툴덕후","이미지 한 장을 움직이는 툴은 쉬운데, 글자가 있는 이미지나 로고는 깨질 가능성이 큽니다.",2744,81,34,true],
+      ["개발","index.html만으로 외부 게시판 크롤링 가능한지 테스트","개발자","브라우저에서 직접 fetch하면 CORS가 걸릴 수 있어서 서버 수집 후 JSON 전달 방식이 안정적입니다.",1921,63,18,true],
+      ["창업","홈페이지 제작 사업 초반에 데모를 여러 개 만들어야 하는 이유","창업러","고객은 말로 설명하는 것보다 실제로 눌러볼 수 있는 샘플을 봤을 때 계약 가능성이 올라갑니다.",1532,38,13,false],
+      ["디자인","상세페이지랑 랜딩페이지 차이 한 줄로 정리","ㅇㅇ","상세페이지는 상품 설명 중심, 랜딩페이지는 전환 중심입니다. 하지만 실제 제작물은 많이 겹칩니다.",1204,25,8,true],
+      ["마케팅","페북 인스타 광고 세팅보다 어려운 건 소재임","광고쟁이","광고 관리자 세팅은 누구나 배울 수 있지만, 문의가 오게 만드는 영상/이미지 소재가 진짜 핵심입니다.",1851,57,19,true],
+      ["홈페이지제작","워드프레스로 커뮤니티 만들면 어디까지 가능함?","워프초보","가능은 하지만 트래픽, 댓글, 알림, 보안, 신고처리까지 생각하면 커스텀이 점점 많아집니다.",994,17,6,false],
+      ["개발","게시판에 이미지 썸네일 넣으니 확실히 꽉 차 보임","프론트","텍스트만 있는 목록보다 48x36 정도의 작은 썸네일만 들어가도 화면 밀도가 확 살아납니다.",1388,44,11,true],
+      ["AI툴","이미지 속 글자 유지하면서 영상 만들기 어려운 이유","AI연구","현재 AI 영상툴은 움직임은 잘 만들지만 텍스트 일관성은 아직 불안정합니다.",1765,51,17,true],
+      ["자유","커뮤니티 이름 웹스튜디오 커뮤니티 괜찮냐","ㅇㅇ","제작/디자인/AI/마케팅을 모두 담기엔 무난한 이름입니다.",803,9,12,false],
+      ["창업","홈페이지 제작 견적 100만원부터 받으려면 보여줄 게 있어야 함","견적러","데모 5개, 가격표, 작업범위, 수정규정, 환불규정을 미리 만들어두면 상담 시간이 줄어듭니다.",2147,68,23,true],
+      ["디자인","포토샵 AI 편집 전문 느낌 내는 썸네일 구성","편집왕","전후 비교, 레이어 느낌, 선택영역, 브러시 효과를 넣으면 전문 작업 느낌이 납니다.",1322,36,10,true],
+      ["마케팅","지역 수리점 블로그 글은 사진 순서가 중요함","SEO","대문사진, 증상사진, 분해사진, 수리사진, 결과사진 순서가 신뢰를 만듭니다.",1135,28,9,true],
+      ["개발","실제 크롤러 붙일 때는 요청 간격 꼭 넣어라","봇관리자","짧은 시간에 반복 요청하면 차단될 수 있습니다. 캐시 저장과 요청 간격이 필요합니다.",1566,49,14,false],
+      ["홈페이지제작","커뮤니티 데모를 고객 영업용으로 쓸 수 있을까","영업맨","가능합니다. 단, 실제 회원/게시글/이미지 업로드까지 되는 것처럼 말하면 안 됩니다.",1007,21,5,true],
+      ["AI툴","이미지 생성 사이트 추천글은 계속 업데이트해야 함","ㅇㅇ","툴 가격과 성능이 자주 바뀌기 때문에 최신 정보 확인이 필요합니다.",724,11,4,false],
+      ["자유","오늘 작업한 데모 화면 캡처 올려봄","익명","좌측 메뉴, 중앙 게시판, 우측 인기글이 있으면 일단 커뮤니티 느낌은 납니다.",2410,82,30,true],
+      ["창업","광고대행+홈페이지제작 묶음상품 가능?","사업자","가능합니다. 랜딩 제작 + 광고소재 + 광고세팅 + 리포트 형태로 묶으면 이해시키기 쉽습니다.",1838,54,15,false],
+      ["디자인","가격표 디자인은 너무 길면 오히려 문의 안 함","가격표","3단계 정도로 간단히 나누고, 고난도 작업은 협의로 빼는 게 좋습니다.",942,18,7,true],
+      ["개발","모바일에서 게시판 열 깨지는 문제 해결법","모바일러","번호, 조회, 추천 열을 숨기고 제목 밑에 메타정보로 넣으면 깔끔해집니다.",1266,39,12,true],
+      ["마케팅","카페 침투 마케팅은 너무 광고 같으면 바로 삭제됨","카페러","질문형, 후기형, 비교형으로 자연스럽게 들어가야 합니다.",1444,33,18,false],
+      ["AI툴","AI 합성은 얼굴보다 손과 글자가 더 티남","편집러","후보정 전제로 작업해야 납품 퀄리티가 올라갑니다.",1655,46,11,true]
+    ];
+
+    let posts = [];
+    let currentBoard = "전체";
+    let currentSort = "latest";
+    let currentPage = 1;
+    let currentPostId = null;
+    let search = {type:"all", keyword:""};
+
+    function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+    function pad(n){return String(n).padStart(2,"0")}
+    function now(){
+      const d = new Date();
+      return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+    function shortTime(ts){
+      const d = new Date(ts), t = new Date();
+      if(d.toDateString()===t.toDateString()) return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      return `${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+    }
+    function escapeHtml(s){
+      return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+    function thumbClass(board,title=""){
+      let seed = (board+title).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
+      return THUMB_CLASS[seed % THUMB_CLASS.length];
+    }
+    function thumbHtml(post, small=false){
+      if(!post.hasImage) return `<div class="thumb row-thumb empty"><span>—</span></div>`;
+      return `<div class="thumb ${small?'row-thumb':''} ${thumbClass(post.board,post.title)}"><span>${EMOJI[post.board] || "🔥"}</span></div>`;
+    }
+    function makePost(board,title,writer,content,views,likes,replies,hasImage,offset=0,source="demo"){
+      return {
+        id:uid(), board,title,writer,content,
+        views:views??Math.floor(Math.random()*1500)+80,
+        likes:likes??Math.floor(Math.random()*60),
+        hasImage:!!hasImage,
+        source,
+        createdAt:Date.now()-offset,
+        replies:Array.from({length:replies||0}).map((_,i)=>({
+          writer:i%4===0?"ㅇㅇ":i%4===1?"익명":i%4===2?"고닉":"반고닉",
+          text:["ㅋㅋㅋㅋ","이거 맞음","정보 ㄳ","생각보다 괜찮네","반박시 네 말도 맞음","이건 저장해둔다"][i%6],
+          time:Date.now()-i*640000
+        }))
+      }
+    }
+
+    function init(){
+      document.getElementById("today").textContent = now();
+      setInterval(()=>document.getElementById("today").textContent = now(),30000);
+
+      const saved = localStorage.getItem("webstudioCommunityPostsV2");
+      if(saved){
+        try{posts = JSON.parse(saved)}catch(e){posts=[]}
+      }
+      if(!posts.length){
+        posts = SAMPLE.map((p,i)=>makePost(p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],i*1280000));
+        save();
+      }
+      if(localStorage.getItem("webstudioDark")==="1") document.body.classList.add("dark");
+
+      renderTabs();
+      renderWriteBoards();
+      renderTags();
+      bind();
+      render();
+    }
+
+    function save(){localStorage.setItem("webstudioCommunityPostsV2",JSON.stringify(posts))}
+
+    function bind(){
+      document.getElementById("searchForm").addEventListener("submit",e=>{
+        e.preventDefault();
+        search.keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+        search.type = document.getElementById("searchType").value;
+        currentPage = 1;
+        render();
+      });
+      document.getElementById("pageSize").addEventListener("change",()=>{currentPage=1;render()});
+      document.querySelectorAll("#sortButtons .chip").forEach(btn=>{
+        btn.addEventListener("click",()=>{
+          document.querySelectorAll("#sortButtons .chip").forEach(x=>x.classList.remove("active"));
+          btn.classList.add("active");
+          currentSort = btn.dataset.sort;
+          currentPage = 1;
+          render();
+        });
+      });
+      document.addEventListener("keydown",e=>{
+        if(e.key==="Escape"){
+          closeModal("postModal"); closeModal("writeModal"); closeModal("guideModal");
+        }
+      });
+    }
+
+    function renderTabs(){
+      const top = document.getElementById("topTabs");
+      const side = document.getElementById("sideBoards");
+      top.innerHTML = "";
+      side.innerHTML = "";
+      BOARDS.forEach(b=>{
+        const btn = document.createElement("button");
+        btn.textContent = b.name;
+        btn.className = b.name===currentBoard ? "active":"";
+        btn.onclick = ()=>setBoard(b.name);
+        top.appendChild(btn);
+
+        const li = document.createElement("li");
+        li.className = b.name===currentBoard ? "active":"";
+        li.innerHTML = `<span>${b.name} 갤러리</span><b>${countBoard(b.name)}</b>`;
+        li.onclick = ()=>setBoard(b.name);
+        side.appendChild(li);
+      });
+    }
+
+    function renderWriteBoards(){
+      document.getElementById("writeBoard").innerHTML = BOARDS.filter(b=>b.name!=="전체").map(b=>`<option value="${b.name}">${b.name}</option>`).join("");
+    }
+
+    function renderTags(){
+      document.getElementById("tags").innerHTML = TAGS.map(t=>`<button class="tag" onclick="tagSearch('${t}')">#${t}</button>`).join("");
+    }
+
+    function tagSearch(t){
+      document.getElementById("searchInput").value = t;
+      search.keyword = t.toLowerCase();
+      search.type = "all";
+      currentPage = 1;
+      render();
+    }
+
+    function setBoard(name){
+      currentBoard = name;
+      currentPage = 1;
+      renderTabs();
+      render();
+    }
+
+    function countBoard(name){
+      return name==="전체" ? posts.length : posts.filter(p=>p.board===name).length;
+    }
+
+    function getFiltered(){
+      let arr = posts.slice();
+      if(currentBoard!=="전체") arr = arr.filter(p=>p.board===currentBoard);
+
+      if(search.keyword){
+        arr = arr.filter(p=>{
+          const map = {
+            all:`${p.board} ${p.title} ${p.writer} ${p.content}`,
+            title:p.title,
+            writer:p.writer,
+            content:p.content
+          };
+          return String(map[search.type]||"").toLowerCase().includes(search.keyword);
+        });
+      }
+
+      if(currentSort==="image") arr = arr.filter(p=>p.hasImage);
+      arr.sort((a,b)=>{
+        if(currentSort==="hot") return (b.likes+b.replies.length*2) - (a.likes+a.replies.length*2);
+        if(currentSort==="view") return b.views - a.views;
+        if(currentSort==="reply") return b.replies.length - a.replies.length;
+        if(currentSort==="image") return b.createdAt - a.createdAt;
+        return b.createdAt - a.createdAt;
+      });
+      return arr;
+    }
+
+    function render(){
+      const arr = getFiltered();
+      const pageSize = Number(document.getElementById("pageSize").value);
+      const totalPages = Math.max(1,Math.ceil(arr.length/pageSize));
+      if(currentPage>totalPages) currentPage = totalPages;
+      const start = (currentPage-1)*pageSize;
+      const page = arr.slice(start,start+pageSize);
+
+      const boardInfo = BOARDS.find(b=>b.name===currentBoard)||BOARDS[0];
+      document.getElementById("boardTitle").textContent = currentBoard==="전체" ? "전체 갤러리" : `${boardInfo.name} 갤러리`;
+      document.getElementById("totalCount").textContent = arr.length.toLocaleString();
+      document.getElementById("imageCount").textContent = arr.filter(p=>p.hasImage).length.toLocaleString();
+      document.getElementById("conceptCount").textContent = arr.filter(p=>p.likes>=40 || p.replies.length>=18).length.toLocaleString();
+      document.getElementById("todayPosts").textContent = posts.filter(p=>new Date(p.createdAt).toDateString()===new Date().toDateString()).length.toLocaleString();
+      document.getElementById("todayReplies").textContent = posts.reduce((s,p)=>s+p.replies.length,0).toLocaleString();
+      document.getElementById("hotPosts").textContent = posts.filter(p=>p.likes>=40 || p.replies.length>=18).length.toLocaleString();
+
+      document.getElementById("postRows").innerHTML = page.map((p,i)=>{
+        const num = arr.length - (start+i);
+        const isHot = p.likes>=40 || p.replies.length>=18;
+        const isNew = Date.now()-p.createdAt < 1000*60*60*5;
+        const source = p.source && p.source!=="demo" ? `<span class="badge green">${escapeHtml(p.source)}</span>` : "";
+        return `
+          <tr>
+            <td class="col-no">${num}</td>
+            <td class="col-thumb">${thumbHtml(p,true)}</td>
+            <td class="title-cell">
+              <div class="title-wrap">
+                <div class="title-line" onclick="openPost('${p.id}')">
+                  ${source}
+                  <span class="post-title ellipsis">${escapeHtml(p.title)}</span>
+                  <span class="comment">[${p.replies.length}]</span>
+                  ${isHot?'<span class="mark hot">HOT</span>':''}
+                  ${isNew?'<span class="mark new">N</span>':''}
+                </div>
+                <div class="title-meta">${escapeHtml(p.board)} · ${escapeHtml(p.writer)} · ${shortTime(p.createdAt)} · 조회 ${p.views} · 추천 ${p.likes}</div>
+              </div>
+            </td>
+            <td class="col-writer ellipsis">${escapeHtml(p.writer)}</td>
+            <td class="col-time">${shortTime(p.createdAt)}</td>
+            <td class="col-view">${p.views}</td>
+            <td class="col-like">${p.likes}</td>
+          </tr>
+        `;
+      }).join("") || `<tr><td colspan="7" style="height:90px;color:var(--muted)">게시글이 없습니다.</td></tr>`;
+
+      renderPager(totalPages);
+      renderRight();
+      renderIssue();
+      renderTabs();
+    }
+
+    function renderPager(totalPages){
+      const box = document.getElementById("pagination");
+      let from = Math.max(1,currentPage-3);
+      let to = Math.min(totalPages,from+6);
+      from = Math.max(1,to-6);
+      let html = `<button class="page" onclick="goPage(${Math.max(1,currentPage-1)})">‹</button>`;
+      for(let i=from;i<=to;i++) html += `<button class="page ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+      html += `<button class="page" onclick="goPage(${Math.min(totalPages,currentPage+1)})">›</button>`;
+      box.innerHTML = html;
+    }
+
+    function goPage(n){
+      currentPage = n;
+      render();
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function renderRight(){
+      const hot = posts.slice().sort((a,b)=>(b.likes+b.replies.length*2+b.views/120)-(a.likes+a.replies.length*2+a.views/120)).slice(0,9);
+      document.getElementById("hotList").innerHTML = hot.map((p,i)=>`
+        <li onclick="openPost('${p.id}')">
+          <span class="rank-num">${i+1}</span>
+          <span class="ellipsis">
+            ${escapeHtml(p.title)}
+            <div class="rank-sub">${escapeHtml(p.board)} · 댓글 ${p.replies.length}</div>
+          </span>
+          <em>${p.likes}</em>
+        </li>
+      `).join("");
+
+      const image = posts.filter(p=>p.hasImage).sort((a,b)=>b.createdAt-a.createdAt).slice(0,6);
+      document.getElementById("imageWall").innerHTML = image.map(p=>`
+        <div class="wall-card" onclick="openPost('${p.id}')">
+          ${thumbHtml(p,false)}
+          <p>${escapeHtml(p.title)}</p>
+        </div>
+      `).join("");
+
+      const ranks = BOARDS.filter(b=>b.name!=="전체").map(b=>{
+        const list = posts.filter(p=>p.board===b.name);
+        const score = list.reduce((s,p)=>s+p.views+p.likes*30+p.replies.length*20,0);
+        return {name:b.name,count:list.length,score};
+      }).sort((a,b)=>b.score-a.score);
+      document.getElementById("boardRank").innerHTML = ranks.map((r,i)=>`
+        <li onclick="setBoard('${r.name}')">
+          <span class="rank-num">${i+1}</span>
+          <span class="ellipsis">${r.name} 갤러리<div class="rank-sub">게시글 ${r.count}개</div></span>
+          <em>${Math.round(r.score/1000)}</em>
+        </li>
+      `).join("");
+    }
+
+    function renderIssue(){
+      const top = posts.filter(p=>p.hasImage).sort((a,b)=>b.likes-a.likes).slice(0,4);
+      document.getElementById("issueCards").innerHTML = top.map(p=>`
+        <div class="mini-card" onclick="openPost('${p.id}')">
+          ${thumbHtml(p,false)}
+          <div class="mini-body">
+            <div class="mini-title ellipsis">${escapeHtml(p.title)}</div>
+            <div class="mini-meta">${escapeHtml(p.board)} · 조회 ${p.views} · 추천 ${p.likes}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openPost(id){
+      const p = posts.find(x=>x.id===id);
+      if(!p) return;
+      currentPostId = id;
+      p.views += 1;
+      save();
+      document.getElementById("modalTitle").textContent = p.title;
+      document.getElementById("modalMeta").innerHTML = `
+        <span>갤러리 <b>${escapeHtml(p.board)}</b></span>
+        <span>글쓴이 <b>${escapeHtml(p.writer)}</b></span>
+        <span>${new Date(p.createdAt).toLocaleString("ko-KR")}</span>
+        <span>조회 ${p.views}</span>
+        <span>추천 ${p.likes}</span>
+      `;
+      const modalImg = document.getElementById("modalImage");
+      if(p.hasImage){
+        modalImg.classList.remove("hide");
+        modalImg.innerHTML = thumbHtml(p,false);
+      }else{
+        modalImg.classList.add("hide");
+        modalImg.innerHTML = "";
+      }
+      document.getElementById("modalContent").textContent = p.content;
+      document.getElementById("modalLike").textContent = p.likes;
+      renderReplies(p);
+      openModal("postModal");
+      render();
+    }
+
+    function renderReplies(p){
+      document.getElementById("replyList").innerHTML = p.replies.map(r=>`
+        <div class="reply">
+          <b>${escapeHtml(r.writer)}</b>
+          <p>${escapeHtml(r.text)} <small>· ${shortTime(r.time||Date.now())}</small></p>
+        </div>
+      `).join("") || `<p style="color:var(--muted)">댓글이 없습니다.</p>`;
+    }
+
+    function likePost(){
+      const p = posts.find(x=>x.id===currentPostId);
+      if(!p) return;
+      p.likes++;
+      save();
+      document.getElementById("modalLike").textContent = p.likes;
+      render();
+      toast("추천했습니다");
+    }
+
+    function addReply(){
+      const input = document.getElementById("replyInput");
+      const text = input.value.trim();
+      if(!text) return toast("댓글을 입력하세요");
+      const p = posts.find(x=>x.id===currentPostId);
+      if(!p) return;
+      p.replies.push({writer:"ㅇㅇ",text,time:Date.now()});
+      input.value = "";
+      save();
+      renderReplies(p);
+      render();
+    }
+
+    function openWrite(){
+      document.getElementById("writeBoard").value = currentBoard==="전체" ? "자유" : currentBoard;
+      document.getElementById("writeWriter").value = "ㅇㅇ";
+      document.getElementById("writeTitle").value = "";
+      document.getElementById("writeContent").value = "";
+      document.getElementById("writeImage").value = "true";
+      openModal("writeModal");
+    }
+
+    function submitPost(){
+      const board = document.getElementById("writeBoard").value;
+      const writer = document.getElementById("writeWriter").value.trim() || "ㅇㅇ";
+      const title = document.getElementById("writeTitle").value.trim();
+      const content = document.getElementById("writeContent").value.trim();
+      const hasImage = document.getElementById("writeImage").value === "true";
+      if(!title) return toast("제목을 입력하세요");
+      if(!content) return toast("본문을 입력하세요");
+      posts.unshift(makePost(board,title,writer,content,0,0,0,hasImage,0,"local"));
+      save();
+      closeModal("writeModal");
+      setBoard(board);
+      toast("게시글이 등록되었습니다");
+    }
+
+    function sampleCrawl(){
+      const sample = [
+        makePost("개발","[DC수집샘플] 공개 갤러리 목록에서 제목/작성자/조회수 파싱 예시","crawler","실제 수집 서버가 디시 갤러리 목록 HTML에서 가져온 값이라고 가정한 샘플입니다.",328,12,5,true,1000,"dc"),
+        makePost("자유","[DC수집샘플] 글 목록에 이미지 아이콘이 있는 글은 썸네일로 표시","crawler","원본 이미지를 직접 복제하지 않고 hasImage 값을 기준으로 임의 썸네일을 표시하는 방식입니다.",441,18,7,true,2000,"dc"),
+        makePost("AI툴","[DC수집샘플] 개념글 리스트 형태의 인기글 표시 테스트","crawler","추천수와 댓글수 기준으로 우측 실시간 베스트에 노출됩니다.",519,29,11,true,3000,"dc"),
+        makePost("마케팅","[DC수집샘플] 제목만 가져오고 본문은 요약 처리하는 구조","crawler","무단 복제를 피하려면 원문 전문 복사보다 제목, 링크, 짧은 요약 중심이 안전합니다.",288,8,3,false,4000,"dc")
+      ];
+      posts = [...sample, ...posts];
+      save();
+      render();
+      toast("수집샘플 4건을 추가했습니다");
+    }
+
+    function importJson(){
+      const raw = document.getElementById("jsonInput").value.trim();
+      if(!raw) return toast("JSON을 입력하세요");
+      try{
+        const arr = JSON.parse(raw);
+        if(!Array.isArray(arr)) throw new Error("array");
+        const imported = arr.map(x=>makePost(
+          x.board || "자유",
+          x.title || "제목 없음",
+          x.writer || "crawler",
+          x.content || x.summary || "",
+          Number(x.views || x.view || 0),
+          Number(x.likes || x.recommend || x.like || 0),
+          Number(x.replies || x.comments || x.comment || 0),
+          x.hasImage !== false,
+          0,
+          x.source || "json"
+        ));
+        posts = [...imported, ...posts];
+        save();
+        document.getElementById("jsonInput").value = "";
+        render();
+        toast(`${imported.length}건을 불러왔습니다`);
+      }catch(e){
+        toast("JSON 형식이 올바르지 않습니다");
+      }
+    }
+
+    function fillJsonExample(){
+      const example = `[
+  {
+    "board": "AI툴",
+    "title": "디시 스타일 수집글 샘플 제목",
+    "writer": "crawler",
+    "content": "서버에서 수집한 내용을 요약해서 넣는 영역입니다.",
+    "views": 381,
+    "likes": 17,
+    "comments": 4,
+    "hasImage": true,
+    "source": "dc"
+  }
+]`;
+      document.getElementById("jsonInput").value = example;
+      navigator.clipboard?.writeText(example);
+      toast("예시 JSON을 넣었습니다");
+    }
+
+    function clearData(){
+      if(!confirm("데모 데이터를 초기화할까요?")) return;
+      localStorage.removeItem("webstudioCommunityPostsV2");
+      posts = SAMPLE.map((p,i)=>makePost(p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],i*1280000));
+      search = {type:"all",keyword:""};
+      currentBoard = "전체";
+      currentSort = "latest";
+      currentPage = 1;
+      document.getElementById("searchInput").value = "";
+      document.querySelectorAll("#sortButtons .chip").forEach(x=>x.classList.remove("active"));
+      document.querySelector('#sortButtons .chip[data-sort="latest"]').classList.add("active");
+      save();
+      renderTabs();
+      render();
+      toast("초기화했습니다");
+    }
+
+    function resetView(){
+      currentBoard = "전체";
+      currentPage = 1;
+      search = {type:"all",keyword:""};
+      document.getElementById("searchInput").value = "";
+      renderTabs();
+      render();
+    }
+
+    function toggleDark(){
+      document.body.classList.toggle("dark");
+      localStorage.setItem("webstudioDark",document.body.classList.contains("dark")?"1":"0");
+    }
+    function openGuide(){openModal("guideModal")}
+    function openModal(id){document.getElementById(id).classList.add("show")}
+    function closeModal(id){document.getElementById(id).classList.remove("show")}
+    function toast(msg){
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(window.__toast);
+      window.__toast = setTimeout(()=>el.classList.remove("show"),1800);
+    }
+
+    init();
+  </script>
+</body>
+</html>

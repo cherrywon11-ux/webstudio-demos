@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>웹스튜디오 주소모음</title>
+  <style>
+    :root{
+      --bg:#07101f;
+      --bg2:#101b31;
+      --paper:#ffffff;
+      --paper2:#f6f8ff;
+      --text:#111827;
+      --muted:#687386;
+      --line:#d9e0ef;
+      --blue:#1767ff;
+      --blue2:#0044c8;
+      --yellow:#ffd84d;
+      --red:#ff3b55;
+      --green:#13b96c;
+      --purple:#7c4dff;
+      --orange:#ff8a00;
+      --cyan:#06b6d4;
+      --pink:#ec4899;
+      --shadow:0 10px 28px rgba(0,0,0,.16);
+      --radius:14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      background:
+        radial-gradient(circle at 18% 0%,rgba(23,103,255,.25),transparent 34%),
+        radial-gradient(circle at 82% 8%,rgba(255,216,77,.18),transparent 25%),
+        linear-gradient(180deg,var(--bg),var(--bg2) 420px,#e9eef8 421px,#e9eef8);
+      color:var(--text);
+      font-size:14px;
+    }
+    a{text-decoration:none;color:inherit}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .inner{width:min(1220px,calc(100% - 24px));margin:0 auto}
+    .ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    .top-notice{
+      background:#050b16;
+      color:#dbe8ff;
+      border-bottom:1px solid rgba(255,255,255,.1);
+    }
+    .top-inner{
+      min-height:36px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .top-left,.top-right{display:flex;align-items:center;gap:12px}
+    .top-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      font-weight:900;
+    }
+    .top-pill.yellow{color:var(--yellow)}
+    .clock{font-weight:900;color:#fff}
+
+    header{
+      color:#fff;
+      padding:22px 0 14px;
+    }
+    .head-grid{
+      display:grid;
+      grid-template-columns:310px minmax(0,1fr) 190px;
+      gap:18px;
+      align-items:center;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .brand-mark{
+      width:56px;height:56px;
+      border-radius:16px;
+      display:grid;place-items:center;
+      background:linear-gradient(145deg,#1767ff,#0036a8);
+      box-shadow:0 12px 30px rgba(23,103,255,.35);
+      font-size:28px;
+      font-weight:900;
+    }
+    .brand h1{
+      margin:0;
+      font-size:27px;
+      letter-spacing:-1.3px;
+      line-height:1.05;
+    }
+    .brand p{
+      margin:5px 0 0;
+      color:#b8c7e6;
+      font-size:12px;
+    }
+
+    .search{
+      height:48px;
+      display:flex;
+      overflow:hidden;
+      border:2px solid rgba(255,255,255,.4);
+      background:rgba(255,255,255,.1);
+      backdrop-filter:blur(8px);
+      border-radius:999px;
+      box-shadow:0 12px 30px rgba(0,0,0,.2);
+    }
+    .search input{
+      flex:1;
+      border:0;
+      outline:none;
+      padding:0 18px;
+      background:transparent;
+      color:#fff;
+    }
+    .search input::placeholder{color:#c3d1ea}
+    .search button{
+      width:92px;
+      border:0;
+      color:#07101f;
+      background:var(--yellow);
+      font-weight:900;
+    }
+
+    .contact-box{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:7px;
+    }
+    .contact-box a{
+      height:34px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:9px;
+      color:#fff;
+      background:rgba(255,255,255,.09);
+      font-weight:900;
+      display:grid;
+      place-items:center;
+    }
+    .contact-box .main-contact{background:var(--blue);border-color:var(--blue)}
+
+    .nav-wrap{
+      margin-top:16px;
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:14px;
+      padding:8px;
+      backdrop-filter:blur(8px);
+      overflow:auto;
+    }
+    .nav{
+      display:flex;
+      gap:6px;
+      min-width:max-content;
+    }
+    .nav a{
+      padding:10px 14px;
+      border-radius:10px;
+      color:#eaf1ff;
+      font-weight:900;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .nav a.active,.nav a:hover{
+      background:#fff;
+      color:var(--blue2);
+    }
+
+    .main{width:min(1220px,calc(100% - 24px));margin:0 auto 50px}
+
+    .notice-ticker{
+      margin-top:10px;
+      background:#fff;
+      border-radius:12px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:100px minmax(0,1fr);
+      align-items:center;
+    }
+    .ticker-title{
+      height:100%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(145deg,#1767ff,#083baa);
+      color:#fff;
+      font-weight:900;
+    }
+    .ticker-line{
+      overflow:hidden;
+      white-space:nowrap;
+      color:#2b3444;
+      padding:12px 0;
+    }
+    .ticker-track{
+      display:inline-block;
+      padding-left:100%;
+      animation:marquee 23s linear infinite;
+      font-weight:800;
+    }
+    @keyframes marquee{
+      from{transform:translateX(0)}
+      to{transform:translateX(-100%)}
+    }
+
+    .quick-links{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(10,1fr);
+      gap:8px;
+    }
+    .quick{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      min-height:64px;
+      display:grid;
+      place-items:center;
+      gap:3px;
+      padding:8px;
+      box-shadow:0 6px 18px rgba(20,36,70,.08);
+      transition:.16s;
+    }
+    .quick:hover{transform:translateY(-2px);border-color:var(--blue)}
+    .quick .ico{
+      width:28px;height:28px;border-radius:9px;
+      display:grid;place-items:center;
+      color:#fff;
+      font-weight:900;
+      background:linear-gradient(145deg,var(--blue),#0740b8);
+    }
+    .quick span{font-size:12px;font-weight:900}
+
+    .ad-section,.category,.side-card,.right-card,.wide-strip{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .ad-section{margin-top:14px}
+    .section-head,.card-head,.cat-head{
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#f5f8ff);
+    }
+    .section-head h2,.card-head h2,.cat-head h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:-.8px;
+    }
+    .section-head small,.card-head small,.cat-head small{
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .top-banner-grid{
+      padding:12px;
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:9px;
+    }
+    .banner,.small-banner,.right-banner,.mini-banner,.popup-banner,.bottom-banner{
+      position:relative;
+      overflow:hidden;
+      color:#fff;
+      isolation:isolate;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .banner:before,.small-banner:before,.right-banner:before,.mini-banner:before,.popup-banner:before,.bottom-banner:before{
+      content:"";
+      position:absolute;
+      inset:-25%;
+      background:
+        radial-gradient(circle at 22% 22%,rgba(255,255,255,.32),transparent 20%),
+        radial-gradient(circle at 75% 72%,rgba(255,255,255,.22),transparent 24%);
+      transform:rotate(16deg);
+      z-index:-1;
+    }
+    .banner{
+      min-height:82px;
+      border-radius:12px;
+      padding:11px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      box-shadow:0 9px 22px rgba(0,0,0,.12);
+    }
+    .banner strong{
+      font-size:15px;
+      letter-spacing:-.5px;
+      line-height:1.25;
+    }
+    .banner span{
+      font-size:11px;
+      opacity:.9;
+    }
+    .banner em{
+      font-style:normal;
+      width:max-content;
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.18);
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .b-blue{background:linear-gradient(135deg,#1767ff,#071f74)}
+    .b-red{background:linear-gradient(135deg,#ff3b55,#8f1026)}
+    .b-green{background:linear-gradient(135deg,#13b96c,#0b5e39)}
+    .b-purple{background:linear-gradient(135deg,#7c4dff,#31137d)}
+    .b-orange{background:linear-gradient(135deg,#ff8a00,#993a00)}
+    .b-dark{background:linear-gradient(135deg,#334155,#0f172a)}
+    .b-pink{background:linear-gradient(135deg,#ec4899,#831843)}
+    .b-cyan{background:linear-gradient(135deg,#06b6d4,#075985)}
+    .b-gold{background:linear-gradient(135deg,#facc15,#a16207)}
+    .b-slate{background:linear-gradient(135deg,#64748b,#1e293b)}
+
+    .wide-strip{
+      margin-top:14px;
+      padding:10px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:9px;
+    }
+    .mini-banner{
+      min-height:62px;
+      border-radius:12px;
+      padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      font-weight:900;
+    }
+    .mini-banner span{
+      font-size:11px;
+      opacity:.86;
+      font-weight:700;
+    }
+
+    .content-grid{
+      display:grid;
+      grid-template-columns:210px minmax(0,1fr) 250px;
+      gap:12px;
+      margin-top:14px;
+      align-items:start;
+    }
+    .side-card,.right-card{margin-bottom:12px}
+    .card-head{
+      font-weight:900;
+      padding:11px 12px;
+    }
+    .side-menu,.rank-list{
+      margin:0;
+      padding:6px;
+      list-style:none;
+    }
+    .side-menu li,.rank-list li{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:9px 8px;
+      border-radius:9px;
+      cursor:pointer;
+      border-bottom:1px solid #f0f3fa;
+    }
+    .side-menu li:last-child,.rank-list li:last-child{border-bottom:0}
+    .side-menu li:hover,.rank-list li:hover{background:#eef4ff;color:var(--blue2);font-weight:900}
+    .side-menu b,.rank-list b{
+      color:var(--muted);
+      font-size:11px;
+      flex:none;
+    }
+    .rank-no{
+      width:21px;height:21px;border-radius:6px;
+      background:#eaf1ff;
+      color:var(--blue2);
+      display:grid;place-items:center;
+      font-weight:900;
+      font-size:11px;
+      flex:none;
+    }
+    .rank-list .txt{
+      flex:1;
+      min-width:0;
+    }
+    .rank-list .txt span{
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .side-banner-stack,.right-ad-grid{
+      padding:9px;
+      display:grid;
+      gap:8px;
+    }
+    .right-banner{
+      min-height:74px;
+      border-radius:11px;
+      padding:10px;
+      display:flex;
+      align-items:flex-end;
+      font-weight:900;
+    }
+    .right-banner:after{
+      content:"AD";
+      position:absolute;
+      right:10px;top:8px;
+      font-size:22px;
+      opacity:.18;
+    }
+    .right-banner small{
+      display:block;
+      opacity:.88;
+      font-weight:700;
+      margin-top:3px;
+    }
+
+    .category{
+      margin-bottom:12px;
+    }
+    .cat-head{
+      padding:11px 12px;
+    }
+    .cat-title{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      font-weight:900;
+      font-size:17px;
+    }
+    .cat-icon{
+      width:30px;height:30px;border-radius:10px;
+      display:grid;place-items:center;
+      color:#fff;
+      background:linear-gradient(145deg,var(--blue),#082f8f);
+    }
+    .cat-more{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .cat-body{
+      padding:10px;
+    }
+    .cat-ad-row{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      margin-bottom:9px;
+    }
+    .small-banner{
+      min-height:56px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:9px;
+      font-weight:900;
+    }
+    .small-banner span{
+      font-size:11px;
+      opacity:.88;
+      font-weight:700;
+    }
+    .link-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+    }
+    .link-item{
+      min-height:43px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--paper2);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:8px 10px;
+      transition:.15s;
+    }
+    .link-item:hover{
+      border-color:var(--blue);
+      background:#edf4ff;
+      transform:translateY(-1px);
+    }
+    .link-name{
+      min-width:0;
+      font-weight:900;
+    }
+    .link-url{
+      display:block;
+      margin-top:2px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:500;
+    }
+    .state{
+      flex:none;
+      min-width:42px;
+      text-align:center;
+      border-radius:999px;
+      padding:4px 7px;
+      font-size:11px;
+      font-weight:900;
+      background:#eaf1ff;
+      color:var(--blue2);
+    }
+    .state.hot{background:#fff1d8;color:#b35b00}
+    .state.new{background:#e7fbf1;color:#087743}
+    .state.wait{background:#ffe8ec;color:#b4172d}
+
+    .bottom-ad-section{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:9px;
+    }
+    .bottom-banner{
+      min-height:70px;
+      border-radius:12px;
+      padding:10px;
+      display:flex;
+      align-items:flex-end;
+      font-weight:900;
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+
+    .floating-left,.floating-right{
+      position:fixed;
+      top:190px;
+      z-index:18;
+      display:grid;
+      gap:8px;
+      width:118px;
+    }
+    .floating-left{left:12px}
+    .floating-right{right:12px}
+    .float-ad{
+      min-height:86px;
+      border-radius:14px;
+      padding:9px;
+      color:#fff;
+      display:flex;
+      align-items:flex-end;
+      font-weight:900;
+      box-shadow:0 12px 28px rgba(0,0,0,.2);
+      position:relative;
+      overflow:hidden;
+    }
+    .float-ad:before{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.32),transparent 23%);
+      transform:rotate(16deg);
+    }
+    .float-ad span{
+      position:relative;
+      z-index:1;
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    .floating-contact{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:20;
+      display:grid;
+      gap:8px;
+    }
+    .float-btn{
+      min-width:132px;
+      height:42px;
+      border-radius:999px;
+      background:var(--blue);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      font-weight:900;
+      box-shadow:0 12px 28px rgba(23,103,255,.35);
+    }
+    .float-btn.yellow{background:var(--yellow);color:#111827}
+
+    .popup-layer{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.58);
+      z-index:99;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    .popup-layer.show{display:flex}
+    .popup-box{
+      width:min(920px,100%);
+      background:#fff;
+      border-radius:18px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      box-shadow:0 24px 80px rgba(0,0,0,.45);
+    }
+    .popup-head{
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#f5f8ff);
+      font-weight:900;
+    }
+    .popup-head button{
+      width:34px;height:34px;border-radius:50%;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:900;
+      font-size:18px;
+    }
+    .popup-grid{
+      padding:12px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+    .popup-banner{
+      min-height:135px;
+      border-radius:14px;
+      padding:13px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .popup-banner em{
+      width:max-content;
+      font-style:normal;
+      background:rgba(0,0,0,.2);
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:11px;
+      font-weight:900;
+    }
+    .popup-banner strong{font-size:18px}
+    .popup-banner span{font-size:12px;opacity:.9}
+    .popup-bottom{
+      padding:10px 12px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .popup-bottom button{
+      border:0;
+      border-radius:999px;
+      padding:8px 12px;
+      background:#111827;
+      color:#fff;
+      font-weight:900;
+    }
+
+    footer{
+      margin-top:22px;
+      background:#07101f;
+      color:#bcc9df;
+      padding:24px 0;
+      text-align:center;
+      font-size:12px;
+    }
+    footer strong{
+      color:#fff;
+      display:block;
+      margin-bottom:6px;
+      font-size:15px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%) translateY(20px);
+      background:#111827;
+      color:#fff;
+      border-radius:999px;
+      padding:11px 16px;
+      box-shadow:0 12px 30px rgba(0,0,0,.25);
+      font-weight:900;
+      opacity:0;
+      transition:.2s;
+      pointer-events:none;
+      z-index:120;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media(max-width:1480px){
+      .floating-left,.floating-right{display:none}
+    }
+    @media(max-width:1120px){
+      .head-grid{grid-template-columns:1fr}
+      .contact-box{grid-template-columns:1fr 1fr}
+      .content-grid{grid-template-columns:190px minmax(0,1fr)}
+      .right-col{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+      .right-card{margin-bottom:0}
+      .top-banner-grid{grid-template-columns:repeat(4,1fr)}
+      .quick-links{grid-template-columns:repeat(5,1fr)}
+      .cat-ad-row{grid-template-columns:repeat(2,1fr)}
+      .link-grid{grid-template-columns:repeat(2,1fr)}
+      .bottom-ad-section{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(max-width:760px){
+      body{
+        background:
+          radial-gradient(circle at 20% 0%,rgba(23,103,255,.24),transparent 34%),
+          linear-gradient(180deg,var(--bg),var(--bg2) 530px,#e9eef8 531px,#e9eef8);
+      }
+      .inner,.main{width:min(100% - 16px,1220px)}
+      .top-inner{align-items:flex-start;padding:8px 0}
+      .top-right{display:none}
+      header{padding:16px 0 10px}
+      .brand h1{font-size:23px}
+      .brand-mark{width:48px;height:48px}
+      .search{height:44px}
+      .contact-box{grid-template-columns:1fr 1fr}
+      .quick-links{grid-template-columns:repeat(3,1fr);gap:6px}
+      .quick{min-height:58px}
+      .top-banner-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+      .banner{min-height:76px}
+      .wide-strip{grid-template-columns:repeat(2,1fr)}
+      .content-grid{display:block}
+      .left-col{display:none}
+      .right-col{display:block}
+      .cat-ad-row{grid-template-columns:1fr 1fr}
+      .link-grid{grid-template-columns:1fr}
+      .bottom-ad-section{grid-template-columns:repeat(2,1fr)}
+      .popup-grid{grid-template-columns:1fr 1fr}
+      .floating-contact{display:none}
+    }
+    @media(max-width:480px){
+      .quick-links{grid-template-columns:repeat(2,1fr)}
+      .top-banner-grid{grid-template-columns:1fr 1fr}
+      .wide-strip{grid-template-columns:1fr}
+      .cat-ad-row{grid-template-columns:1fr}
+      .popup-grid{grid-template-columns:1fr}
+      .section-head{display:block}
+      .section-head small{display:block;margin-top:5px}
+      .bottom-ad-section{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="top-notice">
+    <div class="inner top-inner">
+      <div class="top-left">
+        <span class="top-pill yellow">★ 웹스튜디오 주소모음</span>
+        <span>배너문의</span>
+        <span>제휴문의</span>
+        <span>공지사항</span>
+      </div>
+      <div class="top-right">
+        <span id="dateText"></span>
+        <span class="clock" id="timeText"></span>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="inner">
+      <div class="head-grid">
+        <a class="brand" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+          <div class="brand-mark">W</div>
+          <div>
+            <h1>웹스튜디오 주소모음</h1>
+            <p>배너광고 중심 주소모음 · 링크모음 · 포털 데모</p>
+          </div>
+        </a>
+
+        <form class="search" id="searchForm">
+          <input id="searchInput" placeholder="사이트명, 카테고리, 키워드 검색">
+          <button>검색</button>
+        </form>
+
+        <div class="contact-box">
+          <a class="main-contact" href="#" onclick="toast('입점문의 버튼 데모입니다');return false;">입점문의</a>
+          <a href="#" onclick="toast('배너문의 버튼 데모입니다');return false;">배너문의</a>
+        </div>
+      </div>
+
+      <div class="nav-wrap">
+        <nav class="nav" id="nav"></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="notice-ticker">
+      <div class="ticker-title">공지</div>
+      <div class="ticker-line">
+        <div class="ticker-track">
+          아래의 배너자리 및 내용은 데모버전용이며, 실제 이용시에는 원하는 자리에 배너배치 및 내용이 추가됩니다.
+          &nbsp;&nbsp;&nbsp; 아래의 배너자리 및 내용은 데모버전용이며, 실제 이용시에는 원하는 자리에 배너배치 및 내용이 추가됩니다.
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-links" id="quickLinks"></section>
+
+    <section class="ad-section">
+      <div class="section-head">
+        <h2>🔥 최상단 프리미엄 배너존</h2>
+        <small>상단 노출 / 6열 배치 / 대량 배너 슬롯</small>
+      </div>
+      <div class="top-banner-grid" id="topBanners"></div>
+    </section>
+
+    <section class="wide-strip" id="wideStripTop"></section>
+
+    <div class="content-grid">
+      <aside class="left-col">
+        <section class="side-card">
+          <div class="card-head">MENU <small>category</small></div>
+          <ul class="side-menu" id="sideMenu"></ul>
+        </section>
+
+        <section class="side-card">
+          <div class="card-head">좌측 배너존 <small>AD</small></div>
+          <div class="side-banner-stack" id="leftBanners"></div>
+        </section>
+      </aside>
+
+      <section id="categoryArea"></section>
+
+      <aside class="right-col">
+        <section class="right-card">
+          <div class="card-head">실시간 인기링크 <small>TOP</small></div>
+          <ul class="rank-list" id="rankList"></ul>
+        </section>
+
+        <section class="right-card">
+          <div class="card-head">우측 배너존 <small>AD</small></div>
+          <div class="right-ad-grid" id="rightBanners"></div>
+        </section>
+
+        <section class="right-card">
+          <div class="card-head">신규 등록 <small>NEW</small></div>
+          <ul class="rank-list" id="newList"></ul>
+        </section>
+      </aside>
+    </div>
+
+    <section class="wide-strip" id="wideStripMiddle"></section>
+
+    <section class="ad-section">
+      <div class="section-head">
+        <h2>⭐ 하단 추가 배너존</h2>
+        <small>배너수익 극대화를 위한 하단 다중 슬롯</small>
+      </div>
+      <div class="bottom-ad-section" id="bottomBanners"></div>
+    </section>
+  </main>
+
+  <div class="floating-left" id="floatLeft"></div>
+  <div class="floating-right" id="floatRight"></div>
+
+  <div class="floating-contact">
+    <a class="float-btn yellow" href="#" onclick="showPopup();return false;">📌 팝업배너</a>
+    <a class="float-btn" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">▲ TOP</a>
+  </div>
+
+  <div class="popup-layer" id="popupLayer">
+    <div class="popup-box">
+      <div class="popup-head">
+        <span>📢 팝업 배너존</span>
+        <button onclick="closePopup()">×</button>
+      </div>
+      <div class="popup-grid" id="popupGrid"></div>
+      <div class="popup-bottom">
+        <span>팝업 배너자리 및 내용은 데모버전용입니다.</span>
+        <button onclick="closePopup()">오늘은 닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="inner">
+      <strong>웹스튜디오 주소모음</strong>
+      배너광고 수익형 주소모음 데모입니다. 실제 운영 시에는 불법·유해·저작권 침해 링크 등록을 제한해야 합니다.
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const COLORS = ["b-blue","b-red","b-green","b-purple","b-orange","b-dark","b-pink","b-cyan","b-gold","b-slate"];
+
+    const DATA = {
+      categories: [
+        {
+          id:"webtoon", name:"웹툰/콘텐츠", icon:"📚", desc:"웹툰, 콘텐츠, 커뮤니티형 링크",
+          links:["샘플웹툰 A","샘플웹툰 B","콘텐츠링크 01","콘텐츠링크 02","만화포털 샘플","연재모음 샘플","이미지콘텐츠","콘텐츠뉴스"]
+        },
+        {
+          id:"tv", name:"TV/영상", icon:"🎬", desc:"영상, 다시보기, 채널형 링크",
+          links:["영상모음 A","채널링크 B","클립모음 01","방송정보 샘플","리뷰채널 샘플","OTT정보 샘플","영상포털","동영상랭킹"]
+        },
+        {
+          id:"sports", name:"스포츠/중계", icon:"⚽", desc:"스포츠 정보, 일정, 중계형 링크",
+          links:["스포츠뉴스 A","경기일정 B","축구정보 01","야구정보 02","농구정보 03","해외스포츠","오늘의경기","스포츠랭킹"]
+        },
+        {
+          id:"community", name:"커뮤니티", icon:"💬", desc:"커뮤니티, 포럼, 게시판 링크",
+          links:["유머커뮤니티","IT커뮤니티","창업포럼","디자인포럼","자유게시판","질문답변","실시간이슈","인기글모음"]
+        },
+        {
+          id:"korean", name:"한인교민", icon:"🌏", desc:"해외 한인 커뮤니티, 생활정보 링크",
+          links:["미국 한인정보","일본 한인정보","호주 한인정보","필리핀 한인정보","베트남 한인정보","태국 한인정보","캐나다 한인정보","유럽 한인정보"]
+        },
+        {
+          id:"useful", name:"생활/유용한사이트", icon:"⭐", desc:"검색, 쇼핑, 지도, 생활도구 링크",
+          links:["검색포털","지도서비스","번역도구","파일변환","이미지편집","쇼핑비교","계산기모음","생활도구"]
+        },
+        {
+          id:"shopping", name:"쇼핑/핫딜", icon:"🛒", desc:"쇼핑몰, 가격비교, 핫딜 링크",
+          links:["핫딜모음","가격비교","해외직구","중고거래","쿠폰모음","쇼핑랭킹","리뷰모음","신상품정보"]
+        },
+        {
+          id:"ai", name:"AI/도구", icon:"🤖", desc:"AI, 디자인, 업무자동화 링크",
+          links:["AI이미지","AI영상","문서자동화","디자인툴","코딩도구","번역AI","마케팅AI","썸네일제작"]
+        }
+      ],
+      quickLinks:["Google","YouTube","Naver","Daum","Kakao","Instagram","Facebook","Community","AI Tool","Shopping"],
+      topBanners: Array.from({length:36}).map((_,i)=>({title:`프리미엄 배너 ${String(i+1).padStart(2,"0")}`, sub:"상단 광고 슬롯", color:COLORS[i%COLORS.length]})),
+      wideTop: Array.from({length:8}).map((_,i)=>({title:`가로 배너 ${i+1}`, sub:"중간 고정 노출", color:COLORS[(i+2)%COLORS.length]})),
+      wideMiddle: Array.from({length:8}).map((_,i)=>({title:`추천 배너 ${i+1}`, sub:"카테고리 하단 노출", color:COLORS[(i+5)%COLORS.length]})),
+      leftBanners: Array.from({length:8}).map((_,i)=>({title:`좌측 배너 ${i+1}`, sub:"좌측 광고", color:COLORS[(i+1)%COLORS.length]})),
+      rightBanners: Array.from({length:12}).map((_,i)=>({title:`우측 배너 ${i+1}`, sub:"우측 광고", color:COLORS[(i+3)%COLORS.length]})),
+      bottomBanners: Array.from({length:20}).map((_,i)=>({title:`하단 배너 ${i+1}`, color:COLORS[(i+4)%COLORS.length]})),
+      popupBanners: Array.from({length:9}).map((_,i)=>({title:`팝업 배너 ${i+1}`, sub:"팝업 광고 슬롯", color:COLORS[(i+6)%COLORS.length]})),
+      floatLeft: Array.from({length:3}).map((_,i)=>({title:`좌측 고정 ${i+1}`, color:COLORS[(i+2)%COLORS.length]})),
+      floatRight: Array.from({length:3}).map((_,i)=>({title:`우측 고정 ${i+1}`, color:COLORS[(i+7)%COLORS.length]}))
+    };
+
+    let keyword = "";
+
+    function pad(n){return String(n).padStart(2,"0")}
+    function updateTime(){
+      const d = new Date();
+      const week = ["일","월","화","수","목","금","토"][d.getDay()];
+      document.getElementById("dateText").textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${week}요일`;
+      document.getElementById("timeText").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function render(){
+      renderNav();
+      renderQuick();
+      renderTopBanners();
+      renderWide("wideStripTop", DATA.wideTop);
+      renderWide("wideStripMiddle", DATA.wideMiddle);
+      renderSide();
+      renderCategories();
+      renderRight();
+      renderBottom();
+      renderFloatingAds();
+      renderPopup();
+    }
+
+    function renderNav(){
+      const nav = document.getElementById("nav");
+      nav.innerHTML = `<a class="active" href="#top">전체</a>` + DATA.categories.map(c=>`<a href="#${c.id}">${escapeHtml(c.name)}</a>`).join("");
+    }
+
+    function renderQuick(){
+      document.getElementById("quickLinks").innerHTML = DATA.quickLinks.map(q=>`
+        <a class="quick" href="#" onclick="toast('${escapeJs(q)} 링크 데모입니다');return false;">
+          <div class="ico">${escapeHtml(q[0])}</div>
+          <span>${escapeHtml(q)}</span>
+        </a>
+      `).join("");
+    }
+
+    function renderTopBanners(){
+      document.getElementById("topBanners").innerHTML = DATA.topBanners.map((b,i)=>`
+        <a class="banner ${b.color}" href="#" onclick="toast('상단 배너 ${i+1} 클릭 데모');return false;">
+          <em>AD ${String(i+1).padStart(2,'0')}</em>
+          <strong>${escapeHtml(b.title)}</strong>
+          <span>${escapeHtml(b.sub)}</span>
+        </a>
+      `).join("");
+    }
+
+    function renderWide(id, list){
+      document.getElementById(id).innerHTML = list.map((b,i)=>`
+        <a class="mini-banner ${b.color}" href="#" onclick="toast('${escapeJs(b.title)} 클릭 데모');return false;">
+          <div>${escapeHtml(b.title)}<br><span>${escapeHtml(b.sub)}</span></div>
+          <b>AD</b>
+        </a>
+      `).join("");
+    }
+
+    function renderSide(){
+      document.getElementById("sideMenu").innerHTML = DATA.categories.map(c=>`
+        <li onclick="location.hash='${c.id}'">
+          <span>${escapeHtml(c.icon)} ${escapeHtml(c.name)}</span>
+          <b>${c.links.length}</b>
+        </li>
+      `).join("");
+
+      document.getElementById("leftBanners").innerHTML = DATA.leftBanners.map((b,i)=>`
+        <a class="right-banner ${b.color}" href="#" onclick="toast('좌측 배너 ${i+1} 클릭 데모');return false;">
+          <div>${escapeHtml(b.title)}<small>${escapeHtml(b.sub)}</small></div>
+        </a>
+      `).join("");
+    }
+
+    function renderCategories(){
+      const area = document.getElementById("categoryArea");
+      const filtered = DATA.categories.map(cat=>({
+        ...cat,
+        links: cat.links.filter(name=>{
+          if(!keyword) return true;
+          return `${cat.name} ${name}`.toLowerCase().includes(keyword);
+        })
+      })).filter(cat=>cat.links.length || !keyword);
+
+      area.innerHTML = filtered.map((cat,catIdx)=>`
+        <section class="category" id="${escapeHtml(cat.id)}">
+          <div class="cat-head">
+            <div class="cat-title">
+              <div class="cat-icon">${escapeHtml(cat.icon)}</div>
+              <div>
+                ${escapeHtml(cat.name)}
+                <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:2px">${escapeHtml(cat.desc)}</div>
+              </div>
+            </div>
+            <a class="cat-more" href="#" onclick="toast('${escapeJs(cat.name)} 더보기 데모');return false;">더보기 +</a>
+          </div>
+          <div class="cat-body">
+            <div class="cat-ad-row">
+              ${Array.from({length:4}).map((_,i)=>`
+                <a class="small-banner ${COLORS[(catIdx*4+i)%COLORS.length]}" href="#" onclick="toast('${escapeJs(cat.name)} 배너 ${i+1}');return false;">
+                  <div>${escapeHtml(cat.name)} 배너 ${i+1}<br><span>카테고리 광고</span></div>
+                  <b>AD</b>
+                </a>
+              `).join("")}
+            </div>
+            <div class="link-grid">
+              ${cat.links.map((name,i)=>`
+                <a class="link-item" href="#" onclick="toast('${escapeJs(name)} 링크 데모입니다');return false;">
+                  <div class="link-name">
+                    ${escapeHtml(name)}
+                    <span class="link-url">${escapeHtml(slug(name))}.sample</span>
+                  </div>
+                  <span class="state ${stateClass(i)}">${stateText(i)}</span>
+                </a>
+              `).join("")}
+            </div>
+          </div>
+        </section>
+      `).join("") || `<section class="category"><div class="cat-body" style="padding:30px;text-align:center;color:var(--muted)">검색 결과가 없습니다.</div></section>`;
+    }
+
+    function renderRight(){
+      const allLinks = DATA.categories.flatMap(c=>c.links.map((name,i)=>({name, cat:c.name, idx:i})));
+      document.getElementById("rankList").innerHTML = allLinks.slice(0,10).map((l,i)=>`
+        <li onclick="toast('${escapeJs(l.name)} 링크 데모입니다')">
+          <span class="rank-no">${i+1}</span>
+          <span class="txt"><span>${escapeHtml(l.name)}</span><b>${escapeHtml(l.cat)} · ${escapeHtml(slug(l.name))}.sample</b></span>
+        </li>
+      `).join("");
+
+      document.getElementById("rightBanners").innerHTML = DATA.rightBanners.map((b,i)=>`
+        <a class="right-banner ${b.color}" href="#" onclick="toast('우측 배너 ${i+1} 클릭 데모');return false;">
+          <div>${escapeHtml(b.title)}<small>${escapeHtml(b.sub)}</small></div>
+        </a>
+      `).join("");
+
+      const newest = allLinks.slice().reverse().slice(0,8);
+      document.getElementById("newList").innerHTML = newest.map((l,i)=>`
+        <li onclick="toast('${escapeJs(l.name)} 링크 데모입니다')">
+          <span class="rank-no">${i+1}</span>
+          <span class="txt"><span>${escapeHtml(l.name)}</span><b>${escapeHtml(l.cat)}</b></span>
+        </li>
+      `).join("");
+    }
+
+    function renderBottom(){
+      document.getElementById("bottomBanners").innerHTML = DATA.bottomBanners.map((b,i)=>`
+        <a class="bottom-banner ${b.color}" href="#" onclick="toast('하단 배너 ${i+1} 클릭 데모');return false;">
+          ${escapeHtml(b.title)}
+        </a>
+      `).join("");
+    }
+
+    function renderFloatingAds(){
+      document.getElementById("floatLeft").innerHTML = DATA.floatLeft.map((b,i)=>`
+        <a class="float-ad ${b.color}" href="#" onclick="toast('좌측 고정배너 ${i+1} 클릭 데모');return false;"><span>${escapeHtml(b.title)}</span></a>
+      `).join("");
+      document.getElementById("floatRight").innerHTML = DATA.floatRight.map((b,i)=>`
+        <a class="float-ad ${b.color}" href="#" onclick="toast('우측 고정배너 ${i+1} 클릭 데모');return false;"><span>${escapeHtml(b.title)}</span></a>
+      `).join("");
+    }
+
+    function renderPopup(){
+      document.getElementById("popupGrid").innerHTML = DATA.popupBanners.map((b,i)=>`
+        <a class="popup-banner ${b.color}" href="#" onclick="toast('팝업 배너 ${i+1} 클릭 데모');return false;">
+          <em>POPUP AD ${i+1}</em>
+          <strong>${escapeHtml(b.title)}</strong>
+          <span>${escapeHtml(b.sub)}</span>
+        </a>
+      `).join("");
+    }
+
+    function stateText(i){
+      if(i%5===0) return "HOT";
+      if(i%3===0) return "NEW";
+      return "ON";
+    }
+    function stateClass(i){
+      if(i%5===0) return "hot";
+      if(i%3===0) return "new";
+      return "";
+    }
+    function slug(name){
+      return String(name).toLowerCase().replace(/\s+/g,"-").replace(/[^\w가-힣-]/g,"");
+    }
+
+    document.getElementById("searchForm").addEventListener("submit", e=>{
+      e.preventDefault();
+      keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+      renderCategories();
+      toast(keyword ? "검색 결과를 반영했습니다" : "전체 목록을 표시합니다");
+    });
+
+    function showPopup(){document.getElementById("popupLayer").classList.add("show")}
+    function closePopup(){document.getElementById("popupLayer").classList.remove("show")}
+
+    function toast(msg){
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(window.__toast);
+      window.__toast = setTimeout(()=>el.classList.remove("show"),1800);
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "").replace(/[&<>"']/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[s]));
+    }
+    function escapeJs(str){
+      return String(str ?? "").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+    }
+
+    updateTime();
+    setInterval(updateTime,1000);
+    render();
+    setTimeout(showPopup, 700);
+  </script>
+</body>
+</html>

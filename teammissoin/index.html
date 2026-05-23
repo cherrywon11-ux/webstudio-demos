@@ -1,0 +1,2501 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웹스튜디오 | 제품 리뷰 미션 매칭 플랫폼</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #667085;
+      --sub: #475467;
+      --line: #e5e7eb;
+      --line2: #eef2f7;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-soft: #eaf1ff;
+      --purple: #6d28d9;
+      --green: #10b981;
+      --green-soft: #dcfce7;
+      --orange: #f97316;
+      --orange-soft: #ffedd5;
+      --red: #ef4444;
+      --red-soft: #fee2e2;
+      --dark: #0f172a;
+      --dark2: #1f2937;
+      --shadow: 0 18px 50px rgba(15, 23, 42, .08);
+      --shadow2: 0 10px 28px rgba(15, 23, 42, .06);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(37, 99, 235, .12), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(109, 40, 217, .10), transparent 30%),
+        linear-gradient(180deg, #f8fbff 0%, #f5f7fb 42%, #ffffff 100%);
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, .82);
+      border-bottom: 1px solid rgba(229, 231, 235, .82);
+    }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 950;
+      letter-spacing: -.045em;
+      font-size: 21px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #6d28d9 100%);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      box-shadow: 0 14px 34px rgba(37, 99, 235, .24);
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+
+    .nav-tab {
+      border: 0;
+      background: transparent;
+      color: #475569;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .nav-tab.active {
+      background: white;
+      color: var(--blue-dark);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .07);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      min-height: 44px;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: .16s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(.985);
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      box-shadow: 0 14px 30px rgba(37, 99, 235, .22);
+    }
+
+    .btn-dark {
+      color: white;
+      background: var(--dark);
+    }
+
+    .btn-soft {
+      color: var(--blue-dark);
+      background: var(--blue-soft);
+    }
+
+    .btn-light {
+      color: #344054;
+      background: #f2f4f7;
+    }
+
+    .btn-danger {
+      color: #b91c1c;
+      background: var(--red-soft);
+    }
+
+    .btn-ok {
+      color: #047857;
+      background: var(--green-soft);
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+
+    .page {
+      display: none;
+      min-height: calc(100vh - 72px);
+      padding-bottom: 70px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .hero {
+      padding: 62px 0 36px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, .08);
+      color: var(--blue-dark);
+      border: 1px solid rgba(37, 99, 235, .12);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .hero h1 {
+      margin: 20px 0 18px;
+      font-size: clamp(42px, 5vw, 68px);
+      line-height: 1.03;
+      letter-spacing: -.08em;
+      font-weight: 950;
+    }
+
+    .grad {
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #475569;
+      font-size: 18px;
+      line-height: 1.78;
+      letter-spacing: -.02em;
+      max-width: 680px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+      max-width: 620px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(229,231,235,.9);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 12px 26px rgba(15,23,42,.05);
+    }
+
+    .stat-box strong {
+      display: block;
+      font-size: 25px;
+      letter-spacing: -.055em;
+    }
+
+    .stat-box span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 540px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(15,23,42,.05), rgba(15,23,42,.62)),
+        url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85") center/cover no-repeat;
+    }
+
+    .floating-panel {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      border-radius: 28px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.65);
+      padding: 20px;
+      box-shadow: 0 18px 40px rgba(15,23,42,.16);
+    }
+
+    .floating-panel h3 {
+      margin: 0 0 10px;
+      font-size: 23px;
+      letter-spacing: -.055em;
+    }
+
+    .floating-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .small-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .small-card {
+      border-radius: 16px;
+      padding: 12px;
+      background: #f8fafc;
+      border: 1px solid #eef2f7;
+    }
+
+    .small-card strong {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.03em;
+    }
+
+    .small-card span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.14;
+      letter-spacing: -.065em;
+    }
+
+    .section-title p {
+      margin: 11px 0 0;
+      color: var(--muted);
+      line-height: 1.68;
+      font-size: 15px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .filter {
+      border: 1px solid var(--line);
+      background: white;
+      color: #475467;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .filter.active {
+      color: white;
+      background: var(--dark);
+      border-color: var(--dark);
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .mission-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: var(--shadow2);
+      transition: .18s ease;
+    }
+
+    .mission-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px rgba(15,23,42,.10);
+    }
+
+    .mission-image {
+      height: 210px;
+      background: #e5e7eb center/cover no-repeat;
+      position: relative;
+    }
+
+    .mission-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0) 40%, rgba(15,23,42,.48) 100%);
+    }
+
+    .mission-image .reward {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      color: #047857;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 950;
+      box-shadow: 0 12px 24px rgba(15,23,42,.16);
+    }
+
+    .mission-body {
+      padding: 18px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .badge.blue { background: var(--blue-soft); color: var(--blue-dark); }
+    .badge.green { background: var(--green-soft); color: #047857; }
+    .badge.orange { background: var(--orange-soft); color: #c2410c; }
+    .badge.purple { background: #ede9fe; color: #5b21b6; }
+    .badge.red { background: var(--red-soft); color: #b91c1c; }
+    .badge.dark { background: #eef2f7; color: #334155; }
+
+    .mission-body h3 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.35;
+      letter-spacing: -.045em;
+      word-break: keep-all;
+    }
+
+    .mission-body p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.58;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .mission-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin: 15px 0;
+    }
+
+    .meta {
+      border: 1px solid #eef2f7;
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 10px;
+    }
+
+    .meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .meta strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      letter-spacing: -.02em;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .progress i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 34px 20px;
+      color: var(--muted);
+      border: 1px dashed #cbd5e1;
+      background: white;
+      border-radius: 24px;
+      font-weight: 750;
+      line-height: 1.65;
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow2);
+      padding: 20px;
+    }
+
+    .panel h3 {
+      margin: 0 0 14px;
+      font-size: 21px;
+      letter-spacing: -.05em;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin: 0 0 7px;
+      color: #475467;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d0d5dd;
+      border-radius: 15px;
+      background: #f9fafb;
+      padding: 13px 13px;
+      outline: none;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .field textarea {
+      min-height: 104px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(37,99,235,.55);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .summary {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow2);
+    }
+
+    .summary span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .summary strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 30px;
+      letter-spacing: -.065em;
+    }
+
+    .admin-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-item {
+      border: 1px solid #eef2f7;
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .admin-item h4 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: -.035em;
+    }
+
+    .admin-item p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .item-thumb {
+      width: 86px;
+      height: 86px;
+      border-radius: 18px;
+      background: #e5e7eb center/cover no-repeat;
+      flex: 0 0 auto;
+    }
+
+    .small-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .small-actions.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .small-btn {
+      min-height: 36px;
+      border: 0;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .member-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .member-card-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .notice {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      font-size: 13px;
+      line-height: 1.58;
+      font-weight: 750;
+    }
+
+
+    .info-line {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 8px;
+      margin-top: 7px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .info-line b {
+      color: #344054;
+      font-weight: 950;
+    }
+
+    .info-line span {
+      color: var(--muted);
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .message-meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .panel + .panel {
+      margin-top: 18px;
+    }
+
+    .bottom-nav {
+      display: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, .62);
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(620px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.26);
+      animation: pop .18s ease-out;
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(16px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-cover {
+      height: 230px;
+      background: #e5e7eb center/cover no-repeat;
+      position: relative;
+    }
+
+    .modal-cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0) 40%, rgba(15,23,42,.56) 100%);
+    }
+
+    .modal-cover h3 {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 20px;
+      z-index: 1;
+      color: white;
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.22;
+      letter-spacing: -.06em;
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .detail-box {
+      border: 1px solid #eef2f7;
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 14px;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.65;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%) translateY(20px);
+      width: min(420px, calc(100% - 32px));
+      background: #111827;
+      color: white;
+      border-radius: 16px;
+      padding: 13px 15px;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 850;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s;
+      z-index: 200;
+      box-shadow: 0 18px 40px rgba(15,23,42,.26);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .photo-select {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .photo-option {
+      height: 64px;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      background: #e5e7eb center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .photo-option.active {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.14);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .admin-layout,
+      .member-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .mission-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-visual {
+        min-height: 420px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      body {
+        background: #f6f8fb;
+      }
+
+      .wrap {
+        width: calc(100% - 28px);
+      }
+
+      .topbar {
+        position: sticky;
+      }
+
+      .nav {
+        height: 64px;
+      }
+
+      .brand {
+        font-size: 18px;
+        gap: 9px;
+      }
+
+      .logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 13px;
+        font-size: 16px;
+      }
+
+      .nav-center,
+      .nav-actions {
+        display: none;
+      }
+
+      .page {
+        min-height: calc(100vh - 64px);
+        padding-bottom: 92px;
+      }
+
+      .hero {
+        padding: 20px 0 18px;
+      }
+
+      .hero-grid {
+        gap: 18px;
+      }
+
+      .eyebrow {
+        font-size: 11px;
+        padding: 7px 10px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+        line-height: 1.08;
+        margin: 16px 0 12px;
+      }
+
+      .hero p {
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .btn {
+        min-height: 42px;
+        padding: 0 12px;
+        font-size: 13px;
+        border-radius: 14px;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .stat-box {
+        border-radius: 17px;
+        padding: 12px 9px;
+      }
+
+      .stat-box strong {
+        font-size: 19px;
+      }
+
+      .stat-box span {
+        font-size: 10px;
+      }
+
+      .hero-visual {
+        min-height: 270px;
+        border-radius: 26px;
+      }
+
+      .floating-panel {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        border-radius: 20px;
+        padding: 14px;
+      }
+
+      .floating-panel h3 {
+        font-size: 17px;
+      }
+
+      .floating-panel p {
+        font-size: 12px;
+      }
+
+      .small-cards {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+
+      .small-card {
+        padding: 9px 7px;
+        border-radius: 13px;
+      }
+
+      .small-card strong {
+        font-size: 12px;
+      }
+
+      .small-card span {
+        font-size: 9px;
+      }
+
+      .section {
+        padding: 24px 0;
+      }
+
+      .section-head {
+        display: block;
+        margin-bottom: 14px;
+      }
+
+      .section-title h2 {
+        font-size: 24px;
+      }
+
+      .section-title p {
+        font-size: 13px;
+      }
+
+      .filters {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 3px;
+        margin-bottom: 12px;
+        scrollbar-width: none;
+      }
+
+      .filters::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter {
+        white-space: nowrap;
+        font-size: 12px;
+        padding: 9px 12px;
+      }
+
+      .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .mission-card {
+        border-radius: 22px;
+      }
+
+      .mission-image {
+        height: 172px;
+      }
+
+      .mission-body {
+        padding: 15px;
+      }
+
+      .mission-body h3 {
+        font-size: 17px;
+      }
+
+      .mission-body p {
+        font-size: 13px;
+      }
+
+      .mission-meta {
+        gap: 6px;
+        margin: 12px 0;
+      }
+
+      .meta {
+        padding: 8px;
+        border-radius: 13px;
+      }
+
+      .meta span {
+        font-size: 10px;
+      }
+
+      .meta strong {
+        font-size: 12px;
+      }
+
+      .admin-layout,
+      .member-layout {
+        gap: 14px;
+      }
+
+      .panel {
+        border-radius: 22px;
+        padding: 15px;
+      }
+
+      .panel h3 {
+        font-size: 18px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .field label {
+        font-size: 11px;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        border-radius: 14px;
+        padding: 11px 12px;
+        font-size: 13px;
+      }
+
+      .summary-grid {
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .summary {
+        border-radius: 18px;
+        padding: 12px 10px;
+      }
+
+      .summary strong {
+        font-size: 22px;
+      }
+
+      .summary span {
+        font-size: 10px;
+      }
+
+      .item-row {
+        grid-template-columns: 72px 1fr;
+        gap: 10px;
+      }
+
+      .item-thumb {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+      }
+
+      .admin-item h4 {
+        font-size: 14px;
+      }
+
+      .admin-item p {
+        font-size: 12px;
+      }
+
+      .small-actions {
+        gap: 6px;
+      }
+
+      .small-btn {
+        min-height: 34px;
+        font-size: 11px;
+      }
+
+      .photo-select {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+      }
+
+      .photo-option {
+        height: 54px;
+      }
+
+      .bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 80;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+        background: rgba(255,255,255,.94);
+        backdrop-filter: blur(18px);
+        border-top: 1px solid rgba(229,231,235,.86);
+      }
+
+      .bottom-tab {
+        min-height: 56px;
+        border: 0;
+        border-radius: 18px;
+        background: transparent;
+        color: #667085;
+        font-size: 11px;
+        font-weight: 950;
+        display: grid;
+        place-items: center;
+        gap: 3px;
+      }
+
+      .bottom-tab svg {
+        width: 21px;
+        height: 21px;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        fill: none;
+      }
+
+      .bottom-tab.active {
+        color: var(--blue-dark);
+        background: var(--blue-soft);
+      }
+
+      .modal {
+        align-items: end;
+        padding: 0;
+      }
+
+      .modal-box {
+        width: 100%;
+        max-height: 90vh;
+        border-radius: 28px 28px 0 0;
+      }
+
+      .modal-cover {
+        height: 190px;
+      }
+
+      .modal-cover h3 {
+        font-size: 22px;
+        left: 16px;
+        right: 16px;
+      }
+
+      .modal-body {
+        padding: 16px;
+      }
+
+      .modal-actions {
+        gap: 8px;
+      }
+
+      .toast {
+        bottom: 84px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#" data-go="home">
+        <span class="logo">W</span>
+        <span>웹스튜디오</span>
+      </a>
+
+      <nav class="nav-center" aria-label="주요 메뉴">
+        <button class="nav-tab active" data-go="home">홈</button>
+        <button class="nav-tab" data-go="member">회원</button>
+        <button class="nav-tab" data-go="admin">관리자</button>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-soft" data-go="member">내 미션</button>
+        <button class="btn btn-primary" data-go="admin">
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+          캠페인 등록
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page active" id="pageHome">
+      <div class="hero">
+        <div class="wrap hero-grid">
+          <div>
+            <span class="eyebrow">Product Review Mission Platform</span>
+            <h1>판매자와 소비자를<br><span class="grad">리뷰 미션으로 연결</span></h1>
+            <p>
+              상품을 판매하는 업체가 구매평, SNS 리뷰, SNS 영상 캠페인을 등록하면
+              일반 회원이 미션에 참여하고 관리자가 신청자를 확인합니다.
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn btn-primary" data-go="admin">캠페인 등록</button>
+              <button class="btn btn-dark" data-scroll="missions">미션 보기</button>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat-box">
+                <strong id="statCampaigns">0</strong>
+                <span>등록 캠페인</span>
+              </div>
+              <div class="stat-box">
+                <strong id="statApplicants">0</strong>
+                <span>참여 신청</span>
+              </div>
+              <div class="stat-box">
+                <strong id="statOpen">0</strong>
+                <span>모집중</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-visual">
+            <div class="floating-panel">
+              <h3>실시간 캠페인 운영</h3>
+              <p>관리자가 등록한 캠페인은 홈 화면에 즉시 노출되고, 회원 신청 내역은 관리자 목록에 바로 반영됩니다.</p>
+              <div class="small-cards">
+                <div class="small-card">
+                  <strong>구매평</strong>
+                  <span>상품 리뷰</span>
+                </div>
+                <div class="small-card">
+                  <strong>SNS리뷰</strong>
+                  <span>피드/스토리</span>
+                </div>
+                <div class="small-card">
+                  <strong>SNS영상</strong>
+                  <span>릴스/쇼츠</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <section class="section" id="missions">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>진행 중인 리뷰 미션</h2>
+              <p>카테고리별 캠페인을 확인하고 바로 참여 신청할 수 있습니다.</p>
+            </div>
+            <button class="btn btn-soft" data-go="admin">새 캠페인 등록</button>
+          </div>
+
+          <div class="filters" id="categoryFilters">
+            <button class="filter active" data-category="all">전체</button>
+            <button class="filter" data-category="shopping">구매평</button>
+            <button class="filter" data-category="snsReview">SNS리뷰</button>
+            <button class="filter" data-category="snsVideo">SNS영상</button>
+          </div>
+
+          <div class="mission-grid" id="homeMissionList"></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="page" id="pageMember">
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>회원 마이페이지</h2>
+              <p>신청한 미션과 승인 상태를 확인합니다.</p>
+            </div>
+          </div>
+
+          <div class="member-layout">
+            <div>
+              <div class="panel">
+                <h3>회원 정보</h3>
+                <div class="field">
+                  <label>닉네임</label>
+                  <input id="memberName" value="review_user01" />
+                </div>
+                <div class="field">
+                  <label>대표 채널</label>
+                  <select id="memberChannel">
+                    <option>스마트스토어 구매평</option>
+                    <option>인스타그램 SNS리뷰</option>
+                    <option>릴스/쇼츠 SNS영상</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary" id="saveMember">저장</button>
+              </div>
+
+              <div class="panel">
+                <h3>관리자 문의</h3>
+                <div class="field">
+                  <label>문의 캠페인</label>
+                  <select id="inquiryCampaign"></select>
+                </div>
+                <div class="field">
+                  <label>문의 제목</label>
+                  <input id="inquirySubject" placeholder="예: 리뷰 제출 기한 문의" />
+                </div>
+                <div class="field">
+                  <label>문의 내용</label>
+                  <textarea id="inquiryMessage" placeholder="관리자에게 보낼 문의 내용을 입력하세요."></textarea>
+                </div>
+                <button class="btn btn-dark" id="sendInquiry">문의 보내기</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="summary-grid">
+                <div class="summary">
+                  <span>신청 미션</span>
+                  <strong id="memberApplyCount">0</strong>
+                </div>
+                <div class="summary">
+                  <span>승인</span>
+                  <strong id="memberOkCount">0</strong>
+                </div>
+                <div class="summary">
+                  <span>쪽지</span>
+                  <strong id="memberMessageCount">0</strong>
+                </div>
+              </div>
+
+              <div class="member-card-list" id="myApplyList"></div>
+
+              <div class="panel">
+                <h3>관리자 쪽지</h3>
+                <div class="admin-list" id="memberInboxList"></div>
+              </div>
+
+              <div class="panel">
+                <h3>내 문의 내역</h3>
+                <div class="admin-list" id="memberInquiryList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="page" id="pageAdmin">
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>관리자</h2>
+              <p>캠페인 등록, 노출 상태 변경, 신청자 승인 처리를 관리합니다.</p>
+            </div>
+            <button class="btn btn-light" id="resetData">초기화</button>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary">
+              <span>전체 캠페인</span>
+              <strong id="adminTotal">0</strong>
+            </div>
+            <div class="summary">
+              <span>모집중</span>
+              <strong id="adminOpen">0</strong>
+            </div>
+            <div class="summary">
+              <span>신청자</span>
+              <strong id="adminApplicants">0</strong>
+            </div>
+          </div>
+
+          <div class="admin-layout">
+            <div class="panel">
+              <h3>캠페인 등록</h3>
+
+              <div class="field">
+                <label>대표 이미지</label>
+                <div class="photo-select" id="photoSelect"></div>
+              </div>
+
+              <div class="field">
+                <label>캠페인명</label>
+                <input id="adminTitle" placeholder="예: 무선 미니 청소기 구매평 미션" />
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label>미션 종류</label>
+                  <select id="adminCategory">
+                    <option value="shopping">구매평</option>
+                    <option value="snsReview">SNS리뷰</option>
+                    <option value="snsVideo">SNS영상</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>마감</label>
+                  <input id="adminDday" type="number" min="0" value="7" />
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label>모집 인원</label>
+                  <input id="adminRecruit" type="number" min="1" value="30" />
+                </div>
+                <div class="field">
+                  <label>보상 포인트</label>
+                  <input id="adminReward" type="number" min="0" value="10000" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label>노출 상태</label>
+                <select id="adminStatus">
+                  <option value="open">모집중</option>
+                  <option value="closed">마감</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>미션 조건</label>
+                <textarea id="adminRule" placeholder="예: 실제 구매 후 사진 3장 이상, 사용 후기 300자 이상, 리뷰 URL 제출"></textarea>
+              </div>
+
+              <button class="btn btn-primary" id="addCampaign">등록</button>
+            </div>
+
+            <div>
+              <div class="panel" style="margin-bottom:18px;">
+                <h3>등록 캠페인</h3>
+                <div class="admin-list" id="adminCampaignList"></div>
+              </div>
+
+              <div class="panel">
+                <h3>신청자 관리</h3>
+                <div class="admin-list" id="adminApplicantList"></div>
+              </div>
+
+              <div class="panel">
+                <h3>회원 문의함</h3>
+                <div class="admin-list" id="adminInquiryList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
+    <button class="bottom-tab active" data-go="home">
+      <svg viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9.5Z"/></svg>
+      <span>홈</span>
+    </button>
+    <button class="bottom-tab" data-go="member">
+      <svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>회원</span>
+    </button>
+    <button class="bottom-tab" data-go="admin">
+      <svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2.1 2.1 0 0 1-2.97 2.97l-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21a2.1 2.1 0 0 1-4.2 0v-.06a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.04.04a2.1 2.1 0 0 1-2.97-2.97l.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3a2.1 2.1 0 0 1 0-4.2h.06A1.8 1.8 0 0 0 4.72 8.6a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2.1 2.1 0 0 1 2.97-2.97l.04.04A1.8 1.8 0 0 0 9.3 4a1.8 1.8 0 0 0 1.1-1.66V2a2.1 2.1 0 0 1 4.2 0v.06A1.8 1.8 0 0 0 15.7 3.7a1.8 1.8 0 0 0 1.98-.36l.04-.04a2.1 2.1 0 0 1 2.97 2.97l-.04.04a1.8 1.8 0 0 0-.36 1.98c.26.68.92 1.1 1.66 1.1H22a2.1 2.1 0 0 1 0 4.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+      <span>관리자</span>
+    </button>
+  </nav>
+
+  <div class="modal" id="missionModal" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-cover" id="modalCover">
+        <h3 id="modalTitle">캠페인명</h3>
+      </div>
+      <div class="modal-body">
+        <div class="badges" id="modalBadges"></div>
+        <div class="detail-box" id="modalRule"></div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>신청자 닉네임</label>
+            <input id="applyName" value="review_user01" />
+          </div>
+          <div class="field">
+            <label>참여 채널</label>
+            <select id="applyChannel">
+              <option>스마트스토어 구매평</option>
+              <option>인스타그램 SNS리뷰</option>
+              <option>릴스/쇼츠 SNS영상</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>신청 메시지</label>
+          <textarea id="applyMessage">실제 사용 후 사진과 장단점을 포함해 솔직하게 리뷰하겠습니다.</textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="submitApply">미션 참여 신청</button>
+          <button class="btn btn-light" id="closeModal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = "webstudio_review_platform_real_ui_v4";
+    const MEMBER_KEY = "webstudio_review_platform_member_v4";
+    const MESSAGE_KEY = "webstudio_review_platform_messages_v4";
+
+    const photos = [
+      "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1585386959984-a41552231658?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=900&q=85"
+    ];
+
+    const seedCampaigns = [
+      {
+        id: "c-1001",
+        title: "무선 미니 청소기 구매평 미션",
+        category: "shopping",
+        image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=900&q=85",
+        recruit: 30,
+        reward: 10000,
+        dday: 5,
+        status: "open",
+        rule: "실제 구매 후 사진 3장 이상, 사용 후기 300자 이상, 주문내역 인증과 리뷰 URL 제출이 필요합니다.",
+        createdAt: Date.now() - 500000,
+        applicants: []
+      },
+      {
+        id: "c-1002",
+        title: "비건 립밤 SNS리뷰 미션",
+        category: "snsReview",
+        image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=85",
+        recruit: 50,
+        reward: 8000,
+        dday: 2,
+        status: "open",
+        rule: "제품 체험 후 인스타그램 피드 또는 스토리에 사용 사진 2장 이상과 지정 해시태그를 포함해 주세요.",
+        createdAt: Date.now() - 420000,
+        applicants: []
+      },
+      {
+        id: "c-1003",
+        title: "블루투스 이어폰 SNS영상 미션",
+        category: "snsVideo",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85",
+        recruit: 20,
+        reward: 25000,
+        dday: 7,
+        status: "open",
+        rule: "릴스, 쇼츠, 틱톡 중 1개 채널에 15초 이상 사용 영상을 업로드하고 영상 URL을 제출합니다.",
+        createdAt: Date.now() - 300000,
+        applicants: []
+      }
+    ];
+
+    const categoryMap = {
+      shopping: { label: "구매평", color: "blue" },
+      snsReview: { label: "SNS리뷰", color: "purple" },
+      snsVideo: { label: "SNS영상", color: "orange" }
+    };
+
+    let campaigns = loadCampaigns();
+    let currentFilter = "all";
+    let currentCampaignId = null;
+    let selectedPhoto = photos[0];
+
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    function loadCampaigns() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(seedCampaigns));
+        return JSON.parse(JSON.stringify(seedCampaigns));
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : JSON.parse(JSON.stringify(seedCampaigns));
+      } catch {
+        return JSON.parse(JSON.stringify(seedCampaigns));
+      }
+    }
+
+    function saveCampaigns() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(campaigns));
+    }
+
+    function loadMessages() {
+      const raw = localStorage.getItem(MESSAGE_KEY);
+      if (!raw) return [];
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveMessages(messages) {
+      localStorage.setItem(MESSAGE_KEY, JSON.stringify(messages));
+    }
+
+    function loadMember() {
+      const raw = localStorage.getItem(MEMBER_KEY);
+      if (!raw) return { name: "review_user01", channel: "스마트스토어 구매평" };
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return { name: "review_user01", channel: "스마트스토어 구매평" };
+      }
+    }
+
+    function fmtPoint(num) {
+      return Number(num || 0).toLocaleString("ko-KR") + "P";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getApplicantsTotal() {
+      return campaigns.reduce((sum, c) => sum + (c.applicants?.length || 0), 0);
+    }
+
+    function getOpenCampaigns() {
+      return campaigns.filter(c => c.status === "open");
+    }
+
+    function getProgress(c) {
+      const count = c.applicants?.length || 0;
+      return Math.min(100, Math.round((count / Math.max(1, c.recruit)) * 100));
+    }
+
+    function missionCard(c) {
+      const cat = categoryMap[c.category] || categoryMap.shopping;
+      const count = c.applicants?.length || 0;
+      const closed = c.status !== "open";
+      const progress = getProgress(c);
+      const dday = Number(c.dday) <= 0 ? "오늘마감" : "D-" + c.dday;
+
+      return `
+        <article class="mission-card">
+          <div class="mission-image" style="background-image:url('${c.image}')">
+            <span class="reward">${fmtPoint(c.reward)}</span>
+          </div>
+          <div class="mission-body">
+            <div class="badges">
+              <span class="badge ${cat.color}">${cat.label}</span>
+              <span class="badge ${closed ? "red" : "green"}">${closed ? "마감" : "모집중"}</span>
+              <span class="badge dark">${dday}</span>
+            </div>
+            <h3>${escapeHtml(c.title)}</h3>
+            <p>${escapeHtml(c.rule)}</p>
+            <div class="mission-meta">
+              <div class="meta"><span>신청</span><strong>${count}/${c.recruit}명</strong></div>
+              <div class="meta"><span>진행률</span><strong>${progress}%</strong></div>
+              <div class="meta"><span>종류</span><strong>${cat.label}</strong></div>
+            </div>
+            <div class="progress"><i style="width:${progress}%"></i></div>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="openMission('${c.id}')" ${closed ? "disabled style='opacity:.48;cursor:not-allowed;'" : ""}>미션 참여</button>
+              <button class="btn btn-light" onclick="openMission('${c.id}', true)">상세</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderHome() {
+      const list = $("#homeMissionList");
+      const filtered = campaigns
+        .filter(c => currentFilter === "all" || c.category === currentFilter)
+        .sort((a, b) => b.createdAt - a.createdAt);
+
+      if (!filtered.length) {
+        list.innerHTML = `<div class="empty">등록된 캠페인이 없습니다.</div>`;
+        return;
+      }
+      list.innerHTML = filtered.map(missionCard).join("");
+    }
+
+    function renderStats() {
+      const member = loadMember();
+      const memberApps = getMemberApps(member.name);
+
+      $("#statCampaigns").innerText = campaigns.length;
+      $("#statApplicants").innerText = getApplicantsTotal();
+      $("#statOpen").innerText = getOpenCampaigns().length;
+
+      $("#adminTotal").innerText = campaigns.length;
+      $("#adminOpen").innerText = getOpenCampaigns().length;
+      $("#adminApplicants").innerText = getApplicantsTotal();
+
+      const messages = loadMessages();
+      const inboxCount = messages.filter(m => m.type === "admin_to_member" && m.memberName === member.name).length;
+
+      $("#memberApplyCount").innerText = memberApps.length;
+      $("#memberOkCount").innerText = memberApps.filter(x => x.applicant.status === "승인").length;
+      $("#memberMessageCount").innerText = inboxCount;
+    }
+
+    function renderAdminCampaigns() {
+      const list = $("#adminCampaignList");
+
+      if (!campaigns.length) {
+        list.innerHTML = `<div class="empty">등록된 캠페인이 없습니다.</div>`;
+        return;
+      }
+
+      list.innerHTML = [...campaigns]
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .map(c => {
+          const cat = categoryMap[c.category] || categoryMap.shopping;
+          const count = c.applicants?.length || 0;
+          return `
+            <div class="admin-item">
+              <div class="item-row">
+                <div class="item-thumb" style="background-image:url('${c.image}')"></div>
+                <div>
+                  <div class="badges">
+                    <span class="badge ${cat.color}">${cat.label}</span>
+                    <span class="badge ${c.status === "open" ? "green" : "red"}">${c.status === "open" ? "모집중" : "마감"}</span>
+                  </div>
+                  <h4>${escapeHtml(c.title)}</h4>
+                  <p>신청 ${count}/${c.recruit}명 · 보상 ${fmtPoint(c.reward)} · ${Number(c.dday) <= 0 ? "오늘마감" : "D-" + c.dday}</p>
+                </div>
+              </div>
+              <p>${escapeHtml(c.rule)}</p>
+              <div class="small-actions">
+                <button class="small-btn btn-soft" onclick="toggleCampaign('${c.id}')">${c.status === "open" ? "마감" : "재모집"}</button>
+                <button class="small-btn btn-light" onclick="copyToForm('${c.id}')">복사</button>
+                <button class="small-btn btn-danger" onclick="deleteCampaign('${c.id}')">삭제</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+    }
+
+    function renderApplicants() {
+      const list = $("#adminApplicantList");
+      const rows = [];
+
+      campaigns.forEach(c => {
+        (c.applicants || []).forEach(a => rows.push({ campaign: c, applicant: a }));
+      });
+
+      if (!rows.length) {
+        list.innerHTML = `<div class="empty">신청자가 없습니다.</div>`;
+        return;
+      }
+
+      list.innerHTML = rows
+        .sort((a, b) => b.applicant.appliedAt - a.applicant.appliedAt)
+        .map(({ campaign, applicant }) => {
+          const statusColor = applicant.status === "승인" ? "green" : applicant.status === "반려" ? "red" : "orange";
+          return `
+            <div class="admin-item">
+              <div class="item-row">
+                <div class="item-thumb" style="background-image:url('${campaign.image}')"></div>
+                <div>
+                  <div class="badges">
+                    <span class="badge ${statusColor}">${applicant.status}</span>
+                    <span class="badge dark">${new Date(applicant.appliedAt).toLocaleDateString("ko-KR")}</span>
+                  </div>
+                  <h4>${escapeHtml(applicant.name)}</h4>
+                  <div class="info-line"><b>캠페인</b><span>${escapeHtml(campaign.title)}</span></div>
+                  <div class="info-line"><b>회원채널</b><span>${escapeHtml(applicant.channel)}</span></div>
+                  <div class="info-line"><b>신청내용</b><span>${escapeHtml(applicant.message)}</span></div>
+                  <div class="message-meta">신청일 ${new Date(applicant.appliedAt).toLocaleString("ko-KR")}</div>
+                </div>
+              </div>
+              <div class="small-actions">
+                <button class="small-btn btn-ok" onclick="updateApplicant('${campaign.id}', '${applicant.id}', '승인')">승인</button>
+                <button class="small-btn btn-danger" onclick="updateApplicant('${campaign.id}', '${applicant.id}', '반려')">반려</button>
+                <button class="small-btn btn-soft" onclick="sendAdminNote('${campaign.id}', '${applicant.id}')">쪽지</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+    }
+
+    function getMemberApps(name) {
+      const rows = [];
+      campaigns.forEach(c => {
+        (c.applicants || []).forEach(a => {
+          if (a.name === name) rows.push({ campaign: c, applicant: a });
+        });
+      });
+      return rows;
+    }
+
+    function renderMyApplications() {
+      const member = loadMember();
+      const list = $("#myApplyList");
+      const apps = getMemberApps(member.name);
+
+      if (!apps.length) {
+        list.innerHTML = `<div class="empty">신청한 미션이 없습니다.</div>`;
+        return;
+      }
+
+      list.innerHTML = apps
+        .sort((a, b) => b.applicant.appliedAt - a.applicant.appliedAt)
+        .map(({ campaign, applicant }) => {
+          const cat = categoryMap[campaign.category] || categoryMap.shopping;
+          const statusColor = applicant.status === "승인" ? "green" : applicant.status === "반려" ? "red" : "orange";
+
+          return `
+            <article class="mission-card">
+              <div class="mission-image" style="background-image:url('${campaign.image}')">
+                <span class="reward">${fmtPoint(campaign.reward)}</span>
+              </div>
+              <div class="mission-body">
+                <div class="badges">
+                  <span class="badge ${cat.color}">${cat.label}</span>
+                  <span class="badge ${statusColor}">${applicant.status}</span>
+                </div>
+                <h3>${escapeHtml(campaign.title)}</h3>
+                <p>${escapeHtml(applicant.message)}</p>
+              </div>
+            </article>
+          `;
+        }).join("");
+    }
+
+
+    function renderMemberInquiryOptions() {
+      const select = $("#inquiryCampaign");
+      if (!select) return;
+
+      const member = loadMember();
+      const apps = getMemberApps(member.name);
+      const unique = new Map();
+
+      apps.forEach(({ campaign }) => {
+        unique.set(campaign.id, campaign.title);
+      });
+
+      let html = `<option value="general||일반 문의">일반 문의</option>`;
+      unique.forEach((title, id) => {
+        html += `<option value="${id}||${escapeHtml(title)}">${escapeHtml(title)}</option>`;
+      });
+
+      select.innerHTML = html;
+    }
+
+    function renderMemberMessages() {
+      const member = loadMember();
+      const messages = loadMessages();
+
+      const inbox = messages
+        .filter(m => m.type === "admin_to_member" && m.memberName === member.name)
+        .sort((a, b) => b.createdAt - a.createdAt);
+
+      const inquiries = messages
+        .filter(m => m.type === "member_to_admin" && m.memberName === member.name)
+        .sort((a, b) => b.createdAt - a.createdAt);
+
+      const inboxList = $("#memberInboxList");
+      const inquiryList = $("#memberInquiryList");
+
+      if (inboxList) {
+        if (!inbox.length) {
+          inboxList.innerHTML = `<div class="empty">받은 쪽지가 없습니다.</div>`;
+        } else {
+          inboxList.innerHTML = inbox.map(m => `
+            <div class="admin-item">
+              <div class="badges">
+                <span class="badge blue">관리자 쪽지</span>
+                <span class="badge dark">${escapeHtml(m.campaignTitle || "일반")}</span>
+              </div>
+              <h4>${escapeHtml(m.subject || "관리자 안내")}</h4>
+              <p>${escapeHtml(m.text)}</p>
+              <div class="message-meta">${new Date(m.createdAt).toLocaleString("ko-KR")}</div>
+            </div>
+          `).join("");
+        }
+      }
+
+      if (inquiryList) {
+        if (!inquiries.length) {
+          inquiryList.innerHTML = `<div class="empty">보낸 문의가 없습니다.</div>`;
+        } else {
+          inquiryList.innerHTML = inquiries.map(m => `
+            <div class="admin-item">
+              <div class="badges">
+                <span class="badge purple">내 문의</span>
+                <span class="badge ${m.status === "답변완료" ? "green" : "orange"}">${m.status || "미확인"}</span>
+              </div>
+              <h4>${escapeHtml(m.subject || "문의")}</h4>
+              <div class="info-line"><b>캠페인</b><span>${escapeHtml(m.campaignTitle || "일반 문의")}</span></div>
+              <div class="info-line"><b>내용</b><span>${escapeHtml(m.text)}</span></div>
+              <div class="message-meta">${new Date(m.createdAt).toLocaleString("ko-KR")}</div>
+            </div>
+          `).join("");
+        }
+      }
+    }
+
+    function renderAdminInquiries() {
+      const list = $("#adminInquiryList");
+      if (!list) return;
+
+      const inquiries = loadMessages()
+        .filter(m => m.type === "member_to_admin")
+        .sort((a, b) => b.createdAt - a.createdAt);
+
+      if (!inquiries.length) {
+        list.innerHTML = `<div class="empty">회원 문의가 없습니다.</div>`;
+        return;
+      }
+
+      list.innerHTML = inquiries.map(m => {
+        const statusColor = m.status === "답변완료" ? "green" : "orange";
+        return `
+          <div class="admin-item">
+            <div class="badges">
+              <span class="badge ${statusColor}">${m.status || "미확인"}</span>
+              <span class="badge dark">${escapeHtml(m.campaignTitle || "일반 문의")}</span>
+            </div>
+            <h4>${escapeHtml(m.memberName)} · ${escapeHtml(m.subject || "문의")}</h4>
+            <div class="info-line"><b>캠페인</b><span>${escapeHtml(m.campaignTitle || "일반 문의")}</span></div>
+            <div class="info-line"><b>회원채널</b><span>${escapeHtml(m.memberChannel || "-")}</span></div>
+            <div class="info-line"><b>문의내용</b><span>${escapeHtml(m.text)}</span></div>
+            <div class="message-meta">문의일 ${new Date(m.createdAt).toLocaleString("ko-KR")}</div>
+            <div class="small-actions two">
+              <button class="small-btn btn-soft" onclick="replyInquiry('${m.id}')">답장</button>
+              <button class="small-btn btn-ok" onclick="markInquiryDone('${m.id}')">확인완료</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderPhotoSelect() {
+      const box = $("#photoSelect");
+      box.innerHTML = photos.map((url, idx) => `
+        <button type="button" class="photo-option ${idx === 0 ? "active" : ""}" style="background-image:url('${url}')" data-photo="${url}" aria-label="이미지 ${idx + 1}"></button>
+      `).join("");
+
+      $$(".photo-option").forEach(btn => {
+        btn.addEventListener("click", () => {
+          $$(".photo-option").forEach(x => x.classList.remove("active"));
+          btn.classList.add("active");
+          selectedPhoto = btn.dataset.photo;
+        });
+      });
+    }
+
+    function renderAll() {
+      renderStats();
+      renderHome();
+      renderAdminCampaigns();
+      renderApplicants();
+      renderMyApplications();
+      renderMemberInquiryOptions();
+      renderMemberMessages();
+      renderAdminInquiries();
+    }
+
+    function addCampaign() {
+      const title = $("#adminTitle").value.trim();
+      const rule = $("#adminRule").value.trim();
+
+      if (!title) {
+        toast("캠페인명을 입력하세요.");
+        $("#adminTitle").focus();
+        return;
+      }
+      if (!rule) {
+        toast("미션 조건을 입력하세요.");
+        $("#adminRule").focus();
+        return;
+      }
+
+      const campaign = {
+        id: "c-" + Date.now(),
+        title,
+        category: $("#adminCategory").value,
+        image: selectedPhoto,
+        recruit: Math.max(1, Number($("#adminRecruit").value || 1)),
+        reward: Math.max(0, Number($("#adminReward").value || 0)),
+        dday: Math.max(0, Number($("#adminDday").value || 0)),
+        status: $("#adminStatus").value,
+        rule,
+        createdAt: Date.now(),
+        applicants: []
+      };
+
+      campaigns.unshift(campaign);
+      saveCampaigns();
+      clearForm();
+      renderAll();
+      toast("캠페인이 등록되었습니다.");
+      goPage("home");
+    }
+
+    function clearForm() {
+      $("#adminTitle").value = "";
+      $("#adminCategory").value = "shopping";
+      $("#adminRecruit").value = 30;
+      $("#adminReward").value = 10000;
+      $("#adminDday").value = 7;
+      $("#adminStatus").value = "open";
+      $("#adminRule").value = "";
+      selectedPhoto = photos[0];
+      $$(".photo-option").forEach((x, i) => x.classList.toggle("active", i === 0));
+    }
+
+    function openMission(id, detailOnly = false) {
+      const c = campaigns.find(x => x.id === id);
+      if (!c) return;
+      currentCampaignId = id;
+
+      const cat = categoryMap[c.category] || categoryMap.shopping;
+      const count = c.applicants?.length || 0;
+      const dday = Number(c.dday) <= 0 ? "오늘마감" : "D-" + c.dday;
+
+      $("#modalCover").style.backgroundImage = `url('${c.image}')`;
+      $("#modalTitle").innerText = c.title;
+      $("#modalBadges").innerHTML = `
+        <span class="badge ${cat.color}">${cat.label}</span>
+        <span class="badge green">${fmtPoint(c.reward)}</span>
+        <span class="badge dark">${count}/${c.recruit}명</span>
+        <span class="badge ${c.status === "open" ? "green" : "red"}">${c.status === "open" ? "모집중" : "마감"}</span>
+        <span class="badge dark">${dday}</span>
+      `;
+      $("#modalRule").innerHTML = `<b>미션 조건</b><br>${escapeHtml(c.rule)}`;
+      document.body.classList.add("modal-open");
+      $("#missionModal").classList.add("show");
+      $("#missionModal").setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      $("#missionModal").classList.remove("show");
+      $("#missionModal").setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+      currentCampaignId = null;
+    }
+
+    function submitApply() {
+      const c = campaigns.find(x => x.id === currentCampaignId);
+      if (!c) return;
+
+      if (c.status !== "open") {
+        toast("마감된 캠페인입니다.");
+        return;
+      }
+
+      const name = $("#applyName").value.trim() || "review_user01";
+      const channel = $("#applyChannel").value;
+      const message = $("#applyMessage").value.trim() || "미션 참여를 신청합니다.";
+
+      c.applicants = c.applicants || [];
+
+      if (c.applicants.some(a => a.name === name)) {
+        toast("이미 신청한 캠페인입니다.");
+        return;
+      }
+
+      if (c.applicants.length >= c.recruit) {
+        c.status = "closed";
+        saveCampaigns();
+        renderAll();
+        toast("모집 인원이 마감되었습니다.");
+        return;
+      }
+
+      c.applicants.push({
+        id: "a-" + Date.now(),
+        name,
+        channel,
+        message,
+        status: "대기",
+        appliedAt: Date.now()
+      });
+
+      localStorage.setItem(MEMBER_KEY, JSON.stringify({ name, channel }));
+      $("#memberName").value = name;
+      $("#memberChannel").value = channel;
+
+      if (c.applicants.length >= c.recruit) c.status = "closed";
+
+      saveCampaigns();
+      closeModal();
+      renderAll();
+      toast("미션 참여 신청이 완료되었습니다.");
+      goPage("member");
+    }
+
+    function toggleCampaign(id) {
+      const c = campaigns.find(x => x.id === id);
+      if (!c) return;
+      c.status = c.status === "open" ? "closed" : "open";
+      saveCampaigns();
+      renderAll();
+      toast(c.status === "open" ? "모집중으로 변경했습니다." : "마감 처리했습니다.");
+    }
+
+    function deleteCampaign(id) {
+      if (!confirm("캠페인을 삭제할까요?")) return;
+      campaigns = campaigns.filter(x => x.id !== id);
+      saveCampaigns();
+      renderAll();
+      toast("삭제되었습니다.");
+    }
+
+    function copyToForm(id) {
+      const c = campaigns.find(x => x.id === id);
+      if (!c) return;
+
+      $("#adminTitle").value = c.title + " 복사본";
+      $("#adminCategory").value = c.category;
+      $("#adminRecruit").value = c.recruit;
+      $("#adminReward").value = c.reward;
+      $("#adminDday").value = c.dday;
+      $("#adminStatus").value = c.status;
+      $("#adminRule").value = c.rule;
+      selectedPhoto = c.image;
+
+      $$(".photo-option").forEach(btn => btn.classList.toggle("active", btn.dataset.photo === c.image));
+      toast("등록 폼에 복사했습니다.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateApplicant(campaignId, applicantId, status) {
+      const c = campaigns.find(x => x.id === campaignId);
+      if (!c) return;
+      const a = (c.applicants || []).find(x => x.id === applicantId);
+      if (!a) return;
+      a.status = status;
+      saveCampaigns();
+      renderAll();
+      toast("신청자 상태를 변경했습니다.");
+    }
+
+
+    function sendAdminNote(campaignId, applicantId) {
+      const campaign = campaigns.find(x => x.id === campaignId);
+      if (!campaign) return;
+
+      const applicant = (campaign.applicants || []).find(x => x.id === applicantId);
+      if (!applicant) return;
+
+      const text = prompt(`${applicant.name} 회원에게 보낼 쪽지 내용을 입력하세요.`, "미션 진행 관련 안내드립니다.");
+      if (!text || !text.trim()) return;
+
+      const messages = loadMessages();
+      messages.push({
+        id: "m-" + Date.now(),
+        type: "admin_to_member",
+        subject: "관리자 쪽지",
+        campaignId: campaign.id,
+        campaignTitle: campaign.title,
+        memberName: applicant.name,
+        memberChannel: applicant.channel,
+        text: text.trim(),
+        createdAt: Date.now()
+      });
+
+      saveMessages(messages);
+      renderAll();
+      toast("회원에게 쪽지를 보냈습니다.");
+    }
+
+    function sendMemberInquiry() {
+      const member = loadMember();
+      const selected = ($("#inquiryCampaign").value || "general||일반 문의").split("||");
+      const campaignId = selected[0] || "general";
+      const campaignTitle = selected[1] || "일반 문의";
+      const subject = $("#inquirySubject").value.trim() || "관리자 문의";
+      const text = $("#inquiryMessage").value.trim();
+
+      if (!text) {
+        toast("문의 내용을 입력하세요.");
+        $("#inquiryMessage").focus();
+        return;
+      }
+
+      const messages = loadMessages();
+      messages.push({
+        id: "m-" + Date.now(),
+        type: "member_to_admin",
+        status: "미확인",
+        campaignId,
+        campaignTitle,
+        memberName: member.name,
+        memberChannel: member.channel,
+        subject,
+        text,
+        createdAt: Date.now()
+      });
+
+      saveMessages(messages);
+      $("#inquirySubject").value = "";
+      $("#inquiryMessage").value = "";
+      renderAll();
+      toast("관리자에게 문의를 보냈습니다.");
+    }
+
+    function replyInquiry(messageId) {
+      const messages = loadMessages();
+      const inquiry = messages.find(m => m.id === messageId);
+      if (!inquiry) return;
+
+      const text = prompt(`${inquiry.memberName} 회원에게 답장할 내용을 입력하세요.`, "문의하신 내용 확인했습니다.");
+      if (!text || !text.trim()) return;
+
+      inquiry.status = "답변완료";
+      inquiry.repliedAt = Date.now();
+
+      messages.push({
+        id: "m-" + Date.now(),
+        type: "admin_to_member",
+        subject: "문의 답변",
+        campaignId: inquiry.campaignId,
+        campaignTitle: inquiry.campaignTitle,
+        memberName: inquiry.memberName,
+        memberChannel: inquiry.memberChannel,
+        text: text.trim(),
+        createdAt: Date.now()
+      });
+
+      saveMessages(messages);
+      renderAll();
+      toast("답장을 보냈습니다.");
+    }
+
+    function markInquiryDone(messageId) {
+      const messages = loadMessages();
+      const inquiry = messages.find(m => m.id === messageId);
+      if (!inquiry) return;
+      inquiry.status = "확인완료";
+      inquiry.checkedAt = Date.now();
+      saveMessages(messages);
+      renderAll();
+      toast("문의 상태를 확인완료로 변경했습니다.");
+    }
+
+    function saveMember() {
+      const member = {
+        name: $("#memberName").value.trim() || "review_user01",
+        channel: $("#memberChannel").value
+      };
+      localStorage.setItem(MEMBER_KEY, JSON.stringify(member));
+      $("#applyName").value = member.name;
+      $("#applyChannel").value = member.channel;
+      renderAll();
+      toast("회원 정보가 저장되었습니다.");
+    }
+
+    function resetData() {
+      if (!confirm("저장된 데이터를 초기화할까요?")) return;
+      campaigns = JSON.parse(JSON.stringify(seedCampaigns));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(campaigns));
+      localStorage.removeItem(MEMBER_KEY);
+      localStorage.removeItem(MESSAGE_KEY);
+      initMember();
+      renderAll();
+      toast("초기화되었습니다.");
+    }
+
+    function goPage(page) {
+      $$(".page").forEach(p => p.classList.remove("active"));
+      $("#page" + page.charAt(0).toUpperCase() + page.slice(1)).classList.add("active");
+
+      $$("[data-go]").forEach(btn => {
+        const isMatch = btn.dataset.go === page;
+        btn.classList.toggle("active", isMatch && (btn.classList.contains("nav-tab") || btn.classList.contains("bottom-tab")));
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function toast(message) {
+      const el = $("#toast");
+      el.innerText = message;
+      el.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => el.classList.remove("show"), 2300);
+    }
+
+    function initMember() {
+      const member = loadMember();
+      $("#memberName").value = member.name || "review_user01";
+      $("#memberChannel").value = member.channel || "스마트스토어 구매평";
+      $("#applyName").value = member.name || "review_user01";
+      $("#applyChannel").value = member.channel || "스마트스토어 구매평";
+    }
+
+    $$("[data-go]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        goPage(btn.dataset.go);
+      });
+    });
+
+    $$("[data-scroll]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = document.getElementById(btn.dataset.scroll);
+        if (target) target.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    $$("#categoryFilters .filter").forEach(btn => {
+      btn.addEventListener("click", () => {
+        $$("#categoryFilters .filter").forEach(x => x.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.category;
+        renderHome();
+      });
+    });
+
+    $("#addCampaign").addEventListener("click", addCampaign);
+    $("#submitApply").addEventListener("click", submitApply);
+    $("#closeModal").addEventListener("click", closeModal);
+    $("#missionModal").addEventListener("click", (e) => {
+      if (e.target.id === "missionModal") closeModal();
+    });
+    $("#saveMember").addEventListener("click", saveMember);
+    $("#sendInquiry").addEventListener("click", sendMemberInquiry);
+    $("#resetData").addEventListener("click", resetData);
+
+    function init() {
+      renderPhotoSelect();
+      initMember();
+      renderAll();
+    }
+
+    init();
+
+    window.openMission = openMission;
+    window.toggleCampaign = toggleCampaign;
+    window.deleteCampaign = deleteCampaign;
+    window.copyToForm = copyToForm;
+    window.updateApplicant = updateApplicant;
+    window.sendAdminNote = sendAdminNote;
+    window.replyInquiry = replyInquiry;
+    window.markInquiryDone = markInquiryDone;
+  </script>
+</body>
+</html>
