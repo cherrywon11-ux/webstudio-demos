@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웹스튜디오 데모 모음</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color: #eef2ff;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(59,130,246,.32), transparent 34%),
+        radial-gradient(circle at 86% 0%, rgba(168,85,247,.26), transparent 30%),
+        linear-gradient(135deg, #020617 0%, #0f172a 48%, #111827 100%);
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 70px;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 42px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 18px 50px rgba(96,165,250,.28);
+      color: #fff;
+      font-weight: 900;
+    }
+    .nav-pill {
+      color: #cbd5e1;
+      font-size: 14px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      background: rgba(15,23,42,.54);
+      backdrop-filter: blur(14px);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 30px;
+    }
+    .hero-box, .side-box {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(15,23,42,.66);
+      backdrop-filter: blur(18px);
+      border-radius: 30px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.28);
+    }
+    .hero-box { padding: 44px; }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #bfdbfe;
+      border: 1px solid rgba(147,197,253,.28);
+      background: rgba(37,99,235,.16);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1.05;
+      letter-spacing: -.055em;
+    }
+    .hero-desc {
+      margin: 22px 0 0;
+      color: #cbd5e1;
+      font-size: 18px;
+      line-height: 1.75;
+      max-width: 720px;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .btn {
+      text-decoration: none;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-main { background: #fff; color: #0f172a; }
+    .btn-sub {
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: #e2e8f0;
+    }
+    .side-box {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 315px;
+      position: relative;
+      overflow: hidden;
+    }
+    .side-box:before {
+      content: "";
+      position: absolute;
+      inset: -70px -110px auto auto;
+      width: 220px;
+      height: 220px;
+      background: rgba(96,165,250,.2);
+      border-radius: 50%;
+      filter: blur(8px);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .stat {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .stat strong { display: block; font-size: 30px; margin-bottom: 6px; }
+    .stat span { color: #cbd5e1; font-size: 13px; }
+    .side-note {
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin: 24px 0 0;
+      position: relative;
+      z-index: 1;
+    }
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 24px 0 18px;
+    }
+    .toolbar h3 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
+    .search {
+      width: min(360px, 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(15,23,42,.7);
+      color: #fff;
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .demo-card {
+      min-height: 250px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: linear-gradient(180deg, rgba(30,41,59,.78), rgba(15,23,42,.74));
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.22);
+      display: flex;
+      flex-direction: column;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .demo-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(147,197,253,.42);
+      background: linear-gradient(180deg, rgba(37,99,235,.22), rgba(15,23,42,.78));
+    }
+    .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .num { color: #93c5fd; font-weight: 900; letter-spacing: -.04em; }
+    .badge {
+      font-size: 12px;
+      color: #dbeafe;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(37,99,235,.18);
+      border: 1px solid rgba(147,197,253,.18);
+      white-space: nowrap;
+    }
+    .demo-card h2 {
+      margin: 22px 0 10px;
+      font-size: 24px;
+      line-height: 1.24;
+      letter-spacing: -.04em;
+    }
+    .demo-card p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.65;
+      font-size: 15px;
+      flex: 1;
+    }
+    .card-actions {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .primary {
+      text-decoration: none;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 12px 15px;
+      border-radius: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .path {
+      color: #94a3b8;
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .empty { display:none; color:#cbd5e1; padding: 28px 0; text-align:center; }
+    .footer {
+      margin-top: 36px;
+      color: #94a3b8;
+      font-size: 14px;
+      text-align: center;
+      line-height: 1.7;
+    }
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 24px, 1180px); padding-top: 22px; }
+      .nav { align-items: flex-start; flex-direction: column; margin-bottom: 22px; }
+      .hero-box, .side-box { border-radius: 24px; }
+      .hero-box { padding: 28px 22px; }
+      .hero-desc { font-size: 16px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .grid { grid-template-columns: 1fr; }
+      .demo-card { min-height: auto; }
+      .card-actions { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="nav">
+      <div class="brand"><div class="logo">W</div><div>웹스튜디오<br><span style="color:#94a3b8;font-size:13px;font-weight:600;">Demo Showroom</span></div></div>
+      <div class="nav-pill">고객 전달용 데모 링크 모음</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-box">
+        <div class="kicker">● 실제 클릭 가능한 데모 모음</div>
+        <h1>제작 가능한 데모를<br>한 곳에서 확인하세요</h1>
+        <p class="hero-desc">
+          아래 데모는 실제 화면을 확인할 수 있는 샘플입니다. 업종, 디자인, 문구, 기능 구성은 의뢰 목적에 맞게 변경할 수 있습니다.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-main" href="#demos">데모 목록 보기</a>
+          <a class="btn btn-sub" href="./link/">주소모음 바로가기</a>
+        </div>
+      </div>
+      <aside class="side-box">
+        <div class="stats">
+          <div class="stat"><strong>12</strong><span>등록된 데모</span></div>
+          <div class="stat"><strong>100%</strong><span>클릭형 샘플</span></div>
+          <div class="stat"><strong>PC</strong><span>데스크톱 화면</span></div>
+          <div class="stat"><strong>MO</strong><span>모바일 반응형</span></div>
+        </div>
+        <p class="side-note">고객에게는 이 메인 주소 하나만 보내면 됩니다. 각 카드를 클릭하면 해당 데모 화면으로 이동합니다.</p>
+      </aside>
+    </section>
+
+    <section id="demos">
+      <div class="toolbar">
+        <h3>전체 데모 목록</h3>
+        <input id="search" class="search" type="search" placeholder="데모명 또는 분야 검색" />
+      </div>
+      <div class="grid" id="grid">
+      <article class="demo-card" data-title="스테이킹 수익 데모" data-category="코인 / 스테이킹">
+        <div class="card-top">
+          <span class="num">01</span>
+          <span class="badge">코인 / 스테이킹</span>
+        </div>
+        <h2>스테이킹 수익 데모</h2>
+        <p>수익률, 예치 상품, 투자형 랜딩 구성에 맞춘 스테이킹 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./binancestaking/">데모 보기</a>
+          <span class="path">/binancestaking/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="코인 스왑 데모" data-category="코인 / 스왑">
+        <div class="card-top">
+          <span class="num">02</span>
+          <span class="badge">코인 / 스왑</span>
+        </div>
+        <h2>코인 스왑 데모</h2>
+        <p>테더, ERC20, 코인 교환 흐름을 보여주는 코인 스왑형 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./coinswap/">데모 보기</a>
+          <span class="path">/coinswap/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="TradeLab Pro 데모" data-category="코인 / 거래소">
+        <div class="card-top">
+          <span class="num">03</span>
+          <span class="badge">코인 / 거래소</span>
+        </div>
+        <h2>TradeLab Pro 데모</h2>
+        <p>차트, 게임센터, 거래소형 UI를 보여주는 종합 코인 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./cointestbat/">데모 보기</a>
+          <span class="path">/cointestbat/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="웹스튜디오 커뮤니티" data-category="커뮤니티">
+        <div class="card-top">
+          <span class="num">04</span>
+          <span class="badge">커뮤니티</span>
+        </div>
+        <h2>웹스튜디오 커뮤니티</h2>
+        <p>홈페이지 제작, AI 이미지, 마케팅 콘텐츠를 모아 보여주는 커뮤니티형 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./comunity/">데모 보기</a>
+          <span class="path">/comunity/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="회사소개 페이지 데모" data-category="회사소개 / 랜딩">
+        <div class="card-top">
+          <span class="num">05</span>
+          <span class="badge">회사소개 / 랜딩</span>
+        </div>
+        <h2>회사소개 페이지 데모</h2>
+        <p>기업 소개, 서비스 비전, 신뢰감 있는 소개 페이지 구성을 보여주는 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./invitepage/">데모 보기</a>
+          <span class="path">/invitepage/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="파워사다리 데모" data-category="게임">
+        <div class="card-top">
+          <span class="num">06</span>
+          <span class="badge">게임</span>
+        </div>
+        <h2>파워사다리 데모</h2>
+        <p>사다리 게임형 인터랙션과 결과 화면을 보여주는 게임 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./ladder/">데모 보기</a>
+          <span class="path">/ladder/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="주소모음 페이지 데모" data-category="링크 / 포털">
+        <div class="card-top">
+          <span class="num">07</span>
+          <span class="badge">링크 / 포털</span>
+        </div>
+        <h2>주소모음 페이지 데모</h2>
+        <p>여러 서비스 링크를 한 페이지에서 정리해 보여주는 링크 모음형 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./link/">데모 보기</a>
+          <span class="path">/link/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="비상장 주식 데모" data-category="금융 / 비상장">
+        <div class="card-top">
+          <span class="num">08</span>
+          <span class="badge">금융 / 비상장</span>
+        </div>
+        <h2>비상장 주식 데모</h2>
+        <p>비상장 주식, 종목 정보, 투자형 화면 구성을 보여주는 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./nonstocks/">데모 보기</a>
+          <span class="path">/nonstocks/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="파워볼 데모" data-category="게임">
+        <div class="card-top">
+          <span class="num">09</span>
+          <span class="badge">게임</span>
+        </div>
+        <h2>파워볼 데모</h2>
+        <p>파워볼 게임 화면과 결과 표시 구조를 보여주는 게임형 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./powerball/">데모 보기</a>
+          <span class="path">/powerball/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="종합 쇼핑몰 데모" data-category="쇼핑몰">
+        <div class="card-top">
+          <span class="num">10</span>
+          <span class="badge">쇼핑몰</span>
+        </div>
+        <h2>종합 쇼핑몰 데모</h2>
+        <p>상품 목록, 구매 흐름, 쇼핑몰 메인 화면 구성을 보여주는 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./shopping/">데모 보기</a>
+          <span class="path">/shopping/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="리뷰 미션 플랫폼 데모" data-category="리뷰 / 마케팅">
+        <div class="card-top">
+          <span class="num">11</span>
+          <span class="badge">리뷰 / 마케팅</span>
+        </div>
+        <h2>리뷰 미션 플랫폼 데모</h2>
+        <p>판매자와 소비자를 리뷰 미션으로 연결하는 체험단·리뷰 플랫폼 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./teammissoin/">데모 보기</a>
+          <span class="path">/teammissoin/</span>
+        </div>
+      </article>
+      <article class="demo-card" data-title="여행 예약 데모" data-category="예약 / 여행">
+        <div class="card-top">
+          <span class="num">12</span>
+          <span class="badge">예약 / 여행</span>
+        </div>
+        <h2>여행 예약 데모</h2>
+        <p>여행지 검색, 예약 유도, 여행 상품 소개에 맞춘 예약형 데모입니다.</p>
+        <div class="card-actions">
+          <a class="primary" href="./travel/">데모 보기</a>
+          <span class="path">/travel/</span>
+        </div>
+      </article>
+      </div>
+      <div class="empty" id="empty">검색 결과가 없습니다.</div>
+    </section>
+
+    <footer class="footer">
+      웹스튜디오 데모 쇼룸 · 각 데모는 샘플이며 실제 제작 시 업종과 목적에 맞게 수정됩니다.
+    </footer>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('search');
+    const cards = Array.from(document.querySelectorAll('.demo-card'));
+    const empty = document.getElementById('empty');
+
+    searchInput.addEventListener('input', function () {
+      const keyword = this.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      cards.forEach(function (card) {
+        const text = (card.innerText + ' ' + card.dataset.title + ' ' + card.dataset.category).toLowerCase();
+        const matched = text.includes(keyword);
+        card.style.display = matched ? 'flex' : 'none';
+        if (matched) visibleCount += 1;
+      });
+
+      empty.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
+  </script>
+</body>
+</html>

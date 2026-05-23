@@ -1,0 +1,31 @@
+웹스튜디오 데모 모음 업로드 안내
+
+이 압축파일은 바로 업로드 가능한 형태로 정리해둔 완성본입니다.
+
+폴더 구조
+- index.html : 고객에게 보여줄 메인 데모 목록 페이지
+- binancestaking/ : 스테이킹 데모
+- coinswap/ : 코인 스왑 데모
+- cointestbat/ : 거래소/게임센터 데모
+- comunity/ : 커뮤니티 데모
+- invitepage/ : 회사소개/랜딩 데모
+- ladder/ : 파워사다리 데모
+- link/ : 주소모음 데모
+- nonstocks/ : 비상장 주식 데모
+- powerball/ : 파워볼 데모
+- shopping/ : 쇼핑몰 데모
+- teammissoin/ : 리뷰 미션 플랫폼 데모
+- travel/ : 여행 예약 데모
+
+가장 중요한 점
+1. 압축을 풀었을 때 index.html이 바로 보여야 합니다.
+2. index.html이 webstudio-demos 폴더 안에 한 번 더 들어가 있으면 안 됩니다.
+3. Cloudflare Pages 또는 GitHub에 올릴 때 이 압축파일 안의 내용물을 그대로 올리면 됩니다.
+
+고객에게 보이는 주소 예시
+- 메인: https://본인주소.pages.dev/
+- 스테이킹: https://본인주소.pages.dev/binancestaking/
+- 쇼핑몰: https://본인주소.pages.dev/shopping/
+- 리뷰 미션: https://본인주소.pages.dev/teammissoin/
+
+폴더명은 기존 파일 연결이 깨지지 않도록 원본 그대로 유지했습니다.
